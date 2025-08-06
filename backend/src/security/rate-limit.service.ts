@@ -3,12 +3,14 @@ import { Injectable, Logger } from '@nestjs/common';
 interface RateLimitEntry {
   count: number;
   resetTime: number;
+  requests: number[]; // Timestamps for sliding window
 }
 
 interface RateLimitConfig {
   windowMs: number; // Time window in milliseconds
   maxRequests: number; // Maximum requests per window
   blockDurationMs?: number; // How long to block after exceeding limit
+  algorithm?: 'fixed' | 'sliding'; // Rate limiting algorithm
 }
 
 @Injectable()
@@ -16,6 +18,22 @@ export class RateLimitService {
   private readonly logger = new Logger(RateLimitService.name);
   private readonly limits = new Map<string, RateLimitEntry>();
   private readonly blockedKeys = new Map<string, number>(); // key -> unblock time
+  private cleanupInterval: NodeJS.Timeout;
+
+  constructor() {
+    // Auto-cleanup every 5 minutes
+    this.cleanupInterval = setInterval(() => {
+      this.cleanup().catch(error => {
+        this.logger.error('Cleanup failed:', error);
+      });
+    }, 5 * 60 * 1000);
+  }
+
+  async onModuleDestroy() {
+    if (this.cleanupInterval) {
+      clearInterval(this.cleanupInterval);
+    }
+  }
 
   async checkLimit(
     key: string,
@@ -26,6 +44,15 @@ export class RateLimitService {
     resetTime: number;
     blocked: boolean;
   }> {
+    // Input validation
+    if (!key || typeof key !== 'string') {
+      throw new Error('Rate limit key must be a non-empty string');
+    }
+    
+    if (!config || config.windowMs <= 0 || config.maxRequests <= 0) {
+      throw new Error('Invalid rate limit configuration');
+    }
+
     const now = Date.now();
 
     // Check if key is currently blocked
@@ -49,6 +76,7 @@ export class RateLimitService {
       entry = {
         count: 0,
         resetTime: now + config.windowMs,
+        requests: [],
       };
       this.limits.set(key, entry);
     }
@@ -128,13 +156,32 @@ export class RateLimitService {
     activeLimits: number;
     activeBlocks: number;
     totalMemoryUsage: string;
+    topLimitedKeys: Array<{ key: string; count: number }>;
+    blockedKeysInfo: Array<{ key: string; unblockTime: number; remainingMs: number }>;
   } {
     const memoryUsage = process.memoryUsage();
+    const now = Date.now();
+    
+    // Get top limited keys
+    const topLimitedKeys = Array.from(this.limits.entries())
+      .sort(([,a], [,b]) => b.count - a.count)
+      .slice(0, 10)
+      .map(([key, entry]) => ({ key, count: entry.count }));
+
+    // Get blocked keys info
+    const blockedKeysInfo = Array.from(this.blockedKeys.entries())
+      .map(([key, unblockTime]) => ({
+        key,
+        unblockTime,
+        remainingMs: Math.max(0, unblockTime - now),
+      }));
     
     return {
       activeLimits: this.limits.size,
       activeBlocks: this.blockedKeys.size,
       totalMemoryUsage: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)}MB`,
+      topLimitedKeys,
+      blockedKeysInfo,
     };
   }
 }

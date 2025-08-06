@@ -91,6 +91,14 @@ storage/
 *.7z
 *.tar.gz
 
+# Quarantine directory for infected files
+quarantine/
+*.infected
+
+# Virus scan logs
+scan-logs/
+virus-scan.log
+
 # Game Library specific
 gamelib.db
 backend/uploads/

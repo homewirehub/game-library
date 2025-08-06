@@ -1,14 +1,34 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, UseInterceptors, UploadedFile, Res } from '@nestjs/common';
+import { 
+  Controller, 
+  Get, 
+  Post, 
+  Put, 
+  Delete, 
+  Param, 
+  Body, 
+  UseInterceptors, 
+  UploadedFile, 
+  Res,
+  BadRequestException,
+  Logger 
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { GamesService } from './games.service';
 import { Game } from '../../entities/game.entity';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { FileUploadConfigService } from '../../common/file-upload.config';
+import { VirusScanService } from '../../common/virus-scan.service';
+import { UploadRateLimit } from '../../security/rate-limit.decorator';
+import * as fs from 'fs-extra';
 
 @Controller('games')
 export class GamesController {
-  constructor(private readonly gamesService: GamesService) {}
+  private readonly logger = new Logger(GamesController.name);
+
+  constructor(
+    private readonly gamesService: GamesService,
+    private readonly virusScanService: VirusScanService
+  ) {}
 
   @Get()
   async getAllGames(): Promise<Game[]> {
@@ -21,27 +41,49 @@ export class GamesController {
   }
 
   @Post('upload')
+  @UploadRateLimit() // Apply rate limiting to uploads
   @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: './uploads/games',
-        filename: (req, file, cb) => {
-          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-          cb(null, uniqueSuffix + extname(file.originalname));
-        },
-      }),
-      fileFilter: (req, file, cb) => {
-        const allowedTypes = /\.(zip|rar|7z|iso|exe)$/i;
-        if (allowedTypes.test(file.originalname)) {
-          cb(null, true);
-        } else {
-          cb(new Error('Only game files (.zip, .rar, .7z, .iso, .exe) are allowed'), false);
-        }
-      },
-    })
+    FileInterceptor('file', FileUploadConfigService.createMulterOptions())
   )
   async uploadGame(@UploadedFile() file: Express.Multer.File): Promise<Game> {
-    return this.gamesService.uploadGame(file);
+    if (!file) {
+      throw new BadRequestException('No file uploaded');
+    }
+
+    this.logger.log(`Processing upload: ${file.originalname} (${file.size} bytes)`);
+
+    try {
+      // Perform virus scan if enabled
+      const scanResult = await this.virusScanService.scanFile(file.path);
+      
+      if (!scanResult.isClean) {
+        // Delete infected file immediately
+        await fs.remove(file.path);
+        
+        this.logger.warn(`Infected file detected: ${file.originalname}`, {
+          threats: scanResult.threats,
+          scanner: scanResult.scanner
+        });
+        
+        throw new BadRequestException(
+          `File contains threats: ${scanResult.threats.join(', ')}`
+        );
+      }
+
+      this.logger.log(`File scan completed: ${scanResult.scanner} (${scanResult.scanTime}ms)`);
+
+      // Process the clean file
+      return await this.gamesService.uploadGame(file);
+
+    } catch (error) {
+      // Cleanup file on error
+      if (await fs.pathExists(file.path)) {
+        await fs.remove(file.path);
+      }
+      
+      this.logger.error(`Upload failed for ${file.originalname}:`, error);
+      throw error;
+    }
   }
 
   @Put(':id')

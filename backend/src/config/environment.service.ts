@@ -13,6 +13,18 @@ export interface DatabaseConfig {
   maxConnections?: number;
 }
 
+export interface RedisConfig {
+  url: string;
+  host?: string;
+  port?: number;
+  password?: string;
+  db?: number;
+  keyPrefix?: string;
+  retryDelayOnFailover?: number;
+  maxRetriesPerRequest?: number;
+  lazyConnect?: boolean;
+}
+
 export interface SecurityConfig {
   jwtSecret: string;
   jwtExpiresIn: string;
@@ -76,6 +88,32 @@ export class EnvironmentService {
         .split(','),
       rateLimitWindowMs: this.configService.get<number>('RATE_LIMIT_WINDOW_MS', 15 * 60 * 1000), // 15 minutes
       rateLimitMax: this.configService.get<number>('RATE_LIMIT_MAX', 100),
+    };
+  }
+
+  getRedisConfig(): RedisConfig {
+    const redisUrl = this.configService.get<string>('REDIS_URL');
+    
+    if (redisUrl) {
+      return {
+        url: redisUrl,
+        keyPrefix: this.configService.get<string>('REDIS_KEY_PREFIX', 'gamelib:'),
+        lazyConnect: true,
+        retryDelayOnFailover: 100,
+        maxRetriesPerRequest: 3,
+      };
+    }
+
+    return {
+      url: '', // Will construct from individual parts
+      host: this.configService.get<string>('REDIS_HOST', 'localhost'),
+      port: this.configService.get<number>('REDIS_PORT', 6379),
+      password: this.configService.get<string>('REDIS_PASSWORD'),
+      db: this.configService.get<number>('REDIS_DB', 0),
+      keyPrefix: this.configService.get<string>('REDIS_KEY_PREFIX', 'gamelib:'),
+      lazyConnect: true,
+      retryDelayOnFailover: 100,
+      maxRetriesPerRequest: 3,
     };
   }
 

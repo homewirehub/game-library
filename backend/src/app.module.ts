@@ -8,6 +8,7 @@ import { InstallationModule } from './installation/installation.module';
 import { InstallationGuard } from './installation/installation.guard';
 import { ItchModule } from './modules/itch/itch.module';
 import { SteamModule } from './modules/steam/steam.module';
+import { SecurityModule } from './security/security.module';
 import { Game } from './entities/game.entity';
 import { User } from './entities/user.entity';
 
@@ -48,6 +49,7 @@ import { User } from './entities/user.entity';
       inject: [ConfigService],
     }),
     InstallationModule,
+    SecurityModule,
     GamesModule,
     MetadataModule,
     ItchModule,

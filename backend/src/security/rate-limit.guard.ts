@@ -1,12 +1,14 @@
 import { Injectable, CanActivate, ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { RedisRateLimitService } from './redis-rate-limit.service';
 import { RateLimitService } from './rate-limit.service';
 import { RATE_LIMIT_KEY, RateLimitOptions } from './rate-limit.decorator';
 
 @Injectable()
 export class RateLimitGuard implements CanActivate {
   constructor(
-    private readonly rateLimitService: RateLimitService,
+    private readonly redisRateLimitService: RedisRateLimitService,
+    private readonly fallbackRateLimitService: RateLimitService,
     private readonly reflector: Reflector,
   ) {}
 
@@ -32,11 +34,23 @@ export class RateLimitGuard implements CanActivate {
       ? options.keyGenerator(request)
       : `${request.ip}:${request.route?.path || request.url}`;
 
-    const result = await this.rateLimitService.checkLimit(key, {
-      windowMs: options.windowMs,
-      maxRequests: options.maxRequests,
-      blockDurationMs: options.blockDurationMs,
-    });
+    // Try Redis first, fallback to in-memory if Redis is unavailable
+    let result;
+    try {
+      result = await this.redisRateLimitService.checkLimit(key, {
+        windowMs: options.windowMs,
+        maxRequests: options.maxRequests,
+        blockDurationMs: options.blockDurationMs,
+        algorithm: options.algorithm || 'fixed',
+      });
+    } catch (error) {
+      // Fallback to in-memory rate limiting
+      result = await this.fallbackRateLimitService.checkLimit(key, {
+        windowMs: options.windowMs,
+        maxRequests: options.maxRequests,
+        blockDurationMs: options.blockDurationMs,
+      });
+    }
 
     if (!result.allowed) {
       const message = options.message || 

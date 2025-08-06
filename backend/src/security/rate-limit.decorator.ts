@@ -8,6 +8,7 @@ export interface RateLimitOptions {
   windowMs: number;
   maxRequests: number;
   blockDurationMs?: number;
+  algorithm?: 'fixed' | 'sliding';
   keyGenerator?: (req: any) => string;
   skipIf?: (req: any) => boolean;
   message?: string;
@@ -25,6 +26,7 @@ export const StrictRateLimit = () =>
     windowMs: 15 * 60 * 1000, // 15 minutes
     maxRequests: 20,
     blockDurationMs: 5 * 60 * 1000, // 5 minutes
+    algorithm: 'sliding',
   });
 
 export const UploadRateLimit = () =>
@@ -32,6 +34,7 @@ export const UploadRateLimit = () =>
     windowMs: 60 * 60 * 1000, // 1 hour
     maxRequests: 10,
     blockDurationMs: 30 * 60 * 1000, // 30 minutes
+    algorithm: 'sliding',
   });
 
 export const LoginRateLimit = () =>
@@ -39,5 +42,6 @@ export const LoginRateLimit = () =>
     windowMs: 15 * 60 * 1000, // 15 minutes
     maxRequests: 5,
     blockDurationMs: 30 * 60 * 1000, // 30 minutes
+    algorithm: 'sliding',
     keyGenerator: (req) => `login:${req.ip}:${req.body?.username || 'unknown'}`,
   });

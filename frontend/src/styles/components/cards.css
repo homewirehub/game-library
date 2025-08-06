@@ -1,0 +1,606 @@
+/* ==========================================================================
+   Card Components - Modern Content Containers
+   ========================================================================== */
+
+/* ===== Base Card Styles ===== */
+
+.card {
+  background: var(--color-neutral-800);
+  border: var(--card-border-width) solid var(--color-neutral-700);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-default);
+  overflow: hidden;
+  position: relative;
+  color: var(--color-neutral-100);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--color-primary-600);
+}
+
+.card-header {
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--color-neutral-700);
+  background: var(--color-neutral-700);
+}
+
+.card-body {
+  padding: var(--card-padding);
+}
+
+.card-footer {
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--color-neutral-700);
+  background: var(--color-neutral-750);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+/* ===== Card Variants ===== */
+
+.card-elevated {
+  box-shadow: var(--shadow-lg);
+  border: none;
+}
+
+.card-elevated:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-4px);
+}
+
+.card-flat {
+  box-shadow: none;
+  border: 1px solid var(--color-neutral-200);
+}
+
+.card-outline {
+  background: transparent;
+  border: 2px solid var(--color-neutral-200);
+  box-shadow: none;
+}
+
+.card-outline:hover {
+  border-color: var(--color-primary-300);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ===== Card Sizes ===== */
+
+.card-compact .card-header,
+.card-compact .card-body {
+  padding: var(--card-padding-compact);
+}
+
+.card-compact .card-footer {
+  padding: var(--space-3) var(--card-padding-compact);
+}
+
+.card-spacious .card-header,
+.card-spacious .card-body {
+  padding: var(--space-8);
+}
+
+.card-spacious .card-footer {
+  padding: var(--space-6) var(--space-8);
+}
+
+/* ===== Gaming-Specific Card Types ===== */
+
+/* Game Library Card */
+.game-card {
+  position: relative;
+  aspect-ratio: var(--game-card-aspect-ratio);
+  width: 100%;
+  max-width: var(--game-card-width-md);
+  overflow: hidden;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--color-neutral-800), var(--color-neutral-900));
+}
+
+.game-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}
+
+.game-card-image {
+  width: 100%;
+  height: 60%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.game-card:hover .game-card-image {
+  transform: scale(1.05);
+}
+
+.game-card-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--space-4);
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  color: white;
+}
+
+.game-card-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-1);
+  line-height: var(--line-height-tight);
+}
+
+.game-card-description {
+  font-size: var(--font-size-sm);
+  color: rgba(255,255,255,0.8);
+  line-height: var(--line-height-snug);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.game-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-2);
+  font-size: var(--font-size-xs);
+}
+
+.game-card-platform {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  background: rgba(255,255,255,0.1);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  backdrop-filter: blur(8px);
+}
+
+.game-card-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-weight: var(--font-weight-medium);
+}
+
+.game-card-installed {
+  color: var(--color-success-400);
+}
+
+.game-card-downloading {
+  color: var(--color-warning-400);
+}
+
+.game-card-available {
+  color: var(--color-info-400);
+}
+
+/* Game Card Overlay Actions */
+.game-card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition-default);
+  backdrop-filter: blur(4px);
+}
+
+.game-card:hover .game-card-overlay {
+  opacity: 1;
+}
+
+.game-card-actions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+/* Steam Card */
+.steam-card {
+  background: linear-gradient(135deg, #1b2838, #2a475e);
+  color: white;
+  border: none;
+}
+
+.steam-card-header {
+  background: linear-gradient(135deg, #2a475e, #3d5a73);
+  border-bottom-color: #1b2838;
+}
+
+.steam-card-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: var(--space-2);
+}
+
+/* Itch.io Card */
+.itch-card {
+  background: linear-gradient(135deg, #fa5c5c, #e94545);
+  color: white;
+  border: none;
+}
+
+.itch-card-header {
+  background: linear-gradient(135deg, #e94545, #d63333);
+  border-bottom-color: #fa5c5c;
+}
+
+/* Download Progress Card */
+.download-card {
+  background: var(--color-neutral-0);
+  border: 1px solid var(--color-primary-200);
+  position: relative;
+  overflow: hidden;
+}
+
+.download-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-primary-500), var(--color-secondary-500));
+  width: var(--progress, 0%);
+  transition: width var(--transition-default);
+}
+
+.download-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-4);
+}
+
+.download-progress-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--color-neutral-200);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin: 0 var(--space-4);
+}
+
+.download-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary-500), var(--color-secondary-500));
+  border-radius: var(--radius-full);
+  transition: width var(--transition-default);
+  width: var(--progress, 0%);
+}
+
+.download-stats {
+  display: flex;
+  gap: var(--space-4);
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+}
+
+/* ===== Card Grids & Layouts ===== */
+
+.card-grid {
+  display: grid;
+  gap: var(--space-6);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.card-grid-sm {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-4);
+}
+
+.card-grid-lg {
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: var(--space-8);
+}
+
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.card-masonry {
+  columns: 300px;
+  column-gap: var(--space-6);
+}
+
+.card-masonry .card {
+  break-inside: avoid;
+  margin-bottom: var(--space-6);
+}
+
+/* ===== Stat Cards ===== */
+
+.stat-card {
+  text-align: center;
+  background: linear-gradient(135deg, var(--color-primary-50), var(--color-secondary-50));
+  border: 1px solid var(--color-primary-200);
+}
+
+.stat-card-value {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-extrabold);
+  font-family: var(--font-family-display);
+  color: var(--color-primary-700);
+  line-height: 1;
+  margin-bottom: var(--space-2);
+}
+
+.stat-card-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-600);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-card-change {
+  font-size: var(--font-size-sm);
+  margin-top: var(--space-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+}
+
+.stat-card-change.positive {
+  color: var(--color-success-600);
+}
+
+.stat-card-change.negative {
+  color: var(--color-error-600);
+}
+
+/* ===== Feature Cards ===== */
+
+.feature-card {
+  text-align: center;
+  border: 2px solid transparent;
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(135deg, var(--color-primary-200), var(--color-secondary-200)) border-box;
+}
+
+.feature-card:hover {
+  background: linear-gradient(var(--color-primary-50), var(--color-secondary-50)) padding-box,
+              linear-gradient(135deg, var(--color-primary-500), var(--color-secondary-500)) border-box;
+}
+
+.feature-card-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto var(--space-4);
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-secondary-500));
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.feature-card-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-2);
+  color: var(--color-neutral-900);
+}
+
+.feature-card-description {
+  color: var(--color-neutral-600);
+  line-height: var(--line-height-relaxed);
+}
+
+/* ===== Testimonial Cards ===== */
+
+.testimonial-card {
+  background: var(--color-neutral-0);
+  position: relative;
+  padding-top: var(--space-8);
+}
+
+.testimonial-card::before {
+  content: '"';
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-6);
+  font-size: var(--font-size-6xl);
+  color: var(--color-primary-200);
+  line-height: 1;
+  font-family: var(--font-family-display);
+}
+
+.testimonial-content {
+  font-style: italic;
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-neutral-700);
+  margin-bottom: var(--space-6);
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.testimonial-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+}
+
+.testimonial-author-info {
+  flex: 1;
+}
+
+.testimonial-author-name {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-900);
+}
+
+.testimonial-author-title {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+}
+
+/* ===== Pricing Cards ===== */
+
+.pricing-card {
+  text-align: center;
+  position: relative;
+  border: 2px solid var(--color-neutral-200);
+}
+
+.pricing-card.featured {
+  border-color: var(--color-primary-500);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-xl);
+}
+
+.pricing-card-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600));
+  color: white;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.pricing-card-price {
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-primary-700);
+  line-height: 1;
+  margin: var(--space-6) 0 var(--space-2);
+}
+
+.pricing-card-period {
+  color: var(--color-neutral-600);
+  font-size: var(--font-size-lg);
+}
+
+.pricing-card-features {
+  list-style: none;
+  padding: 0;
+  margin: var(--space-6) 0;
+}
+
+.pricing-card-features li {
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-neutral-100);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.pricing-card-features li:last-child {
+  border-bottom: none;
+}
+
+.pricing-card-check {
+  color: var(--color-success-500);
+  flex-shrink: 0;
+}
+
+/* ===== Responsive Behavior ===== */
+
+@media (max-width: 768px) {
+  .card-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  
+  .card-grid-sm {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  
+  .card-masonry {
+    columns: 1;
+  }
+  
+  .game-card {
+    max-width: none;
+  }
+  
+  .pricing-card.featured {
+    transform: none;
+  }
+  
+  .stat-card-value {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+@media (max-width: 640px) {
+  .card-header,
+  .card-body {
+    padding: var(--space-4);
+  }
+  
+  .card-footer {
+    padding: var(--space-3) var(--space-4);
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+  }
+  
+  .game-card-content {
+    padding: var(--space-3);
+  }
+  
+  .game-card-title {
+    font-size: var(--font-size-base);
+  }
+  
+  .download-progress {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  
+  .download-progress-bar {
+    margin: 0;
+  }
+}
+
+/* ===== Accessibility ===== */
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .game-card-image,
+  .game-card-overlay {
+    transition: none;
+  }
+  
+  .card:hover,
+  .game-card:hover {
+    transform: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .card {
+    border-width: 2px;
+  }
+  
+  .game-card-overlay {
+    background: rgba(0,0,0,0.8);
+  }
+}

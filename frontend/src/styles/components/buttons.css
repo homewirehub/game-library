@@ -1,0 +1,465 @@
+/* ==========================================================================
+   Button Components - Modern Interactive Elements
+   ========================================================================== */
+
+/* ===== Base Button Styles ===== */
+
+.btn {
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  
+  /* Typography */
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  white-space: nowrap;
+  
+  /* Sizing */
+  height: var(--button-height-base);
+  padding: 0 var(--space-4);
+  
+  /* Styling */
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  cursor: pointer;
+  
+  /* Transitions */
+  transition: all var(--transition-default);
+  
+  /* Focus */
+  position: relative;
+}
+
+.btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-primary-100), 0 0 0 4px var(--color-primary-500);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ===== Button Sizes ===== */
+
+.btn-sm {
+  height: var(--button-height-sm);
+  padding: 0 var(--space-3);
+  font-size: var(--font-size-sm);
+  gap: var(--space-1-5);
+}
+
+.btn-base {
+  height: var(--button-height-base);
+  padding: 0 var(--space-4);
+  font-size: var(--font-size-base);
+  gap: var(--space-2);
+}
+
+.btn-lg {
+  height: var(--button-height-lg);
+  padding: 0 var(--space-6);
+  font-size: var(--font-size-lg);
+  gap: var(--space-2-5);
+}
+
+.btn-xl {
+  height: var(--button-height-xl);
+  padding: 0 var(--space-8);
+  font-size: var(--font-size-xl);
+  gap: var(--space-3);
+}
+
+/* ===== Button Variants ===== */
+
+/* Primary Button - Main Actions */
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600));
+  color: white;
+  border-color: var(--color-primary-600);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, var(--color-primary-600), var(--color-primary-700));
+  border-color: var(--color-primary-700);
+  box-shadow: var(--shadow-md), var(--shadow-glow-primary);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  background: linear-gradient(135deg, var(--color-primary-700), var(--color-primary-800));
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Secondary Button - Steam Green */
+.btn-secondary {
+  background: linear-gradient(135deg, var(--color-secondary-500), var(--color-secondary-600));
+  color: white;
+  border-color: var(--color-secondary-600);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(135deg, var(--color-secondary-600), var(--color-secondary-700));
+  border-color: var(--color-secondary-700);
+  box-shadow: var(--shadow-md), var(--shadow-glow-secondary);
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  background: linear-gradient(135deg, var(--color-secondary-700), var(--color-secondary-800));
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Accent Button - Itch.io Pink */
+.btn-accent {
+  background: linear-gradient(135deg, var(--color-accent-500), var(--color-accent-600));
+  color: white;
+  border-color: var(--color-accent-600);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-accent:hover {
+  background: linear-gradient(135deg, var(--color-accent-600), var(--color-accent-700));
+  border-color: var(--color-accent-700);
+  box-shadow: var(--shadow-md), var(--shadow-glow-accent);
+  transform: translateY(-1px);
+}
+
+.btn-accent:active {
+  background: linear-gradient(135deg, var(--color-accent-700), var(--color-accent-800));
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Outline Buttons */
+.btn-outline-primary {
+  background: transparent;
+  color: var(--color-primary-600);
+  border-color: var(--color-primary-300);
+}
+
+.btn-outline-primary:hover {
+  background: var(--color-primary-50);
+  color: var(--color-primary-700);
+  border-color: var(--color-primary-500);
+}
+
+.btn-outline-secondary {
+  background: transparent;
+  color: var(--color-secondary-600);
+  border-color: var(--color-secondary-300);
+}
+
+.btn-outline-secondary:hover {
+  background: var(--color-secondary-50);
+  color: var(--color-secondary-700);
+  border-color: var(--color-secondary-500);
+}
+
+/* Ghost Buttons */
+.btn-ghost {
+  background: transparent;
+  color: var(--color-neutral-600);
+  border-color: transparent;
+}
+
+.btn-ghost:hover {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-800);
+}
+
+.btn-ghost:active {
+  background: var(--color-neutral-200);
+}
+
+/* Text Buttons */
+.btn-text {
+  background: transparent;
+  border: none;
+  color: var(--color-primary-600);
+  padding: var(--space-2) var(--space-3);
+  height: auto;
+}
+
+.btn-text:hover {
+  color: var(--color-primary-700);
+  text-decoration: underline;
+}
+
+/* ===== Semantic Button Variants ===== */
+
+.btn-success {
+  background: linear-gradient(135deg, var(--color-success-500), var(--color-success-600));
+  color: white;
+  border-color: var(--color-success-600);
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, var(--color-success-600), var(--color-success-700));
+  border-color: var(--color-success-700);
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, var(--color-warning-500), var(--color-warning-600));
+  color: white;
+  border-color: var(--color-warning-600);
+}
+
+.btn-warning:hover {
+  background: linear-gradient(135deg, var(--color-warning-600), var(--color-warning-700));
+  border-color: var(--color-warning-700);
+}
+
+.btn-error {
+  background: linear-gradient(135deg, var(--color-error-500), var(--color-error-600));
+  color: white;
+  border-color: var(--color-error-600);
+}
+
+.btn-error:hover {
+  background: linear-gradient(135deg, var(--color-error-600), var(--color-error-700));
+  border-color: var(--color-error-700);
+}
+
+/* ===== Button Shapes ===== */
+
+.btn-rounded {
+  border-radius: var(--radius-full);
+}
+
+.btn-square {
+  border-radius: var(--radius-sm);
+}
+
+.btn-circle {
+  border-radius: var(--radius-full);
+  padding: 0;
+  width: var(--button-height-base);
+  aspect-ratio: 1;
+}
+
+.btn-circle.btn-sm {
+  width: var(--button-height-sm);
+}
+
+.btn-circle.btn-lg {
+  width: var(--button-height-lg);
+}
+
+.btn-circle.btn-xl {
+  width: var(--button-height-xl);
+}
+
+/* ===== Button Groups ===== */
+
+.btn-group {
+  display: inline-flex;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-group .btn {
+  border-radius: 0;
+  border-right-width: 0;
+  position: relative;
+}
+
+.btn-group .btn:first-child {
+  border-top-left-radius: var(--radius-md);
+  border-bottom-left-radius: var(--radius-md);
+}
+
+.btn-group .btn:last-child {
+  border-top-right-radius: var(--radius-md);
+  border-bottom-right-radius: var(--radius-md);
+  border-right-width: 1px;
+}
+
+.btn-group .btn:hover,
+.btn-group .btn:focus {
+  z-index: 1;
+}
+
+/* ===== Loading State ===== */
+
+.btn-loading {
+  color: transparent;
+  pointer-events: none;
+}
+
+.btn-loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1rem;
+  height: 1rem;
+  margin: -0.5rem 0 0 -0.5rem;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: var(--radius-full);
+  animation: btn-spin 1s linear infinite;
+}
+
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== Icon Buttons ===== */
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.btn-icon svg {
+  width: 1.25em;
+  height: 1.25em;
+  flex-shrink: 0;
+}
+
+.btn-icon-left {
+  padding-left: var(--space-3);
+}
+
+.btn-icon-right {
+  padding-right: var(--space-3);
+}
+
+/* ===== Gaming-Specific Buttons ===== */
+
+.btn-download {
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600));
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-download::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left var(--transition-slow);
+}
+
+.btn-download:hover::before {
+  left: 100%;
+}
+
+.btn-play {
+  background: linear-gradient(135deg, var(--color-secondary-500), var(--color-secondary-600));
+  color: white;
+  font-weight: var(--font-weight-semibold);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-play:hover {
+  box-shadow: var(--shadow-lg), var(--shadow-glow-secondary);
+  transform: translateY(-2px);
+}
+
+.btn-steam {
+  background: linear-gradient(135deg, #1b2838, #2a475e);
+  color: white;
+  border-color: #2a475e;
+}
+
+.btn-steam:hover {
+  background: linear-gradient(135deg, #2a475e, #3d5a73);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-itch {
+  background: linear-gradient(135deg, #fa5c5c, #e94545);
+  color: white;
+  border-color: #e94545;
+}
+
+.btn-itch:hover {
+  background: linear-gradient(135deg, #e94545, #d63333);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== Responsive Behavior ===== */
+
+@media (max-width: 640px) {
+  .btn {
+    font-size: var(--font-size-sm);
+    padding: 0 var(--space-3);
+  }
+  
+  .btn-lg {
+    height: var(--button-height-base);
+    font-size: var(--font-size-base);
+  }
+  
+  .btn-xl {
+    height: var(--button-height-lg);
+    font-size: var(--font-size-lg);
+  }
+  
+  .btn-group {
+    flex-direction: column;
+  }
+  
+  .btn-group .btn {
+    border-radius: 0;
+    border-right-width: 1px;
+    border-bottom-width: 0;
+  }
+  
+  .btn-group .btn:first-child {
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+  }
+  
+  .btn-group .btn:last-child {
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    border-bottom-width: 1px;
+  }
+}
+
+/* ===== Accessibility ===== */
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+  
+  .btn:hover {
+    transform: none;
+  }
+  
+  .btn-loading::after {
+    animation: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .btn {
+    border-width: 2px;
+  }
+  
+  .btn-ghost,
+  .btn-text {
+    border: 2px solid currentColor;
+  }
+}

@@ -31,7 +31,7 @@ export interface SystemHealth {
 export class HealthService {
   constructor(
     private readonly configService: ConfigService,
-    private readonly environmentService: EnvironmentService,
+    private readonly environmentService: EnvironmentService
   ) {}
 
   async getHealth(): Promise<SystemHealth> {
@@ -95,7 +95,7 @@ export class HealthService {
       }
 
       await dataSource.initialize();
-      
+
       // Test a simple query
       const result = await dataSource.query('SELECT 1 as test');
       await dataSource.destroy();
@@ -240,19 +240,16 @@ export class HealthService {
 
   private async checkDiskSpace(): Promise<HealthCheck> {
     try {
-      const storageConfig = this.environmentService.getStorageConfig();
-      
-      // Use fs.stat to get basic disk information
-      const stats = await fs.stat(storageConfig.path);
-      
+  const storageConfig = this.environmentService.getStorageConfig();
+
       // For a more comprehensive disk check, we would need platform-specific tools
       // For now, just check if the directory is accessible
       return {
         status: 'healthy',
         message: 'Storage directory accessible',
-        details: { 
+        details: {
           path: storageConfig.path,
-          note: 'Detailed disk space monitoring requires platform-specific implementation'
+          note: 'Detailed disk space monitoring requires platform-specific implementation',
         },
         timestamp: new Date().toISOString(),
       };
@@ -300,17 +297,19 @@ export class HealthService {
     }
   }
 
-  private determineOverallStatus(checks: Record<string, HealthCheck>): 'healthy' | 'unhealthy' | 'degraded' {
-    const statuses = Object.values(checks).map(check => check.status);
-    
-    if (statuses.some(status => status === 'unhealthy')) {
+  private determineOverallStatus(
+    checks: Record<string, HealthCheck>
+  ): 'healthy' | 'unhealthy' | 'degraded' {
+    const statuses = Object.values(checks).map((check) => check.status);
+
+    if (statuses.some((status) => status === 'unhealthy')) {
       return 'unhealthy';
     }
-    
-    if (statuses.some(status => status === 'warning')) {
+
+    if (statuses.some((status) => status === 'warning')) {
       return 'degraded';
     }
-    
+
     return 'healthy';
   }
 }

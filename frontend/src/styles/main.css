@@ -41,6 +41,12 @@
   flex-direction: column;
 }
 
+/* Force dark theme when the document has the 'dark' class (we set this in main.tsx) */
+.dark .game-library-layout {
+  background: linear-gradient(135deg, var(--color-neutral-900), var(--color-neutral-800));
+  color: var(--color-neutral-100);
+}
+
 .game-library-layout::before {
   content: '';
   position: fixed;
@@ -48,7 +54,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
+  background:
     radial-gradient(circle at 20% 50%, rgba(14, 165, 233, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 80% 20%, rgba(34, 197, 94, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 40% 80%, rgba(236, 72, 153, 0.05) 0%, transparent 50%);
@@ -101,8 +107,9 @@
 /* ===== Hero Section ===== */
 
 .hero-section {
-  background: linear-gradient(135deg, 
-    rgba(14, 165, 233, 0.9), 
+  background: linear-gradient(
+    135deg,
+    rgba(14, 165, 233, 0.9),
     rgba(34, 197, 94, 0.8),
     rgba(236, 72, 153, 0.7)
   );
@@ -125,8 +132,12 @@
 }
 
 @keyframes hero-grid-move {
-  0% { transform: translate(0, 0); }
-  100% { transform: translate(10px, 10px); }
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(10px, 10px);
+  }
 }
 
 .hero-content {
@@ -235,8 +246,13 @@
 }
 
 @keyframes status-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 /* Enhanced Game Cards */
@@ -408,7 +424,9 @@
 
 .modern-search-input:focus {
   border-color: var(--color-primary-500);
-  box-shadow: var(--shadow-xl), 0 0 0 4px rgba(14, 165, 233, 0.1);
+  box-shadow:
+    var(--shadow-xl),
+    0 0 0 4px rgba(14, 165, 233, 0.1);
 }
 
 .modern-search-icon {
@@ -529,7 +547,7 @@
   left: 0;
   bottom: 0;
   right: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
   animation: progress-shimmer 1.5s infinite;
 }
 
@@ -563,32 +581,32 @@
   .hero-title {
     font-size: var(--font-size-4xl);
   }
-  
+
   .hero-subtitle {
     font-size: var(--font-size-lg);
   }
-  
+
   .hero-actions {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .game-card-actions {
     flex-direction: column;
   }
-  
+
   .wizard-header {
     padding: var(--space-6);
   }
-  
+
   .wizard-body {
     padding: var(--space-6);
   }
-  
+
   .modern-search-input {
     font-size: var(--font-size-base);
   }
-  
+
   .download-stats {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -598,25 +616,25 @@
   .game-library-layout {
     background: var(--color-neutral-50);
   }
-  
+
   .platform-badge {
     padding: var(--space-1) var(--space-2);
   }
-  
+
   .game-card-info {
     padding: var(--space-4);
   }
-  
+
   .wizard-step-indicator {
     gap: var(--space-2);
   }
-  
+
   .wizard-step {
     width: 32px;
     height: 32px;
     font-size: var(--font-size-sm);
   }
-  
+
   .download-header {
     flex-direction: column;
     gap: var(--space-3);
@@ -630,34 +648,34 @@
   .game-library-layout {
     background: linear-gradient(135deg, var(--color-neutral-900), var(--color-neutral-800));
   }
-  
+
   .game-navbar {
     background: rgba(15, 23, 42, 0.95);
     border-bottom-color: rgba(255, 255, 255, 0.1);
   }
-  
+
   .platform-badge {
     background: rgba(0, 0, 0, 0.4);
     color: var(--color-neutral-300);
     border-color: rgba(255, 255, 255, 0.1);
   }
-  
+
   .modern-game-card {
     background: var(--color-neutral-800);
     border-color: rgba(255, 255, 255, 0.1);
   }
-  
+
   .modern-search-input {
     background: var(--color-neutral-800);
     border-color: var(--color-neutral-700);
     color: var(--color-neutral-100);
   }
-  
+
   .search-suggestions {
     background: var(--color-neutral-800);
     border-color: var(--color-neutral-700);
   }
-  
+
   .search-suggestion:hover {
     background: var(--color-neutral-700);
   }
@@ -670,14 +688,14 @@
   .hero-section::before {
     display: none;
   }
-  
+
   .game-navbar,
   .hero-section,
   .wizard-footer {
     background: white !important;
     color: black !important;
   }
-  
+
   .modern-game-card {
     break-inside: avoid;
     box-shadow: none;

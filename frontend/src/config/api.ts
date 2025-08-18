@@ -12,18 +12,18 @@ const API_ENDPOINTS = {
   INSTALLATION_REQUIREMENTS: `${API_BASE_URL}/api/installation/requirements`,
   INSTALLATION_TEST_DB: `${API_BASE_URL}/api/installation/test-database`,
   INSTALLATION_INSTALL: `${API_BASE_URL}/api/installation/install`,
-  
+
   // Game endpoints
   GAMES: `${API_BASE_URL}/api/games`,
   GAMES_UPLOAD: `${API_BASE_URL}/api/games/upload`,
   GAME_BY_ID: (id: string) => `${API_BASE_URL}/api/games/${id}`,
   GAME_DOWNLOAD: (id: string) => `${API_BASE_URL}/api/games/${id}/download`,
-  
+
   // Metadata endpoints
   METADATA_SOURCES: `${API_BASE_URL}/api/metadata/sources`,
   METADATA_SEARCH: `${API_BASE_URL}/api/metadata/search`,
   METADATA_ENRICH: (gameId: string) => `${API_BASE_URL}/api/metadata/enrich/${gameId}`,
-  
+
   // Steam endpoints
   STEAM_STATUS: `${API_BASE_URL}/api/steam/status`,
   STEAM_USERS: `${API_BASE_URL}/api/steam/users`,
@@ -32,7 +32,7 @@ const API_ENDPOINTS = {
   STEAM_REMOVE_GAME: `${API_BASE_URL}/api/steam/games/remove`,
   STEAM_ADD_ITCH: `${API_BASE_URL}/api/steam/games/add-itch`,
   STEAM_RESTART: `${API_BASE_URL}/api/steam/restart`,
-  
+
   // Itch endpoints
   ITCH_DOWNLOADS: `${API_BASE_URL}/api/itch/downloads`,
   ITCH_GAMES_LOCAL: `${API_BASE_URL}/api/itch/games/local`,

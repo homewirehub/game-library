@@ -8,7 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   // Set consistent global API prefix
   app.setGlobalPrefix('api');
-  
+
   // Global input validation
   app.useGlobalPipes(
     new ValidationPipe({
@@ -21,7 +21,7 @@ async function bootstrap() {
 
   // Unified error responses
   app.useGlobalFilters(new GlobalExceptionFilter());
-  
+
   // Enable CORS for frontend
   const envService = app.get(EnvironmentService);
   const corsOrigin = envService.getSecurityConfig().corsOrigin;
@@ -29,7 +29,7 @@ async function bootstrap() {
     origin: corsOrigin,
     credentials: true,
   });
-  
+
   const port = process.env.PORT || 3001;
   await app.listen(port);
   console.log(`🚀 Game Library Backend running on http://localhost:${port}`);

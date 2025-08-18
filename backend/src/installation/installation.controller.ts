@@ -1,6 +1,15 @@
 import { Controller, Get, Post, Body, HttpException, HttpStatus } from '@nestjs/common';
-import { IsIn, IsNumber, IsString, IsOptional, Min, Max, IsEmail, MinLength } from 'class-validator';
-import { InstallationService, InstallationConfig } from './installation.service';
+import {
+  IsIn,
+  IsNumber,
+  IsString,
+  IsOptional,
+  Min,
+  Max,
+  IsEmail,
+  MinLength,
+} from 'class-validator';
+import { InstallationService } from './installation.service';
 
 export class DatabaseConfigDto {
   @IsIn(['postgres', 'sqlite'])
@@ -96,10 +105,10 @@ export class InstallationController {
         success: true,
         requirements,
       };
-    } catch (error) {
+  } catch (_error) {
       throw new HttpException(
         'Failed to check system requirements',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
@@ -113,10 +122,10 @@ export class InstallationController {
         success: true,
         message: 'Database connection successful',
       };
-    } catch (error) {
+  } catch (_error) {
       return {
         success: false,
-        message: `Database connection failed: ${error.message}`,
+    message: `Database connection failed: ${_error.message}`,
       };
     }
   }
@@ -127,10 +136,7 @@ export class InstallationController {
       // Check if already installed
       const isInstalled = await this.installationService.isInstalled();
       if (isInstalled) {
-        throw new HttpException(
-          'System is already installed',
-          HttpStatus.BAD_REQUEST,
-        );
+        throw new HttpException('System is already installed', HttpStatus.BAD_REQUEST);
       }
 
       // Validate configuration
@@ -148,10 +154,10 @@ export class InstallationController {
           'Upload your first game to get started',
         ],
       };
-    } catch (error) {
+  } catch (_error) {
       throw new HttpException(
-        `Installation failed: ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
+    `Installation failed: ${_error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }

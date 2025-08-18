@@ -339,36 +339,36 @@
   .steam-integration {
     padding: 15px;
   }
-  
+
   .header {
     flex-direction: column;
     gap: 15px;
     align-items: flex-start;
   }
-  
+
   .header h1 {
     font-size: 2rem;
   }
-  
+
   .form-row {
     grid-template-columns: 1fr;
   }
-  
+
   .game-header {
     flex-direction: column;
     gap: 12px;
     align-items: flex-start;
   }
-  
+
   .game-tags {
     margin-left: 0;
   }
-  
+
   .detail-row {
     flex-direction: column;
     gap: 4px;
   }
-  
+
   .detail-row .label {
     min-width: auto;
     margin-right: 0;

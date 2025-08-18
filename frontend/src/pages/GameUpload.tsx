@@ -80,8 +80,8 @@ const GameUpload: React.FC = () => {
         <h2 className="page-title">Upload New Game</h2>
         <p className="page-description">Add games to your library by uploading game files</p>
       </div>
-      
-      <div 
+
+      <div
         className={`upload-dropzone ${isDragActive ? 'drag-active' : ''} ${file ? 'has-file' : ''}`}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
@@ -106,9 +106,7 @@ const GameUpload: React.FC = () => {
           <label htmlFor="file-upload" className="btn btn-primary">
             Choose Files
           </label>
-          <p className="file-types-text">
-            Supported formats: ZIP, RAR, 7Z, ISO, EXE
-          </p>
+          <p className="file-types-text">Supported formats: ZIP, RAR, 7Z, ISO, EXE</p>
         </div>
       </div>
 
@@ -126,16 +124,16 @@ const GameUpload: React.FC = () => {
               <p className="file-type">{file.name.split('.').pop()?.toUpperCase()} File</p>
             </div>
           </div>
-          
+
           <div className="upload-actions">
-            <button 
-              onClick={uploadGame} 
+            <button
+              onClick={uploadGame}
               disabled={uploading}
               className={`btn btn-primary ${uploading ? 'loading' : ''}`}
             >
               {uploading ? 'Uploading...' : 'Upload Game'}
             </button>
-            <button 
+            <button
               onClick={() => setFile(null)}
               className="btn btn-secondary"
               disabled={uploading}
@@ -154,11 +152,11 @@ const GameUpload: React.FC = () => {
           </div>
           <div className="progress-container">
             <div className="progress-bar">
-              <div 
-                className="progress-fill" 
-                style={{ 
+              <div
+                className="progress-fill"
+                style={{
                   width: `${uploadProgress}%`,
-                  transition: 'width 0.3s ease'
+                  transition: 'width 0.3s ease',
                 }}
               ></div>
             </div>

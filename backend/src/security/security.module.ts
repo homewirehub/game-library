@@ -13,10 +13,6 @@ import { RateLimitController } from './rate-limit.controller';
     RedisRateLimitService, // Primary Redis-backed service
     RateLimitGuard,
   ],
-  exports: [
-    RateLimitService,
-    RedisRateLimitService,
-    RateLimitGuard,
-  ],
+  exports: [RateLimitService, RedisRateLimitService, RateLimitGuard],
 })
 export class SecurityModule {}

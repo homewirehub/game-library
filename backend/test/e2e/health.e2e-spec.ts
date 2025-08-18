@@ -1,4 +1,6 @@
-import * as request from 'supertest';
+/// <reference types="jest" />
+import 'reflect-metadata';
+import request from 'supertest';
 import { INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { HealthModule } from '../../src/health/health.module';

@@ -12,7 +12,7 @@ const dbType = configService.get('DB_TYPE', 'sqlite');
 const sqliteDriver = configService.get('DB_SQLITE_DRIVER', 'better-sqlite3');
 
 export const AppDataSource = new DataSource(
-  dbType === 'postgres' 
+  dbType === 'postgres'
     ? {
         type: 'postgres',
         host: configService.get('DB_HOST', 'localhost'),
@@ -28,25 +28,27 @@ export const AppDataSource = new DataSource(
         synchronize: false,
         logging: ['error', 'warn', 'migration'],
       }
-    : sqliteDriver === 'sqlite' ? {
-        type: 'sqlite',
-        database: configService.get('DB_PATH', './gamelib.db'),
-        entities: ['src/**/*.entity.ts'],
-        migrations: ['src/migrations/*.ts'],
-        subscribers: ['src/**/*.subscriber.ts'],
-        migrationsTableName: 'typeorm_migrations',
-        migrationsRun: false,
-        synchronize: false,
-        logging: ['error', 'warn', 'migration'],
-      } : {
-        type: 'better-sqlite3',
-        database: configService.get('DB_PATH', './gamelib.db'),
-        entities: ['src/**/*.entity.ts'],
-        migrations: ['src/migrations/*.ts'],
-        subscribers: ['src/**/*.subscriber.ts'],
-        migrationsTableName: 'typeorm_migrations',
-        migrationsRun: false,
-        synchronize: false,
-        logging: ['error', 'warn', 'migration'],
-      }
+    : sqliteDriver === 'sqlite'
+      ? {
+          type: 'sqlite',
+          database: configService.get('DB_PATH', './gamelib.db'),
+          entities: ['src/**/*.entity.ts'],
+          migrations: ['src/migrations/*.ts'],
+          subscribers: ['src/**/*.subscriber.ts'],
+          migrationsTableName: 'typeorm_migrations',
+          migrationsRun: false,
+          synchronize: false,
+          logging: ['error', 'warn', 'migration'],
+        }
+      : {
+          type: 'better-sqlite3',
+          database: configService.get('DB_PATH', './gamelib.db'),
+          entities: ['src/**/*.entity.ts'],
+          migrations: ['src/migrations/*.ts'],
+          subscribers: ['src/**/*.subscriber.ts'],
+          migrationsTableName: 'typeorm_migrations',
+          migrationsRun: false,
+          synchronize: false,
+          logging: ['error', 'warn', 'migration'],
+        }
 );

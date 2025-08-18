@@ -23,14 +23,9 @@ export const Card: React.FC<CardProps> = ({
   const hoverClass = hover ? 'card--hover' : '';
   const interactiveClass = interactive ? 'card--interactive' : '';
 
-  const classes = [
-    baseClass,
-    variantClass,
-    paddingClass,
-    hoverClass,
-    interactiveClass,
-    className
-  ].filter(Boolean).join(' ');
+  const classes = [baseClass, variantClass, paddingClass, hoverClass, interactiveClass, className]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div className={classes} {...props}>

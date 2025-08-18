@@ -5,6 +5,7 @@ Use this checklist to ensure safe and successful production deployments of the G
 ## 📋 Pre-Deployment Checklist
 
 ### ✅ Environment Configuration
+
 - [ ] **Environment Variables**: All required variables set in production `.env`
 - [ ] **JWT Secret**: 64+ character cryptographically random secret
 - [ ] **Database**: PostgreSQL configured (never SQLite in production)
@@ -14,12 +15,14 @@ Use this checklist to ensure safe and successful production deployments of the G
 - [ ] **SSL/TLS**: HTTPS enabled and certificates valid
 
 ### ✅ Database Preparation
+
 - [ ] **Backup**: Current database backed up
 - [ ] **Migrations**: All migrations tested in staging
 - [ ] **Synchronize**: Set to `false` (never `true` in production)
 - [ ] **Connection**: Database credentials and connectivity verified
 
 ### ✅ Security Hardening
+
 - [ ] **Rate Limiting**: Redis-backed rate limiting enabled
 - [ ] **Authentication**: JWT configuration validated
 - [ ] **Password Hashing**: BCrypt rounds set appropriately (12-14)
@@ -27,6 +30,7 @@ Use this checklist to ensure safe and successful production deployments of the G
 - [ ] **API Keys**: External API keys configured securely
 
 ### ✅ Application Testing
+
 - [ ] **Build**: Application builds without errors
 - [ ] **Tests**: All unit and integration tests pass
 - [ ] **Health Check**: `/health` endpoint responds correctly
@@ -36,6 +40,7 @@ Use this checklist to ensure safe and successful production deployments of the G
 ## 🔧 Deployment Steps
 
 ### 1. **Backup Current System**
+
 ```bash
 # Database backup
 pg_dump your_production_db > backup_$(date +%Y%m%d_%H%M%S).sql
@@ -45,6 +50,7 @@ tar -czf app_backup_$(date +%Y%m%d_%H%M%S).tar.gz /path/to/current/app
 ```
 
 ### 2. **Deploy Application**
+
 ```bash
 # Clone/update repository
 git pull origin main
@@ -60,6 +66,7 @@ pnpm migration:run
 ```
 
 ### 3. **Start Services**
+
 ```bash
 # Using PM2 (recommended)
 pm2 start ecosystem.config.js
@@ -72,6 +79,7 @@ pnpm start
 ```
 
 ### 4. **Verify Deployment**
+
 ```bash
 # Health check
 curl https://your-domain.com/api/health
@@ -88,6 +96,7 @@ curl https://your-domain.com/api/games
 If deployment fails or issues are detected:
 
 ### **Immediate Rollback**
+
 ```bash
 # 1. Stop new application
 pm2 stop game-library
@@ -107,6 +116,7 @@ pm2 restart game-library
 ```
 
 ### **Post-Rollback Tasks**
+
 - [ ] Verify application is working
 - [ ] Check error logs for root cause
 - [ ] Plan fix for next deployment
@@ -115,6 +125,7 @@ pm2 restart game-library
 ## 🌍 Environment Templates
 
 ### **Production .env Template**
+
 ```bash
 # Application
 NODE_ENV=production
@@ -158,6 +169,7 @@ LOG_LEVEL=warn
 ```
 
 ### **Docker Compose Production**
+
 ```yaml
 version: '3.8'
 services:
@@ -181,7 +193,7 @@ services:
   app:
     build: .
     ports:
-      - "3001:3001"
+      - '3001:3001'
     environment:
       - NODE_ENV=production
     depends_on:
@@ -200,6 +212,7 @@ volumes:
 ## 📊 Monitoring & Maintenance
 
 ### **Health Monitoring**
+
 - [ ] Application health endpoint: `/api/health`
 - [ ] Database connectivity monitoring
 - [ ] Redis connectivity monitoring
@@ -208,6 +221,7 @@ volumes:
 - [ ] Response time monitoring
 
 ### **Log Monitoring**
+
 ```bash
 # Application logs
 pm2 logs game-library
@@ -220,6 +234,7 @@ journalctl -u game-library -f
 ```
 
 ### **Regular Maintenance**
+
 - [ ] **Weekly**: Review error logs and performance metrics
 - [ ] **Monthly**: Update dependencies (with testing)
 - [ ] **Quarterly**: Review and update environment configurations
@@ -228,14 +243,16 @@ journalctl -u game-library -f
 ## 🚨 Emergency Contacts
 
 ### **Escalation Path**
+
 1. **Development Team**: [contact info]
 2. **DevOps Team**: [contact info]
 3. **Database Administrator**: [contact info]
 4. **On-call Engineer**: [contact info]
 
 ### **Critical Resources**
+
 - **Monitoring Dashboard**: [URL]
-- **Error Tracking**: [URL] 
+- **Error Tracking**: [URL]
 - **Database Admin Panel**: [URL]
 - **Documentation**: [URL]
 

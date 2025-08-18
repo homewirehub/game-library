@@ -8,17 +8,17 @@ contextBridge.exposeInMainWorld('electronAPI', {
   downloadGame: (gameId) => ipcRenderer.invoke('download-game', gameId),
   installGame: (filePath, gameName) => ipcRenderer.invoke('install-game', filePath, gameName),
   addToSteam: (gameData) => ipcRenderer.invoke('add-to-steam', gameData),
-  
+
   // System info
   getSystemInfo: () => ipcRenderer.invoke('get-system-info'),
-  
+
   // Window controls
   closeApp: () => ipcRenderer.invoke('close-app'),
   minimizeApp: () => ipcRenderer.invoke('minimize-app'),
-  
+
   // File operations
   selectDirectory: () => ipcRenderer.invoke('select-directory'),
-  openExternal: (url) => ipcRenderer.invoke('open-external', url)
+  openExternal: (url) => ipcRenderer.invoke('open-external', url),
 });
 
 // DOM ready event

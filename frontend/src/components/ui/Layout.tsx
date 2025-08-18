@@ -21,18 +21,13 @@ export const Container: React.FC<ContainerProps> = ({
   const sizeClass = `container--${size}`;
   const paddingClass = `container--padding-${padding}`;
   const centeredClass = centered ? 'container--centered' : '';
-  const scrollableClass = scrollable 
+  const scrollableClass = scrollable
     ? `container--scrollable${scrollable === 'auto' ? '-auto' : scrollable === 'content' ? '-content' : ''}`
     : '';
 
-  const classes = [
-    baseClass,
-    sizeClass,
-    paddingClass,
-    centeredClass,
-    scrollableClass,
-    className
-  ].filter(Boolean).join(' ');
+  const classes = [baseClass, sizeClass, paddingClass, centeredClass, scrollableClass, className]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div className={classes} {...props}>
@@ -68,7 +63,7 @@ export const Flex: React.FC<FlexProps> = ({
   const justifyClass = `flex--justify-${justify}`;
   const alignClass = `flex--align-${align}`;
   const gapClass = typeof gap === 'number' ? '' : `flex--gap-${gap}`;
-  const scrollableClass = scrollable 
+  const scrollableClass = scrollable
     ? `flex--scrollable${scrollable === 'x' ? '-x' : scrollable === 'both' ? '-both' : ''}`
     : '';
 
@@ -80,8 +75,10 @@ export const Flex: React.FC<FlexProps> = ({
     alignClass,
     gapClass,
     scrollableClass,
-    className
-  ].filter(Boolean).join(' ');
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   const customStyle = typeof gap === 'number' ? { ...style, gap: `${gap}px` } : style;
 
@@ -112,17 +109,10 @@ export const Grid: React.FC<GridProps> = ({
   const gapClass = `grid--gap-${gap}`;
   const rowsClass = typeof rows === 'number' ? '' : `grid--rows-${rows}`;
 
-  const classes = [
-    baseClass,
-    colsClass,
-    gapClass,
-    rowsClass,
-    className
-  ].filter(Boolean).join(' ');
+  const classes = [baseClass, colsClass, gapClass, rowsClass, className].filter(Boolean).join(' ');
 
-  const customStyle = typeof rows === 'number' ? 
-    { ...style, gridTemplateRows: `repeat(${rows}, 1fr)` } : 
-    style;
+  const customStyle =
+    typeof rows === 'number' ? { ...style, gridTemplateRows: `repeat(${rows}, 1fr)` } : style;
 
   return (
     <div className={classes} style={customStyle} {...props}>
@@ -147,12 +137,7 @@ export const Stack: React.FC<StackProps> = ({
   const spacingClass = `stack--spacing-${spacing}`;
   const alignClass = `stack--align-${align}`;
 
-  const classes = [
-    baseClass,
-    spacingClass,
-    alignClass,
-    className
-  ].filter(Boolean).join(' ');
+  const classes = [baseClass, spacingClass, alignClass, className].filter(Boolean).join(' ');
 
   return (
     <div className={classes} {...props}>

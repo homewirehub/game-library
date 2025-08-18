@@ -9,12 +9,12 @@ export class GamesService {
   constructor(
     @InjectRepository(Game)
     private gameRepository: Repository<Game>,
-    private metadataService: MetadataService,
+    private metadataService: MetadataService
   ) {}
 
   async getAllGames(): Promise<Game[]> {
     return this.gameRepository.find({
-      order: { createdAt: 'DESC' }
+      order: { createdAt: 'DESC' },
     });
   }
 
@@ -28,14 +28,14 @@ export class GamesService {
       fileName: file.originalname,
       filePath: file.path,
       fileSize: file.size,
-      status: 'uploaded'
+      status: 'uploaded',
     });
 
     const savedGame = await this.gameRepository.save(game);
-    
+
     // Process metadata in background
     this.metadataService.processGameFile(savedGame.id);
-    
+
     return savedGame;
   }
 

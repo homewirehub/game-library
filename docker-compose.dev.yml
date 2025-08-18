@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: gamelib_user
       POSTGRES_PASSWORD: secure_password_change_me
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init-scripts:/docker-entrypoint-initdb.d
@@ -21,13 +21,13 @@ services:
     restart: unless-stopped
     command: redis-server --appendonly yes --requirepass redis_password_change_me
     ports:
-      - "6379:6379"
+      - '6379:6379'
     volumes:
       - redis_data:/data
     networks:
       - gamelib_network
     healthcheck:
-      test: ["CMD", "redis-cli", "-a", "redis_password_change_me", "ping"]
+      test: ['CMD', 'redis-cli', '-a', 'redis_password_change_me', 'ping']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -40,7 +40,7 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin_password_change_me
       PGADMIN_CONFIG_SERVER_MODE: 'False'
     ports:
-      - "8080:80"
+      - '8080:80'
     volumes:
       - pgadmin_data:/var/lib/pgadmin
     networks:

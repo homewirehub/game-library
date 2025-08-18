@@ -5,16 +5,18 @@
 ### **Option 1: Docker Setup (Recommended)**
 
 1. **Start PostgreSQL with Docker:**
+
    ```bash
    docker-compose -f docker-compose.dev.yml up -d
    ```
-   
+
    This creates:
    - PostgreSQL database on port 5432
    - PgAdmin web interface on http://localhost:8080
    - Default credentials: `gamelib_user` / `secure_password_change_me`
 
 2. **Start the application:**
+
    ```bash
    pnpm run dev
    ```
@@ -37,6 +39,7 @@
    - Linux: `sudo apt install postgresql postgresql-contrib`
 
 2. **Create database and user:**
+
    ```sql
    CREATE USER gamelib_user WITH PASSWORD 'your_password';
    CREATE DATABASE gamelib OWNER gamelib_user;
@@ -48,36 +51,43 @@
 ## 🎯 **Installation Wizard Features**
 
 ### **Step 1: System Requirements**
+
 - Node.js version check
 - Disk space verification
 - Memory requirements
 
 ### **Step 2: Database Configuration**
+
 - PostgreSQL connection settings
 - Database creation
 - Connection testing
 
 ### **Step 3: Admin Account**
+
 - Administrator username/password
 - Email configuration
 - Security validation
 
 ### **Step 4: Server & Storage**
+
 - Server port and host settings
 - Storage directory configuration
 - File size limits
 
 ### **Step 5: Review & Install**
+
 - Configuration summary
 - Final installation process
 
 ### **Step 6: Success & Next Steps**
+
 - Installation completion
 - Access instructions
 
 ## 🔧 **Production Deployment**
 
 ### **Environment Variables**
+
 Create `.env` file with:
 
 ```env
@@ -104,6 +114,7 @@ BCRYPT_ROUNDS=12
 ```
 
 ### **Build & Deploy**
+
 ```bash
 # Build backend
 cd backend && pnpm build
@@ -143,11 +154,13 @@ game.lib/
 ## 🔍 **Database Management**
 
 ### **PgAdmin Access**
+
 - URL: http://localhost:8080
 - Email: admin@gamelib.local
 - Password: admin_password_change_me
 
 ### **Direct Database Access**
+
 ```bash
 psql -h localhost -U gamelib_user -d gamelib
 ```

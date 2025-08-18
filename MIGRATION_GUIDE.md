@@ -5,6 +5,7 @@ This guide explains how to manage database schema changes using TypeORM migratio
 ## 📋 Overview
 
 **Migrations** are version-controlled database schema changes that allow you to:
+
 - ✅ Apply consistent database changes across environments
 - ✅ Roll back problematic changes safely
 - ✅ Track schema evolution over time
@@ -48,14 +49,14 @@ pnpm dev
 
 ### Migration Management
 
-| Command | Description |
-|---------|-------------|
+| Command                          | Description                            |
+| -------------------------------- | -------------------------------------- |
 | `pnpm migration:generate <name>` | Generate migration from entity changes |
-| `pnpm migration:create <name>` | Create empty migration file |
-| `pnpm migration:run` | Run all pending migrations |
-| `pnpm migration:revert` | Revert the last migration |
-| `pnpm migration:show` | Show migration status |
-| `pnpm schema:drop` | ⚠️ Drop entire database schema |
+| `pnpm migration:create <name>`   | Create empty migration file            |
+| `pnpm migration:run`             | Run all pending migrations             |
+| `pnpm migration:revert`          | Revert the last migration              |
+| `pnpm migration:show`            | Show migration status                  |
+| `pnpm schema:drop`               | ⚠️ Drop entire database schema         |
 
 ### Examples
 
@@ -95,6 +96,7 @@ DB_NAME=gamelib
 ### TypeORM DataSource
 
 The migration system uses `src/config/data-source.ts` for configuration. This file:
+
 - ✅ Loads environment variables
 - ✅ Configures database connection
 - ✅ Sets migration paths and settings
@@ -103,6 +105,7 @@ The migration system uses `src/config/data-source.ts` for configuration. This fi
 ## 🏗️ Migration Best Practices
 
 ### 1. **Descriptive Names**
+
 ```bash
 # ✅ Good
 pnpm migration:generate src/migrations/AddGameMetadataFields
@@ -114,26 +117,30 @@ pnpm migration:generate src/migrations/Fix
 ```
 
 ### 2. **Review Before Running**
+
 Always review generated migrations before applying:
+
 ```typescript
 // Check that the migration does what you expect
 export class AddGameMetadata1234567890 implements MigrationInterface {
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        // ✅ Verify these changes are correct
-        await queryRunner.query(`ALTER TABLE "games" ADD "metacritic_score" integer`);
-        await queryRunner.query(`CREATE INDEX "IDX_games_metacritic" ON "games" ("metacritic_score")`);
-    }
-    
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        // ✅ Ensure down migration reverses the up migration
-        await queryRunner.query(`DROP INDEX "IDX_games_metacritic"`);
-        await queryRunner.query(`ALTER TABLE "games" DROP COLUMN "metacritic_score"`);
-    }
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    // ✅ Verify these changes are correct
+    await queryRunner.query(`ALTER TABLE "games" ADD "metacritic_score" integer`);
+    await queryRunner.query(`CREATE INDEX "IDX_games_metacritic" ON "games" ("metacritic_score")`);
+  }
+
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    // ✅ Ensure down migration reverses the up migration
+    await queryRunner.query(`DROP INDEX "IDX_games_metacritic"`);
+    await queryRunner.query(`ALTER TABLE "games" DROP COLUMN "metacritic_score"`);
+  }
 }
 ```
 
 ### 3. **Test Rollbacks**
+
 Test your down migrations in development:
+
 ```bash
 # Apply migration
 pnpm migration:run
@@ -146,7 +153,9 @@ pnpm migration:run
 ```
 
 ### 4. **Backup Before Production**
+
 Always backup production databases before running migrations:
+
 ```bash
 # PostgreSQL backup example
 pg_dump gamelib_prod > backup_$(date +%Y%m%d_%H%M%S).sql
@@ -158,12 +167,14 @@ pnpm migration:run
 ## 🔒 Production Deployment
 
 ### 1. **Pre-Deployment Checklist**
+
 - [ ] All migrations tested in staging environment
 - [ ] Database backup completed
 - [ ] Migration rollback plan prepared
 - [ ] Team notified of deployment window
 
 ### 2. **Deployment Process**
+
 ```bash
 # 1. Backup database
 pg_dump your_db > backup_$(date +%Y%m%d_%H%M%S).sql
@@ -179,7 +190,9 @@ curl http://localhost:3001/health
 ```
 
 ### 3. **Rollback Procedure**
+
 If issues occur:
+
 ```bash
 # Option 1: Revert last migration
 pnpm migration:revert
@@ -193,12 +206,14 @@ psql your_db < backup_20240106_143000.sql
 ### Common Issues
 
 #### "Migration table not found"
+
 ```bash
 # First migration run, this is expected
 pnpm migration:run
 ```
 
 #### "Migration already exists"
+
 ```bash
 # Check migration status
 pnpm migration:show
@@ -207,6 +222,7 @@ pnpm migration:show
 ```
 
 #### "No changes in database schema found"
+
 ```bash
 # Your entities haven't changed since last migration
 # Or you might need to:
@@ -216,6 +232,7 @@ pnpm migration:show
 ```
 
 #### Database connection errors
+
 ```bash
 # Check your .env configuration
 # Verify database server is running

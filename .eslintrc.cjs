@@ -19,11 +19,7 @@ module.exports = {
     },
     // Backend tests/e2e - do NOT require a TS project (avoids parserOptions.project errors)
     {
-      files: [
-        'backend/test/**/*.ts',
-        'backend/**/*.spec.ts',
-        'backend/**/*.e2e-spec.ts',
-      ],
+      files: ['backend/test/**/*.ts', 'backend/**/*.spec.ts', 'backend/**/*.e2e-spec.ts'],
       parser: '@typescript-eslint/parser',
       parserOptions: { tsconfigRootDir: __dirname },
       plugins: ['@typescript-eslint'],

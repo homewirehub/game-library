@@ -38,7 +38,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     if (exception instanceof HttpException) {
       status = exception.getStatus();
       const exceptionResponse = exception.getResponse();
-      
+
       if (typeof exceptionResponse === 'object') {
         message = (exceptionResponse as any).message || exception.message;
         error = (exceptionResponse as any).error || exception.name;
@@ -50,7 +50,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     } else if (exception instanceof Error) {
       message = exception.message;
       error = exception.name;
-      
+
       // Handle specific error types
       if (exception.name === 'ValidationError') {
         status = HttpStatus.BAD_REQUEST;
@@ -77,20 +77,17 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
     // Log error for monitoring
     const logLevel = status >= 500 ? 'error' : 'warn';
-    this.logger[logLevel](
-      `${request.method} ${request.url} - ${status} - ${message}`,
-      {
-        requestId,
-        statusCode: status,
-        error: error,
-        userAgent: request.get('User-Agent'),
-        ip: request.ip,
-        body: this.sanitizeRequestBody(request.body),
-        query: request.query,
-        params: request.params,
-        exception: exception instanceof Error ? exception.stack : exception,
-      }
-    );
+    this.logger[logLevel](`${request.method} ${request.url} - ${status} - ${message}`, {
+      requestId,
+      statusCode: status,
+      error: error,
+      userAgent: request.get('User-Agent'),
+      ip: request.ip,
+      body: this.sanitizeRequestBody(request.body),
+      query: request.query,
+      params: request.params,
+      exception: exception instanceof Error ? exception.stack : exception,
+    });
 
     response.status(status).json(errorResponse);
   }

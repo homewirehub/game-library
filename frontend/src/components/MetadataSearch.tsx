@@ -29,7 +29,7 @@ const MetadataSearch: React.FC<MetadataSearchProps> = ({
   gameId,
   currentTitle,
   onMetadataSelected,
-  onEnrichmentComplete
+  onEnrichmentComplete,
 }) => {
   const [searchQuery, setSearchQuery] = useState(currentTitle);
   const [selectedSources, setSelectedSources] = useState<string[]>([]);
@@ -42,7 +42,7 @@ const MetadataSearch: React.FC<MetadataSearchProps> = ({
     queryFn: async (): Promise<MetadataSource[]> => {
       const response = await axios.get(API_ENDPOINTS.METADATA_SOURCES);
       return response.data;
-    }
+    },
   });
 
   // Search metadata mutation
@@ -50,13 +50,13 @@ const MetadataSearch: React.FC<MetadataSearchProps> = ({
     mutationFn: async ({ query, sources }: { query: string; sources?: string[] }) => {
       const params = new URLSearchParams({
         query,
-        maxResults: '10'
+        maxResults: '10',
       });
-      
+
       if (sources && sources.length > 0) {
         params.append('sources', sources.join(','));
       }
-      
+
       const response = await axios.get(`${API_ENDPOINTS.METADATA_SEARCH}?${params}`);
       return response.data;
     },
@@ -67,19 +67,23 @@ const MetadataSearch: React.FC<MetadataSearchProps> = ({
     onError: (error) => {
       console.error('Search error:', error);
       setIsSearching(false);
-    }
+    },
   });
 
   // Enrich metadata mutation
   const enrichMutation = useMutation({
-    mutationFn: async ({ gameId, searchQuery, sources }: { 
-      gameId: number; 
-      searchQuery?: string; 
-      sources?: string[] 
+    mutationFn: async ({
+      gameId,
+      searchQuery,
+      sources,
+    }: {
+      gameId: number;
+      searchQuery?: string;
+      sources?: string[];
     }) => {
       const response = await axios.post(`${API_ENDPOINTS.METADATA_ENRICH}/${gameId}`, {
         searchQuery,
-        sources
+        sources,
       });
       return response.data;
     },
@@ -90,24 +94,22 @@ const MetadataSearch: React.FC<MetadataSearchProps> = ({
     onError: (error) => {
       console.error('Enrichment error:', error);
       alert('Error enriching metadata. Please try again.');
-    }
+    },
   });
 
   const handleSearch = () => {
     if (!searchQuery.trim()) return;
-    
+
     setIsSearching(true);
     searchMutation.mutate({
       query: searchQuery,
-      sources: selectedSources.length > 0 ? selectedSources : undefined
+      sources: selectedSources.length > 0 ? selectedSources : undefined,
     });
   };
 
   const handleSourceToggle = (sourceName: string) => {
-    setSelectedSources(prev => 
-      prev.includes(sourceName)
-        ? prev.filter(s => s !== sourceName)
-        : [...prev, sourceName]
+    setSelectedSources((prev) =>
+      prev.includes(sourceName) ? prev.filter((s) => s !== sourceName) : [...prev, sourceName]
     );
   };
 
@@ -116,7 +118,7 @@ const MetadataSearch: React.FC<MetadataSearchProps> = ({
     enrichMutation.mutate({
       gameId,
       searchQuery: result.title,
-      sources: [result.source]
+      sources: [result.source],
     });
   };
 
@@ -124,20 +126,23 @@ const MetadataSearch: React.FC<MetadataSearchProps> = ({
     enrichMutation.mutate({
       gameId,
       searchQuery: searchQuery || currentTitle,
-      sources: selectedSources.length > 0 ? selectedSources : undefined
+      sources: selectedSources.length > 0 ? selectedSources : undefined,
     });
   };
 
   return (
     <div className="metadata-search">
       <h3>Search & Enrich Metadata</h3>
-      
+
       {/* Available Sources */}
       <div className="sources-section">
         <h4>Available Sources</h4>
         <div className="sources-grid">
           {sources?.map((source) => (
-            <label key={source.name} className={`source-item ${!source.available ? 'unavailable' : ''}`}>
+            <label
+              key={source.name}
+              className={`source-item ${!source.available ? 'unavailable' : ''}`}
+            >
               <input
                 type="checkbox"
                 checked={selectedSources.includes(source.name)}
@@ -145,9 +150,7 @@ const MetadataSearch: React.FC<MetadataSearchProps> = ({
                 disabled={!source.available}
               />
               <span className="source-name">{source.name}</span>
-              <span className="source-status">
-                {source.available ? '✓' : '✗'}
-              </span>
+              <span className="source-status">{source.available ? '✓' : '✗'}</span>
             </label>
           ))}
         </div>
@@ -163,7 +166,7 @@ const MetadataSearch: React.FC<MetadataSearchProps> = ({
             placeholder="Enter game title to search..."
             className="search-input"
           />
-          <button 
+          <button
             onClick={handleSearch}
             disabled={isSearching || !searchQuery.trim()}
             className="search-button"
@@ -171,8 +174,8 @@ const MetadataSearch: React.FC<MetadataSearchProps> = ({
             {isSearching ? 'Searching...' : 'Search'}
           </button>
         </div>
-        
-        <button 
+
+        <button
           onClick={handleAutoEnrich}
           disabled={enrichMutation.isPending}
           className="auto-enrich-button"
@@ -186,21 +189,17 @@ const MetadataSearch: React.FC<MetadataSearchProps> = ({
         <div className="results-section">
           <h4>Search Results</h4>
           <div className="results-grid">
-            {searchResults.map((result, index) => (
+            {searchResults.map((result, _index) => (
               <div key={`${result.source}-${result.id}`} className="result-item">
                 {result.coverUrl && (
-                  <img 
-                    src={result.coverUrl} 
-                    alt={result.title}
-                    className="result-cover"
-                  />
+                  <img src={result.coverUrl} alt={result.title} className="result-cover" />
                 )}
                 <div className="result-info">
                   <h5>{result.title}</h5>
                   {result.releaseYear && <p>Year: {result.releaseYear}</p>}
                   <p>Source: {result.source}</p>
                   <p>Relevance: {Math.round(result.relevanceScore * 100)}%</p>
-                  <button 
+                  <button
                     onClick={() => handleSelectResult(result)}
                     className="select-result-button"
                     disabled={enrichMutation.isPending}

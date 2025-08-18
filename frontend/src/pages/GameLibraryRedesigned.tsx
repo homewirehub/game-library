@@ -2,17 +2,16 @@ import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { 
+import {
   ScrollableLayout,
-  Card, 
-  CardHeader, 
-  CardContent, 
-  Button, 
-  Input, 
-  Select, 
+  Card,
+  CardHeader,
+  Button,
+  Input,
+  Select,
   Grid,
   Flex,
-  Stack
+  Stack,
 } from '../components/ui';
 import API_ENDPOINTS from '../config/api';
 
@@ -34,33 +33,38 @@ const GameLibraryRedesigned: React.FC = () => {
   const [sortBy, setSortBy] = useState<'title' | 'releaseYear' | 'status'>('title');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const { data: games, isLoading, error } = useQuery({
+  const {
+    data: games,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['games'],
     queryFn: async (): Promise<Game[]> => {
       const response = await axios.get(API_ENDPOINTS.GAMES);
       return response.data;
-    }
+    },
   });
 
   const filteredAndSortedGames = React.useMemo(() => {
     if (!games) return [];
-    
+
     let filtered = games;
-    
+
     // Filter by status
     if (filterStatus !== 'all') {
-      filtered = filtered.filter(game => game.status === filterStatus);
+      filtered = filtered.filter((game) => game.status === filterStatus);
     }
-    
+
     // Filter by search query
     if (searchQuery.trim()) {
-      filtered = filtered.filter(game => 
-        game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        game.developer?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        game.genre?.toLowerCase().includes(searchQuery.toLowerCase())
+      filtered = filtered.filter(
+        (game) =>
+          game.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          game.developer?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          game.genre?.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-    
+
     // Sort
     return filtered.sort((a, b) => {
       switch (sortBy) {
@@ -109,8 +113,11 @@ const GameLibraryRedesigned: React.FC = () => {
   if (error) {
     return (
       <ScrollableLayout padding="lg" maxWidth="xl">
-        <Card variant="outlined" padding="xl" 
-              style={{ borderColor: '#ef4444', backgroundColor: '#fef2f2' }}>
+        <Card
+          variant="outlined"
+          padding="xl"
+          style={{ borderColor: '#ef4444', backgroundColor: '#fef2f2' }}
+        >
           <Flex direction="column" align="center" gap="md">
             <div style={{ fontSize: '2rem' }}>❌</div>
             <h3 style={{ margin: 0, color: '#dc2626' }}>Failed to Load Games</h3>
@@ -134,14 +141,13 @@ const GameLibraryRedesigned: React.FC = () => {
           <CardHeader>
             <Flex justify="between" align="center" gap="md">
               <Stack spacing="sm">
-                <h1 style={{ margin: 0, fontSize: '2rem', fontWeight: 600 }}>
-                  🎮 Game Library
-                </h1>
+                <h1 style={{ margin: 0, fontSize: '2rem', fontWeight: 600 }}>🎮 Game Library</h1>
                 <p style={{ margin: 0, color: '#6b7280', fontSize: '1rem' }}>
-                  {filteredAndSortedGames.length} {filteredAndSortedGames.length === 1 ? 'game' : 'games'} found
+                  {filteredAndSortedGames.length}{' '}
+                  {filteredAndSortedGames.length === 1 ? 'game' : 'games'} found
                 </p>
               </Stack>
-              
+
               <Link to="/upload">
                 <Button variant="primary" size="lg" icon="⬆️">
                   Add Game
@@ -161,22 +167,26 @@ const GameLibraryRedesigned: React.FC = () => {
               icon="🔍"
               size="lg"
             />
-            
+
             <Grid cols="responsive" gap="md">
               <Select
                 value={filterStatus}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilterStatus(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                  setFilterStatus(e.target.value)
+                }
                 options={statusOptions}
                 size="md"
               />
-              
+
               <Select
                 value={sortBy}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSortBy(e.target.value as 'title' | 'releaseYear' | 'status')}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                  setSortBy(e.target.value as 'title' | 'releaseYear' | 'status')
+                }
                 options={sortOptions}
                 size="md"
               />
-              
+
               <Flex gap="sm">
                 <Button
                   variant={viewMode === 'grid' ? 'primary' : 'ghost'}
@@ -208,10 +218,9 @@ const GameLibraryRedesigned: React.FC = () => {
                 {searchQuery ? 'No games match your search' : 'No games found'}
               </h3>
               <p style={{ margin: 0, color: '#9ca3af', textAlign: 'center' }}>
-                {searchQuery 
+                {searchQuery
                   ? `Try a different search term or check your filters.`
-                  : 'Start by adding some games to your library.'
-                }
+                  : 'Start by adding some games to your library.'}
               </p>
               {searchQuery && (
                 <Button variant="secondary" onClick={() => setSearchQuery('')}>
@@ -228,8 +237,8 @@ const GameLibraryRedesigned: React.FC = () => {
                   {viewMode === 'grid' ? (
                     <Stack spacing="md">
                       {game.coverUrl && (
-                        <img 
-                          src={game.coverUrl} 
+                        <img
+                          src={game.coverUrl}
                           alt={game.title}
                           style={{
                             width: '100%',
@@ -254,16 +263,23 @@ const GameLibraryRedesigned: React.FC = () => {
                           </p>
                         )}
                         <Flex justify="between" align="center">
-                          <span style={{
-                            padding: '0.25rem 0.75rem',
-                            fontSize: '0.75rem',
-                            fontWeight: 600,
-                            borderRadius: '9999px',
-                            backgroundColor: game.status === 'installed' ? '#10b981' : 
-                                            game.status === 'downloading' ? '#3b82f6' : 
-                                            game.status === 'error' ? '#ef4444' : '#6b7280',
-                            color: 'white'
-                          }}>
+                          <span
+                            style={{
+                              padding: '0.25rem 0.75rem',
+                              fontSize: '0.75rem',
+                              fontWeight: 600,
+                              borderRadius: '9999px',
+                              backgroundColor:
+                                game.status === 'installed'
+                                  ? '#10b981'
+                                  : game.status === 'downloading'
+                                    ? '#3b82f6'
+                                    : game.status === 'error'
+                                      ? '#ef4444'
+                                      : '#6b7280',
+                              color: 'white',
+                            }}
+                          >
                             {game.status.toUpperCase()}
                           </span>
                         </Flex>
@@ -272,15 +288,15 @@ const GameLibraryRedesigned: React.FC = () => {
                   ) : (
                     <Flex gap="md" align="center">
                       {game.coverUrl && (
-                        <img 
-                          src={game.coverUrl} 
+                        <img
+                          src={game.coverUrl}
                           alt={game.title}
                           style={{
                             width: '80px',
                             height: '80px',
                             objectFit: 'cover',
                             borderRadius: '8px',
-                            flexShrink: 0
+                            flexShrink: 0,
                           }}
                         />
                       )}
@@ -306,17 +322,24 @@ const GameLibraryRedesigned: React.FC = () => {
                           )}
                         </Flex>
                       </Stack>
-                      <span style={{
-                        padding: '0.25rem 0.75rem',
-                        fontSize: '0.75rem',
-                        fontWeight: 600,
-                        borderRadius: '9999px',
-                        backgroundColor: game.status === 'installed' ? '#10b981' : 
-                                        game.status === 'downloading' ? '#3b82f6' : 
-                                        game.status === 'error' ? '#ef4444' : '#6b7280',
-                        color: 'white',
-                        flexShrink: 0
-                      }}>
+                      <span
+                        style={{
+                          padding: '0.25rem 0.75rem',
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          borderRadius: '9999px',
+                          backgroundColor:
+                            game.status === 'installed'
+                              ? '#10b981'
+                              : game.status === 'downloading'
+                                ? '#3b82f6'
+                                : game.status === 'error'
+                                  ? '#ef4444'
+                                  : '#6b7280',
+                          color: 'white',
+                          flexShrink: 0,
+                        }}
+                      >
                         {game.status.toUpperCase()}
                       </span>
                     </Flex>

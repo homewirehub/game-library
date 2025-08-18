@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "composite": true,
+    "outDir": "../.tsbuild/cypress",
+    "types": ["cypress", "@testing-library/cypress", "cypress-real-events"],
+    "lib": ["es2020", "dom"]
+  },
+  "include": ["**/*.ts", "**/*.tsx"]
+}

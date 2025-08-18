@@ -14,7 +14,7 @@ export class HealthController {
   async getReadiness() {
     const health = await this.healthService.getHealth();
     if (health.status === 'unhealthy') {
-  throw new ServiceUnavailableException('Service not ready');
+      throw new ServiceUnavailableException('Service not ready');
     }
     return { status: 'ready' };
   }

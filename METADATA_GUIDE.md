@@ -5,6 +5,7 @@ This guide explains how to configure and use the comprehensive metadata system t
 ## 🎯 Overview
 
 The metadata system provides:
+
 - **Multi-source integration**: IGDB, VNDB, RAWG, Steam
 - **Automatic metadata enrichment**: Cover images, descriptions, release info
 - **Manual search & selection**: Choose the best metadata match
@@ -39,6 +40,7 @@ PORT=3000
 ### 2. Source Priorities
 
 Sources are queried in order of priority:
+
 1. **IGDB** (Priority 1) - Comprehensive game database
 2. **VNDB** (Priority 2) - Visual novel specialist
 3. **RAWG** (Priority 3) - Large game database
@@ -47,7 +49,7 @@ Sources are queried in order of priority:
 ### 3. Source Capabilities
 
 | Source | General Games | Visual Novels | API Key Required | Screenshots | Release Info |
-|--------|---------------|---------------|------------------|-------------|--------------|
+| ------ | ------------- | ------------- | ---------------- | ----------- | ------------ |
 | IGDB   | ✅ Excellent  | ⚠️ Limited    | ✅ Yes           | ✅ Yes      | ✅ Yes       |
 | VNDB   | ❌ No         | ✅ Excellent  | ❌ No            | ✅ Yes      | ✅ Yes       |
 | RAWG   | ✅ Good       | ❌ No         | ✅ Yes           | ✅ Yes      | ✅ Yes       |
@@ -78,24 +80,31 @@ From the game details page:
 ### API Endpoints
 
 #### Get Available Sources
+
 ```bash
 GET /metadata/sources
 ```
+
 Returns list of sources with availability status.
 
 #### Search Metadata
+
 ```bash
 GET /metadata/search?query=game+name&sources=IGDB,VNDB&maxResults=10
 ```
+
 Search across specified sources for metadata.
 
 #### Get Specific Metadata
+
 ```bash
 GET /metadata/source/VNDB/v21905
 ```
+
 Get detailed metadata from a specific source and ID.
 
 #### Enrich Game Metadata
+
 ```bash
 POST /metadata/enrich/1
 {
@@ -103,22 +112,26 @@ POST /metadata/enrich/1
   "sources": ["IGDB", "VNDB"]
 }
 ```
+
 Manually enrich metadata for a specific game.
 
 ## 🎮 Supported Game Types
 
 ### Regular Games
+
 - **Best sources**: IGDB, RAWG, Steam
 - **Automatic detection**: Based on filename
 - **Rich metadata**: Screenshots, ratings, platforms
 
 ### Visual Novels
+
 - **Best source**: VNDB (specialized)
 - **Comprehensive tags**: Content categories, technical info
 - **Length estimates**: Reading time information
 - **Language support**: Multiple language availability
 
 ### Indie Games
+
 - **Best sources**: RAWG, Steam
 - **Developer info**: Independent developer details
 - **Store links**: Direct purchase links
@@ -128,6 +141,7 @@ Manually enrich metadata for a specific game.
 The system automatically cleans filenames for better search results:
 
 ### Automatic Cleanup
+
 - Removes file extensions (`.zip`, `.exe`, etc.)
 - Strips version numbers (`v1.2.3`)
 - Removes year indicators (`(2023)`)
@@ -135,6 +149,7 @@ The system automatically cleans filenames for better search results:
 - Normalizes spacing
 
 ### Manual Query Tips
+
 - Use the **official game title** when possible
 - Try **alternative titles** or **localizations**
 - Use **developer name** + game name for indies
@@ -143,14 +158,17 @@ The system automatically cleans filenames for better search results:
 ## 📊 Metadata Quality
 
 ### High Quality Sources
+
 - **IGDB**: Professional game database, excellent for AAA games
 - **VNDB**: Community-driven, exceptional for visual novels
 
 ### Medium Quality Sources
+
 - **RAWG**: Large database, good coverage but variable quality
 - **Steam**: Accurate but limited to Steam catalog
 
 ### Quality Indicators
+
 - **Relevance Score**: 0.0 - 1.0 (higher is better)
 - **Source Priority**: Lower numbers = higher quality
 - **Cover Image**: High-resolution images preferred
@@ -159,18 +177,21 @@ The system automatically cleans filenames for better search results:
 ## 🛠️ Troubleshooting
 
 ### No Metadata Found
+
 1. **Check source availability** via `/metadata/sources`
 2. **Try alternative search terms**
 3. **Check API key configuration**
 4. **Use manual search** with custom query
 
 ### Poor Quality Results
+
 1. **Refine search query** manually
 2. **Select specific sources** only
 3. **Try different combinations** of search terms
 4. **Use alternative titles** or abbreviations
 
 ### API Rate Limits
+
 - **IGDB**: 4 requests per second
 - **RAWG**: 20,000 requests per month (free tier)
 - **VNDB**: 100 requests per 10 minutes
@@ -179,38 +200,47 @@ The system automatically cleans filenames for better search results:
 ### Common Issues
 
 #### RAWG 401 Unauthorized
+
 ```
 Error: Request failed with status code 401
 ```
+
 **Solution**: Get valid API key from https://rawg.io/apidocs
 
 #### IGDB Authentication Failed
+
 ```
 Error: Failed to authenticate with IGDB
 ```
+
 **Solution**: Check Twitch Client ID and Secret in `.env`
 
 #### VNDB Connection Timeout
+
 ```
 Error: VNDB is not available
 ```
+
 **Solution**: Check internet connection, VNDB may be temporarily down
 
 ## 🎯 Best Practices
 
 ### For Game Libraries
+
 1. **Enable automatic enrichment** for bulk uploads
 2. **Review results** for important games manually
 3. **Use preferred sources** for specific game types
 4. **Customize search queries** for difficult-to-find games
 
 ### For Visual Novel Collections
+
 1. **Prioritize VNDB** as primary source
 2. **Search by Japanese titles** if English search fails
 3. **Use official title variations**
 4. **Check for fan translations** vs official releases
 
 ### For Indie Game Collections
+
 1. **Use developer name** + game title
 2. **Try Steam** if other sources fail
 3. **Check itch.io** titles manually
@@ -219,16 +249,19 @@ Error: VNDB is not available
 ## 📈 Performance Optimization
 
 ### Parallel Processing
+
 - All sources searched **simultaneously**
 - **Non-blocking** API calls
 - **Timeout handling** for slow sources
 
 ### Caching Strategy
+
 - **Results cached** in game database
 - **Avoid re-fetching** same metadata
 - **Update mechanism** for outdated data
 
 ### Resource Management
+
 - **Connection pooling** for HTTP requests
 - **Rate limiting** compliance
 - **Error handling** and retries
@@ -236,12 +269,14 @@ Error: VNDB is not available
 ## 🔄 Future Enhancements
 
 ### Planned Features
+
 - **HowLongToBeat** integration for play time
 - **Metacritic** scores and reviews
 - **MobyGames** historical data
 - **Custom source plugins**
 
 ### Community Sources
+
 - **User submissions** for missing games
 - **Community ratings** and reviews
 - **Screenshot contributions**

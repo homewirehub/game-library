@@ -8,10 +8,10 @@
   overflow-y: auto;
   overflow-x: hidden;
   box-sizing: border-box;
-  
+
   /* Smooth scrolling */
   scroll-behavior: smooth;
-  
+
   /* Webkit scrollbar styling */
   scrollbar-width: thin;
   scrollbar-color: var(--color-neutral-600) var(--color-neutral-800);
@@ -87,11 +87,11 @@
   .scrollable-layout--padding-md {
     padding: var(--space-4);
   }
-  
+
   .scrollable-layout--padding-lg {
     padding: var(--space-6);
   }
-  
+
   .scrollable-layout--padding-xl {
     padding: var(--space-8);
   }

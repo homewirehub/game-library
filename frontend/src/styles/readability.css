@@ -1,0 +1,44 @@
+/* === Readability fix pack === */
+
+/* 1) Make regular text actually regular */
+html, body, #root {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  font-weight: 400;            /* avoid 300 for body */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #e5e7eb;              /* high-contrast on dark */
+  background: #0f172a;
+}
+
+/* 2) Use real bolds, not faux */
+body {
+  font-synthesis-weight: none; /* prevent fake bold/italic */
+}
+strong, b, h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;            /* map headings to 700 */
+  color: #ffffff;
+}
+
+/* 3) Make secondary/muted text still readable */
+.muted, .subtitle, .helper, [data-muted="true"] {
+  color: #cbd5e1;
+}
+
+/* 4) Typical UI surfaces (cards/pills/buttons) */
+.card, .panel, .pill, .badge, .btn, .feature {
+  background: #1f2937;
+  color: #e5e7eb;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* 5) Prevent extension filters from dimming */
+#root, #root * {
+  filter: none !important;
+  text-shadow: none;
+}
+
+/* 6) If you had global 300 anywhere, neutralize it */
+[class*="text-300"], .light, .thin, [data-weight="light"] {
+  font-weight: 400 !important;
+}

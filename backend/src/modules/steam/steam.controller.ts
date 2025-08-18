@@ -5,7 +5,6 @@ import {
   Delete,
   Body,
   Param,
-  Query,
   HttpStatus,
   HttpException,
   Logger,
@@ -42,12 +41,10 @@ export class SteamController {
   @Get('status')
   async getStatus() {
     const isInstalled = await this.steamService.isInstalled();
-    
+
     return {
       installed: isInstalled,
-      message: isInstalled 
-        ? 'Steam is installed and accessible' 
-        : 'Steam not found on this system'
+      message: isInstalled ? 'Steam is installed and accessible' : 'Steam not found on this system',
     };
   }
 
@@ -55,40 +52,29 @@ export class SteamController {
   async getSteamUsers() {
     try {
       const users = await this.steamService.getSteamUsers();
-      
+
       this.logger.log(`Found ${users.length} Steam users`);
-      
+
       return {
         users,
         count: users.length,
       };
-    } catch (error) {
+  } catch (error) {
       this.logger.error('Failed to get Steam users:', error);
-      throw new HttpException(
-        'Failed to get Steam users',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException('Failed to get Steam users', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @Post('games/add')
   async addNonSteamGame(@Body() request: AddGameRequest) {
     try {
-      const {
-        userId,
-        gameId,
-        gameName,
-        executablePath,
-        workingDir,
-        iconPath,
-        tags,
-      } = request;
+      const { userId, gameId, gameName, executablePath, workingDir, iconPath, tags } = request;
 
       // Validate required fields
       if (!userId || !gameId || !gameName || !executablePath) {
         throw new HttpException(
           'userId, gameId, gameName, and executablePath are required',
-          HttpStatus.BAD_REQUEST,
+          HttpStatus.BAD_REQUEST
         );
       }
 
@@ -96,7 +82,7 @@ export class SteamController {
       if (!isInstalled) {
         throw new HttpException(
           'Steam is not installed on this system',
-          HttpStatus.SERVICE_UNAVAILABLE,
+          HttpStatus.SERVICE_UNAVAILABLE
         );
       }
 
@@ -109,14 +95,11 @@ export class SteamController {
         executablePath,
         workingDir,
         iconPath,
-        tags,
+        tags
       );
 
       if (!added) {
-        throw new HttpException(
-          'Failed to add game to Steam',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
+        throw new HttpException('Failed to add game to Steam', HttpStatus.INTERNAL_SERVER_ERROR);
       }
 
       return {
@@ -128,14 +111,14 @@ export class SteamController {
       };
     } catch (error) {
       this.logger.error('Failed to add game to Steam:', error);
-      
+
       if (error instanceof HttpException) {
         throw error;
       }
-      
+
       throw new HttpException(
         error.message || 'Failed to add game to Steam',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
@@ -146,10 +129,7 @@ export class SteamController {
       const { userId, gameId } = request;
 
       if (!userId || !gameId) {
-        throw new HttpException(
-          'userId and gameId are required',
-          HttpStatus.BAD_REQUEST,
-        );
+        throw new HttpException('userId and gameId are required', HttpStatus.BAD_REQUEST);
       }
 
       this.logger.log(`Removing game ${gameId} from Steam for user ${userId}`);
@@ -157,10 +137,7 @@ export class SteamController {
       const removed = await this.steamService.removeNonSteamGame(userId, gameId);
 
       if (!removed) {
-        throw new HttpException(
-          'Game not found or failed to remove',
-          HttpStatus.NOT_FOUND,
-        );
+        throw new HttpException('Game not found or failed to remove', HttpStatus.NOT_FOUND);
       }
 
       return {
@@ -171,14 +148,14 @@ export class SteamController {
       };
     } catch (error) {
       this.logger.error('Failed to remove game from Steam:', error);
-      
+
       if (error instanceof HttpException) {
         throw error;
       }
-      
+
       throw new HttpException(
         error.message || 'Failed to remove game from Steam',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
@@ -187,10 +164,7 @@ export class SteamController {
   async getNonSteamGames(@Param('userId') userId: string): Promise<SteamShortcut[]> {
     try {
       if (!userId) {
-        throw new HttpException(
-          'userId is required',
-          HttpStatus.BAD_REQUEST,
-        );
+        throw new HttpException('userId is required', HttpStatus.BAD_REQUEST);
       }
 
       this.logger.log(`Getting non-Steam games for user ${userId}`);
@@ -202,15 +176,12 @@ export class SteamController {
       return games;
     } catch (error) {
       this.logger.error(`Failed to get games for user ${userId}:`, error);
-      
+
       if (error instanceof HttpException) {
         throw error;
       }
-      
-      throw new HttpException(
-        'Failed to get non-Steam games',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+
+      throw new HttpException('Failed to get non-Steam games', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -220,31 +191,24 @@ export class SteamController {
       const { gameId, gameName, searchQuery } = request;
 
       if (!gameId || !gameName) {
-        throw new HttpException(
-          'gameId and gameName are required',
-          HttpStatus.BAD_REQUEST,
-        );
+        throw new HttpException('gameId and gameName are required', HttpStatus.BAD_REQUEST);
       }
 
       this.logger.log(`Downloading Steam Grid assets for: ${gameName}`);
 
-      const assets = await this.steamService.downloadSteamGridAssets(
-        gameId,
-        gameName,
-        searchQuery,
-      );
+      const assets = await this.steamService.downloadSteamGridAssets(gameId, gameName, searchQuery);
 
       return assets;
     } catch (error) {
       this.logger.error('Failed to download Steam Grid assets:', error);
-      
+
       if (error instanceof HttpException) {
         throw error;
       }
-      
+
       throw new HttpException(
         error.message || 'Failed to download Steam Grid assets',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
@@ -257,10 +221,7 @@ export class SteamController {
       const restarted = await this.steamService.restartSteam();
 
       if (!restarted) {
-        throw new HttpException(
-          'Failed to restart Steam',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
+        throw new HttpException('Failed to restart Steam', HttpStatus.INTERNAL_SERVER_ERROR);
       }
 
       return {
@@ -269,42 +230,38 @@ export class SteamController {
       };
     } catch (error) {
       this.logger.error('Failed to restart Steam:', error);
-      
+
       if (error instanceof HttpException) {
         throw error;
       }
-      
+
       throw new HttpException(
         error.message || 'Failed to restart Steam',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
 
   // Convenience endpoint for adding itch.io games to Steam
   @Post('games/add-itch')
-  async addItchGameToSteam(@Body() request: {
-    userId: string;
-    gameId: string;
-    gameName: string;
-    gameSlug: string;
-    executablePath?: string;
-    downloadAssets?: boolean;
-  }) {
+  async addItchGameToSteam(
+    @Body()
+    request: {
+      userId: string;
+      gameId: string;
+      gameName: string;
+      gameSlug: string;
+      executablePath?: string;
+      downloadAssets?: boolean;
+    }
+  ) {
     try {
-      const {
-        userId,
-        gameId,
-        gameName,
-        gameSlug,
-        executablePath,
-        downloadAssets = true,
-      } = request;
+      const { userId, gameId, gameName, gameSlug, executablePath, downloadAssets = true } = request;
 
       if (!userId || !gameId || !gameName || !gameSlug) {
         throw new HttpException(
           'userId, gameId, gameName, and gameSlug are required',
-          HttpStatus.BAD_REQUEST,
+          HttpStatus.BAD_REQUEST
         );
       }
 
@@ -321,13 +278,13 @@ export class SteamController {
         exePath,
         undefined, // working dir
         undefined, // icon path (will be downloaded)
-        ['Itch.io', 'Indie Game', 'Game Library'],
+        ['Itch.io', 'Indie Game', 'Game Library']
       );
 
       if (!added) {
         throw new HttpException(
           'Failed to add Itch.io game to Steam',
-          HttpStatus.INTERNAL_SERVER_ERROR,
+          HttpStatus.INTERNAL_SERVER_ERROR
         );
       }
 
@@ -336,10 +293,7 @@ export class SteamController {
       // Download Steam Grid assets if requested
       if (downloadAssets) {
         try {
-          assets = await this.steamService.downloadSteamGridAssets(
-            gameId,
-            gameName,
-          );
+          assets = await this.steamService.downloadSteamGridAssets(gameId, gameName);
         } catch (error) {
           this.logger.warn(`Failed to download assets for ${gameName}:`, error);
         }
@@ -355,39 +309,39 @@ export class SteamController {
       };
     } catch (error) {
       this.logger.error('Failed to add Itch.io game to Steam:', error);
-      
+
       if (error instanceof HttpException) {
         throw error;
       }
-      
+
       throw new HttpException(
         error.message || 'Failed to add Itch.io game to Steam',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }
 
   // Bulk operations
   @Post('games/add-multiple')
-  async addMultipleGames(@Body() request: {
-    userId: string;
-    games: Array<{
-      gameId: string;
-      gameName: string;
-      executablePath: string;
-      workingDir?: string;
-      iconPath?: string;
-      tags?: string[];
-    }>;
-  }) {
+  async addMultipleGames(
+    @Body()
+    request: {
+      userId: string;
+      games: Array<{
+        gameId: string;
+        gameName: string;
+        executablePath: string;
+        workingDir?: string;
+        iconPath?: string;
+        tags?: string[];
+      }>;
+    }
+  ) {
     try {
       const { userId, games } = request;
 
       if (!userId || !games || !Array.isArray(games)) {
-        throw new HttpException(
-          'userId and games array are required',
-          HttpStatus.BAD_REQUEST,
-        );
+        throw new HttpException('userId and games array are required', HttpStatus.BAD_REQUEST);
       }
 
       this.logger.log(`Adding ${games.length} games to Steam for user ${userId}`);
@@ -403,7 +357,7 @@ export class SteamController {
             game.executablePath,
             game.workingDir,
             game.iconPath,
-            game.tags,
+            game.tags
           );
 
           results.push({
@@ -422,7 +376,7 @@ export class SteamController {
         }
       }
 
-      const successCount = results.filter(r => r.success).length;
+      const successCount = results.filter((r) => r.success).length;
 
       return {
         userId,
@@ -434,14 +388,14 @@ export class SteamController {
       };
     } catch (error) {
       this.logger.error('Failed to add multiple games to Steam:', error);
-      
+
       if (error instanceof HttpException) {
         throw error;
       }
-      
+
       throw new HttpException(
         error.message || 'Failed to add multiple games to Steam',
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.INTERNAL_SERVER_ERROR
       );
     }
   }

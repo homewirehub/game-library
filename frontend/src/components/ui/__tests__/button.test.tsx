@@ -16,7 +16,11 @@ describe('Button', () => {
 
   it('shows loading state and disables button', () => {
     const onClick = jest.fn();
-    render(<Button loading onClick={onClick}>Save</Button>);
+    render(
+      <Button loading onClick={onClick}>
+        Save
+      </Button>
+    );
 
     const btn = screen.getByRole('button', { name: /save/i });
     expect(btn).toBeDisabled();

@@ -8,9 +8,7 @@ module.exports = [
     ignores: [
       '**/dist/**',
       '**/node_modules/**',
-      'frontend/src/components/ItchGames-backup.tsx',
-      'backend/test/**',
-      '**/*.e2e-spec.ts',
+      // keep minimal ignores; tests are handled by overrides below
     ],
   },
   {
@@ -24,7 +22,10 @@ module.exports = [
     rules: {
       ...(tseslint.configs?.recommended?.rules || {}),
       // Relax strict rules to keep CI green while we iterate
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+  { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
+      ],
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-require-imports': 'off',
     },
@@ -40,7 +41,10 @@ module.exports = [
     plugins: { '@typescript-eslint': tseslint },
     rules: {
       ...(tseslint.configs?.recommended?.rules || {}),
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+  { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
+      ],
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-require-imports': 'off',
     },
@@ -49,13 +53,20 @@ module.exports = [
     files: ['frontend/**/*.{ts,tsx}'],
     languageOptions: {
       parser: tsparser,
-      parserOptions: { project: './frontend/tsconfig.json', tsconfigRootDir: __dirname, ecmaFeatures: { jsx: true } },
+      parserOptions: {
+        project: './frontend/tsconfig.json',
+        tsconfigRootDir: __dirname,
+        ecmaFeatures: { jsx: true },
+      },
       sourceType: 'module',
     },
     plugins: { '@typescript-eslint': tseslint },
     rules: {
       ...(tseslint.configs?.recommended?.rules || {}),
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+  { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
+      ],
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-require-imports': 'off',
     },

@@ -26,20 +26,16 @@ export const TabBar: React.FC<TabBarProps> = ({
   variant = 'default',
   size = 'md',
   fullWidth = false,
-  className = ''
+  className = '',
 }) => {
   const baseClass = 'tab-bar';
   const variantClass = `tab-bar--${variant}`;
   const sizeClass = `tab-bar--${size}`;
   const fullWidthClass = fullWidth ? 'tab-bar--full-width' : '';
 
-  const classes = [
-    baseClass,
-    variantClass,
-    sizeClass,
-    fullWidthClass,
-    className
-  ].filter(Boolean).join(' ');
+  const classes = [baseClass, variantClass, sizeClass, fullWidthClass, className]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div className={classes} role="tablist">
@@ -54,13 +50,9 @@ export const TabBar: React.FC<TabBarProps> = ({
           className={`tab-item ${activeTab === tab.id ? 'tab-item--active' : ''} ${tab.disabled ? 'tab-item--disabled' : ''}`}
           onClick={() => !tab.disabled && onTabChange(tab.id)}
         >
-          {tab.icon && (
-            <span className="tab-item__icon">{tab.icon}</span>
-          )}
+          {tab.icon && <span className="tab-item__icon">{tab.icon}</span>}
           <span className="tab-item__label">{tab.label}</span>
-          {tab.badge && (
-            <span className="tab-item__badge">{tab.badge}</span>
-          )}
+          {tab.badge && <span className="tab-item__badge">{tab.badge}</span>}
         </button>
       ))}
     </div>
@@ -80,7 +72,7 @@ export const TabPanel: React.FC<TabPanelProps> = ({
   ...props
 }) => {
   const isActive = activeTab === tabId;
-  
+
   return (
     <div
       id={`tabpanel-${tabId}`}

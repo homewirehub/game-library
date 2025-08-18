@@ -8,7 +8,13 @@ type Props = {
   nextDisabled?: boolean;
 };
 
-export function WizardActions({ onBack, onNext, backLabel = 'Back', nextLabel = 'Next →', nextDisabled }: Props) {
+export function WizardActions({
+  onBack,
+  onNext,
+  backLabel = 'Back',
+  nextLabel = 'Next →',
+  nextDisabled,
+}: Props) {
   if (!onBack && !onNext) return null;
   return (
     <div className="row" style={{ justifyContent: 'flex-end' }}>

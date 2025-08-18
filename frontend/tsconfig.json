@@ -15,13 +15,7 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": [
-  "src",
-  "jest.config.js",
-  "setupTests.ts"
-  ],
-  "exclude": [
-    "src/components/ItchGames-backup.tsx"
-  ],
+  "include": ["src", "jest.config.js", "setupTests.ts"],
+  "exclude": ["src/components/ItchGames-backup.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

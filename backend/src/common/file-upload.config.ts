@@ -1,16 +1,30 @@
 import { BadRequestException } from '@nestjs/common';
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 import { diskStorage } from 'multer';
-import { extname, join } from 'path';
+import { extname } from 'path';
 import { existsSync, mkdirSync } from 'fs';
 import * as crypto from 'crypto';
 
 // Allowed file types for game uploads
 const ALLOWED_GAME_EXTENSIONS = [
-  '.zip', '.rar', '.7z', '.tar.gz', '.tar.bz2',
-  '.exe', '.msi', '.deb', '.rpm', '.AppImage',
-  '.dmg', '.pkg', '.apk', '.ipa',
-  '.iso', '.img', '.bin', '.nrg'
+  '.zip',
+  '.rar',
+  '.7z',
+  '.tar.gz',
+  '.tar.bz2',
+  '.exe',
+  '.msi',
+  '.deb',
+  '.rpm',
+  '.AppImage',
+  '.dmg',
+  '.pkg',
+  '.apk',
+  '.ipa',
+  '.iso',
+  '.img',
+  '.bin',
+  '.nrg',
 ];
 
 // MIME type validation (additional security layer)
@@ -26,7 +40,7 @@ const ALLOWED_MIME_TYPES = [
   'application/vnd.debian.binary-package',
   'application/x-rpm',
   'application/octet-stream',
-  'application/x-iso9660-image'
+  'application/x-iso9660-image',
 ];
 
 export interface UploadConfig {
@@ -40,11 +54,11 @@ export interface UploadConfig {
 export class FileUploadConfigService {
   private static getUploadConfig(): UploadConfig {
     return {
-      maxFileSize: parseInt(process.env.UPLOAD_MAX_FILE_SIZE || '2147483648'), // 2GB default
-      uploadDir: process.env.UPLOAD_DIR || './uploads/games',
+  maxFileSize: parseInt(process.env.MAX_FILE_SIZE || '2147483648'), // 2GB default
+  uploadDir: process.env.UPLOAD_PATH || './storage/uploads',
       allowedExtensions: ALLOWED_GAME_EXTENSIONS,
       allowedMimeTypes: ALLOWED_MIME_TYPES,
-      virusScanEnabled: process.env.VIRUS_SCAN_ENABLED === 'true'
+      virusScanEnabled: process.env.VIRUS_SCAN_ENABLED === 'true',
     };
   }
 
@@ -97,9 +111,7 @@ export class FileUploadConfigService {
         // Check for suspicious filenames
         if (this.isSuspiciousFilename(file.originalname)) {
           return cb(
-            new BadRequestException(
-              'Filename contains suspicious characters or patterns.'
-            ),
+            new BadRequestException('Filename contains suspicious characters or patterns.'),
             false
           );
         }
@@ -135,10 +147,10 @@ export class FileUploadConfigService {
     // Check for suspicious extensions (double extensions)
     const suspiciousPatterns = [
       /\.(exe|scr|bat|cmd|com|pif|vbs|js|jar|zip)\.(exe|scr|bat|cmd)$/i,
-      /\.(exe|scr|bat|cmd|com|pif|vbs|js|jar)\.(zip|rar|7z)$/i
+      /\.(exe|scr|bat|cmd|com|pif|vbs|js|jar)\.(zip|rar|7z)$/i,
     ];
 
-    return suspiciousPatterns.some(pattern => pattern.test(filename));
+    return suspiciousPatterns.some((pattern) => pattern.test(filename));
   }
 
   static getConfig(): UploadConfig {

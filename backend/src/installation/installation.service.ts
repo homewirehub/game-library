@@ -4,7 +4,12 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import { DataSource } from 'typeorm';
 import * as bcryptjs from 'bcryptjs';
-import { DatabaseConnectionError, DatabaseCreationError, StorageError, ConfigurationError } from './installation.errors';
+import {
+  DatabaseConnectionError,
+  DatabaseCreationError as _DatabaseCreationError,
+  StorageError as _StorageError,
+  ConfigurationError,
+} from './installation.errors';
 import { User } from '../entities/user.entity';
 import { Game } from '../entities/game.entity';
 
@@ -49,7 +54,7 @@ export class InstallationService {
   async testDatabaseConnection(config: InstallationConfig['database']): Promise<boolean> {
     try {
       let dataSource: DataSource;
-  const sqliteDriver = process.env.DB_SQLITE_DRIVER === 'sqlite' ? 'sqlite' : 'better-sqlite3';
+      const sqliteDriver = process.env.DB_SQLITE_DRIVER === 'sqlite' ? 'sqlite' : 'better-sqlite3';
 
       if (config.type === 'sqlite') {
         const dbFile = config.path || config.database;
@@ -140,17 +145,14 @@ export class InstallationService {
       this.logger.error('Database connection test failed:', error);
       const dbFile = config.path || config.database;
       const resolved = config.type === 'sqlite' ? path.resolve(dbFile) : undefined;
-      throw new DatabaseConnectionError(
-        `Failed to connect to ${config.type} database`,
-        {
-          type: config.type,
-          host: config.host,
-          port: config.port,
-          database: config.database,
-          path: resolved,
-          error: error?.message || String(error),
-        }
-      );
+      throw new DatabaseConnectionError(`Failed to connect to ${config.type} database`, {
+        type: config.type,
+        host: config.host,
+        port: config.port,
+        database: config.database,
+        path: resolved,
+        error: error?.message || String(error),
+      });
     }
   }
 
@@ -159,11 +161,11 @@ export class InstallationService {
       // For SQLite, just ensure the directory exists
       const dbPath = config.path || config.database;
       const dbDir = path.dirname(dbPath);
-      
+
       if (!fs.existsSync(dbDir)) {
         fs.ensureDirSync(dbDir);
       }
-      
+
       this.logger.log(`SQLite database will be created at: ${dbPath}`);
       return;
     }
@@ -180,12 +182,11 @@ export class InstallationService {
 
     try {
       await adminDataSource.initialize();
-      
+
       // Check if database exists
-      const result = await adminDataSource.query(
-        'SELECT 1 FROM pg_database WHERE datname = $1',
-        [config.database]
-      );
+      const result = await adminDataSource.query('SELECT 1 FROM pg_database WHERE datname = $1', [
+        config.database,
+      ]);
 
       if (result.length === 0) {
         // Create database
@@ -235,17 +236,17 @@ export class InstallationService {
 
     try {
       await dataSource.initialize();
-      
+
       // Create admin user using TypeORM
       const hashedPassword = await bcryptjs.hash(config.admin.password, 10);
-      
+
       const userRepository = dataSource.getRepository(User);
-      
+
       // Check if admin user already exists
       let adminUser = await userRepository.findOne({
-        where: { username: config.admin.username }
+        where: { username: config.admin.username },
       });
-      
+
       if (adminUser) {
         // Update existing admin user
         adminUser.email = config.admin.email;
@@ -370,11 +371,11 @@ INSTALLATION_DATE=${new Date().toISOString()}
       path.join(storagePath, 'temp'),
       path.join(storagePath, 'backups'),
       // New directories for itch.io integration
-      path.join(storagePath, 'downloads'),      // Raw itch.io downloads
-      path.join(storagePath, 'installers'),     // Unpacked installers
-      path.join(storagePath, 'installed'),      // Installed games
-      path.join(storagePath, 'steam-assets'),   // Steam shortcuts & icons
-      path.join(storagePath, 'metadata'),       // Cached metadata
+      path.join(storagePath, 'downloads'), // Raw itch.io downloads
+      path.join(storagePath, 'installers'), // Unpacked installers
+      path.join(storagePath, 'installed'), // Installed games
+      path.join(storagePath, 'steam-assets'), // Steam shortcuts & icons
+      path.join(storagePath, 'metadata'), // Cached metadata
     ];
 
     for (const dir of directories) {
@@ -409,7 +410,7 @@ INSTALLATION_DATE=${new Date().toISOString()}
     } else if (config.database.type === 'sqlite') {
       const dbPath = config.database.path || config.database.database;
       const dbDir = path.dirname(path.resolve(dbPath));
-      
+
       try {
         await fs.access(dbDir, fs.constants.W_OK);
       } catch {
@@ -457,22 +458,22 @@ INSTALLATION_DATE=${new Date().toISOString()}
 
   async completeInstallation(config: InstallationConfig): Promise<void> {
     const rollbackActions: (() => Promise<void>)[] = [];
-    
+
     try {
       this.logger.log('Starting installation process...');
-      
+
       // Step 0: Validate configuration
       this.logger.log('Validating configuration...');
       await this.validateInstallationConfig(config);
-      
+
       // Step 1: Test database connection
       this.logger.log('Testing database connection...');
       await this.testDatabaseConnectionWithErrors(config.database);
-      
+
       // Step 2: Create database (PostgreSQL only)
       this.logger.log('Creating database...');
       await this.createDatabase(config.database);
-      
+
       // Step 3: Initialize database and create admin user
       this.logger.log('Initializing database schema...');
       await this.initializeDatabase(config);
@@ -501,21 +502,28 @@ INSTALLATION_DATE=${new Date().toISOString()}
 
       // Step 6: Mark installation as complete
       this.logger.log('Finalizing installation...');
-      await fs.writeFile(this.installFlagPath, JSON.stringify({
-        completed: true,
-        date: new Date().toISOString(),
-        version: '1.0.0',
-        config: {
-          database: { type: config.database.type },
-          storage: { path: config.storage.path },
-          admin: { username: config.admin.username }
-        }
-      }, null, 2));
+      await fs.writeFile(
+        this.installFlagPath,
+        JSON.stringify(
+          {
+            completed: true,
+            date: new Date().toISOString(),
+            version: '1.0.0',
+            config: {
+              database: { type: config.database.type },
+              storage: { path: config.storage.path },
+              admin: { username: config.admin.username },
+            },
+          },
+          null,
+          2
+        )
+      );
 
       this.logger.log('Installation completed successfully');
     } catch (error) {
       this.logger.error('Installation failed, performing rollback...', error);
-      
+
       // Execute rollback actions in reverse order
       for (const rollback of rollbackActions.reverse()) {
         try {
@@ -524,7 +532,7 @@ INSTALLATION_DATE=${new Date().toISOString()}
           this.logger.error('Rollback action failed:', rollbackError);
         }
       }
-      
+
       throw new Error(`Installation failed: ${error.message}`);
     }
   }
@@ -536,7 +544,7 @@ INSTALLATION_DATE=${new Date().toISOString()}
   }> {
     const nodeVersion = process.version;
     const requiredNodeVersion = '18.0.0';
-    
+
     // Get system memory info
     const os = require('os');
     const totalMemory = os.totalmem();
@@ -549,18 +557,18 @@ INSTALLATION_DATE=${new Date().toISOString()}
       node: {
         current: nodeVersion,
         required: `>=${requiredNodeVersion}`,
-        satisfied: this.compareVersions(nodeVersion.slice(1), requiredNodeVersion) >= 0
+        satisfied: this.compareVersions(nodeVersion.slice(1), requiredNodeVersion) >= 0,
       },
       disk: {
         available: '10+ GB', // Simplified - in production you'd check actual disk space
         required: '1 GB',
-        satisfied: true
+        satisfied: true,
       },
       memory: {
         available: `${totalMemoryMB} MB (${freeMemoryMB} MB free)`,
         required: `${requiredMemoryMB} MB`,
-        satisfied: totalMemoryMB >= requiredMemoryMB
-      }
+        satisfied: totalMemoryMB >= requiredMemoryMB,
+      },
     };
   }
 
@@ -571,15 +579,15 @@ INSTALLATION_DATE=${new Date().toISOString()}
   private compareVersions(a: string, b: string): number {
     const aParts = a.split('.').map(Number);
     const bParts = b.split('.').map(Number);
-    
+
     for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
       const aPart = aParts[i] || 0;
       const bPart = bParts[i] || 0;
-      
+
       if (aPart > bPart) return 1;
       if (aPart < bPart) return -1;
     }
-    
+
     return 0;
   }
 }

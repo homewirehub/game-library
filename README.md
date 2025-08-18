@@ -16,6 +16,7 @@ A modern, full-stack game library management application built with React, TypeS
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - **React 18** with TypeScript
 - **Vite** for fast development and building
 - **TanStack Query** for data fetching and caching
@@ -24,6 +25,7 @@ A modern, full-stack game library management application built with React, TypeS
 - **Modern CSS** with custom design system
 
 ### Backend
+
 - **NestJS** with TypeScript
 - **TypeORM** with SQLite/PostgreSQL support
 - **Multer** for file uploads
@@ -32,6 +34,7 @@ A modern, full-stack game library management application built with React, TypeS
 - **Rate limiting** and security middleware
 
 ### Integrations
+
 - **Steam** non-Steam games management
 - **Itch.io** via Butler CLI
 - **IGDB** (Twitch API) for game metadata
@@ -41,23 +44,27 @@ A modern, full-stack game library management application built with React, TypeS
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - **Node.js** 18+ and npm/pnpm
 - **Git** for version control
 
 ### Installation
 
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/yourusername/game-library.git
    cd game-library
    ```
 
 2. **Install dependencies**:
+
    ```bash
    pnpm install
    ```
 
 3. **Start the development servers**:
+
    ```bash
    pnpm dev
    ```
@@ -105,11 +112,13 @@ JWT_SECRET=your-super-secret-jwt-key
 ### Optional Integrations
 
 #### Steam Integration
+
 - Automatically detected if Steam is installed
 - Adds games as non-Steam shortcuts
 - Downloads artwork from SteamGridDB
 
 #### Itch.io Integration
+
 - Requires Butler CLI: `npm install -g @itchio/butler`
 - Download games directly from itch.io
 - Automatic Steam integration
@@ -117,6 +126,7 @@ JWT_SECRET=your-super-secret-jwt-key
 ## 🔧 Development
 
 ### Project Structure
+
 ```
 game-library/
 ├── frontend/          # React frontend application
@@ -162,6 +172,7 @@ pnpm lint:fix         # Fix linting issues
 ## 🌟 Features in Detail
 
 ### Game Library
+
 - Upload games via ZIP files or direct folder selection
 - Automatic metadata detection and enrichment
 - Custom cover art support
@@ -169,6 +180,7 @@ pnpm lint:fix         # Fix linting issues
 - Advanced search and filtering options
 
 ### Steam Integration
+
 - Detect Steam users automatically
 - Add any executable as a non-Steam game
 - Download and apply custom artwork
@@ -176,6 +188,7 @@ pnpm lint:fix         # Fix linting issues
 - Bulk operations for multiple games
 
 ### Itch.io Integration
+
 - Search the entire itch.io catalog
 - Download games with progress tracking
 - Automatic extraction and installation
@@ -183,6 +196,7 @@ pnpm lint:fix         # Fix linting issues
 - Support for free and paid games
 
 ### Metadata Sources
+
 - **IGDB**: Comprehensive game database from Twitch
 - **RAWG**: Large video game database
 - **SteamGridDB**: High-quality game artwork

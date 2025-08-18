@@ -22,11 +22,14 @@ export class RateLimitService {
 
   constructor() {
     // Auto-cleanup every 5 minutes
-    this.cleanupInterval = setInterval(() => {
-      this.cleanup().catch(error => {
-        this.logger.error('Cleanup failed:', error);
-      });
-    }, 5 * 60 * 1000);
+    this.cleanupInterval = setInterval(
+      () => {
+        this.cleanup().catch((error) => {
+          this.logger.error('Cleanup failed:', error);
+        });
+      },
+      5 * 60 * 1000
+    );
   }
 
   async onModuleDestroy() {
@@ -48,7 +51,7 @@ export class RateLimitService {
     if (!key || typeof key !== 'string') {
       throw new Error('Rate limit key must be a non-empty string');
     }
-    
+
     if (!config || config.windowMs <= 0 || config.maxRequests <= 0) {
       throw new Error('Invalid rate limit configuration');
     }
@@ -86,7 +89,9 @@ export class RateLimitService {
       // Block the key if blockDurationMs is specified
       if (config.blockDurationMs) {
         this.blockedKeys.set(key, now + config.blockDurationMs);
-        this.logger.warn(`Rate limit exceeded for key: ${key}. Blocked for ${config.blockDurationMs}ms`);
+        this.logger.warn(
+          `Rate limit exceeded for key: ${key}. Blocked for ${config.blockDurationMs}ms`
+        );
       }
 
       return {
@@ -148,7 +153,9 @@ export class RateLimitService {
     }
 
     if (cleanedLimits > 0 || cleanedBlocks > 0) {
-      this.logger.debug(`Cleaned ${cleanedLimits} expired rate limits and ${cleanedBlocks} expired blocks`);
+      this.logger.debug(
+        `Cleaned ${cleanedLimits} expired rate limits and ${cleanedBlocks} expired blocks`
+      );
     }
   }
 
@@ -161,21 +168,20 @@ export class RateLimitService {
   } {
     const memoryUsage = process.memoryUsage();
     const now = Date.now();
-    
+
     // Get top limited keys
     const topLimitedKeys = Array.from(this.limits.entries())
-      .sort(([,a], [,b]) => b.count - a.count)
+      .sort(([, a], [, b]) => b.count - a.count)
       .slice(0, 10)
       .map(([key, entry]) => ({ key, count: entry.count }));
 
     // Get blocked keys info
-    const blockedKeysInfo = Array.from(this.blockedKeys.entries())
-      .map(([key, unblockTime]) => ({
-        key,
-        unblockTime,
-        remainingMs: Math.max(0, unblockTime - now),
-      }));
-    
+    const blockedKeysInfo = Array.from(this.blockedKeys.entries()).map(([key, unblockTime]) => ({
+      key,
+      unblockTime,
+      remainingMs: Math.max(0, unblockTime - now),
+    }));
+
     return {
       activeLimits: this.limits.size,
       activeBlocks: this.blockedKeys.size,
@@ -193,7 +199,7 @@ export const RATE_LIMIT_CONFIGS = {
     windowMs: 15 * 60 * 1000, // 15 minutes
     maxRequests: 100,
   },
-  
+
   API_STRICT: {
     windowMs: 15 * 60 * 1000, // 15 minutes
     maxRequests: 20,

@@ -22,13 +22,14 @@ export class RedisRateLimitService implements OnModuleDestroy {
   private cleanupInterval: NodeJS.Timeout;
   private fallbackLimits = new Map<string, any>(); // Fallback for Redis failures
 
-  constructor(
-    @InjectRedis() private readonly redis: Redis,
-  ) {
+  constructor(@InjectRedis() private readonly redis: Redis) {
     // Auto-cleanup every 5 minutes for fallback storage
-    this.cleanupInterval = setInterval(() => {
-      this.cleanupFallback();
-    }, 5 * 60 * 1000);
+    this.cleanupInterval = setInterval(
+      () => {
+        this.cleanupFallback();
+      },
+      5 * 60 * 1000
+    );
   }
 
   async onModuleDestroy() {
@@ -37,15 +38,12 @@ export class RedisRateLimitService implements OnModuleDestroy {
     }
   }
 
-  async checkLimit(
-    key: string,
-    config: RateLimitConfig
-  ): Promise<RateLimitResponse> {
+  async checkLimit(key: string, config: RateLimitConfig): Promise<RateLimitResponse> {
     // Input validation
     if (!key || typeof key !== 'string') {
       throw new Error('Rate limit key must be a non-empty string');
     }
-    
+
     if (!config || config.windowMs <= 0 || config.maxRequests <= 0) {
       throw new Error('Invalid rate limit configuration');
     }
@@ -78,7 +76,7 @@ export class RedisRateLimitService implements OnModuleDestroy {
       return {
         allowed: false,
         remainingRequests: 0,
-        resetTime: now + (ttl * 1000),
+        resetTime: now + ttl * 1000,
         blocked: true,
       };
     }
@@ -87,9 +85,9 @@ export class RedisRateLimitService implements OnModuleDestroy {
     const pipeline = this.redis.pipeline();
     pipeline.incr(windowKey);
     pipeline.expire(windowKey, Math.ceil(config.windowMs / 1000));
-    
+
     const results = await pipeline.exec();
-    
+
     if (!results || results.some(([err]) => err)) {
       throw new Error('Redis pipeline execution failed');
     }
@@ -99,12 +97,8 @@ export class RedisRateLimitService implements OnModuleDestroy {
     if (count > config.maxRequests) {
       // Set block if configured
       if (config.blockDurationMs) {
-        await this.redis.setex(
-          blockKey,
-          Math.ceil(config.blockDurationMs / 1000),
-          '1'
-        );
-        
+        await this.redis.setex(blockKey, Math.ceil(config.blockDurationMs / 1000), '1');
+
         this.logger.warn(
           `Rate limit exceeded for key: ${key}. Blocked for ${config.blockDurationMs}ms`
         );
@@ -142,28 +136,28 @@ export class RedisRateLimitService implements OnModuleDestroy {
       return {
         allowed: false,
         remainingRequests: 0,
-        resetTime: now + (ttl * 1000),
+        resetTime: now + ttl * 1000,
         blocked: true,
       };
     }
 
     // Use sorted set for sliding window
     const pipeline = this.redis.pipeline();
-    
+
     // Remove old entries
     pipeline.zremrangebyscore(windowKey, 0, windowStart);
-    
+
     // Count current requests in window
     pipeline.zcard(windowKey);
-    
+
     // Add current request
     pipeline.zadd(windowKey, now, `${now}-${Math.random()}`);
-    
+
     // Set expiration
     pipeline.expire(windowKey, Math.ceil(config.windowMs / 1000));
-    
+
     const results = await pipeline.exec();
-    
+
     if (!results || results.some(([err]) => err)) {
       throw new Error('Redis sliding window pipeline execution failed');
     }
@@ -173,13 +167,9 @@ export class RedisRateLimitService implements OnModuleDestroy {
     if (count >= config.maxRequests) {
       // Remove the request we just added since it's not allowed
       await this.redis.zrem(windowKey, `${now}-${Math.random()}`);
-      
+
       if (config.blockDurationMs) {
-        await this.redis.setex(
-          blockKey,
-          Math.ceil(config.blockDurationMs / 1000),
-          '1'
-        );
+        await this.redis.setex(blockKey, Math.ceil(config.blockDurationMs / 1000), '1');
       }
 
       return {
@@ -198,12 +188,9 @@ export class RedisRateLimitService implements OnModuleDestroy {
     };
   }
 
-  private checkFallbackLimit(
-    key: string,
-    config: RateLimitConfig
-  ): RateLimitResponse {
+  private checkFallbackLimit(key: string, config: RateLimitConfig): RateLimitResponse {
     const now = Date.now();
-    
+
     // Use the same logic as the original in-memory implementation
     let entry = this.fallbackLimits.get(key);
 
@@ -239,7 +226,7 @@ export class RedisRateLimitService implements OnModuleDestroy {
     try {
       const windowKey = `rate_limit:${key}`;
       const count = await this.redis.get(windowKey);
-      
+
       if (!count) {
         return maxRequests;
       }
@@ -267,7 +254,7 @@ export class RedisRateLimitService implements OnModuleDestroy {
     } catch (error) {
       this.logger.error(`Failed to clear limit for ${key}:`, error);
     }
-    
+
     // Also clear fallback
     this.fallbackLimits.delete(key);
   }
@@ -280,14 +267,14 @@ export class RedisRateLimitService implements OnModuleDestroy {
   private cleanupFallback(): void {
     const now = Date.now();
     let cleaned = 0;
-    
+
     for (const [key, entry] of this.fallbackLimits.entries()) {
       if (now >= entry.resetTime) {
         this.fallbackLimits.delete(key);
         cleaned++;
       }
     }
-    
+
     if (cleaned > 0) {
       this.logger.debug(`Cleaned ${cleaned} expired fallback rate limits`);
     }
@@ -302,16 +289,16 @@ export class RedisRateLimitService implements OnModuleDestroy {
     topLimitedKeys?: Array<{ key: string; count: number }>;
   }> {
     const memoryUsage = process.memoryUsage();
-    
+
     try {
       // Get Redis stats
       const info = await this.redis.info('memory');
       const redisMemory = info.match(/used_memory_human:(.+)/)?.[1]?.trim() || 'unknown';
-      
+
       // Count Redis keys (this might be expensive in production)
       const rateLimitKeys = await this.redis.keys('rate_limit:*');
       const blockKeys = await this.redis.keys('rate_limit_block:*');
-      
+
       return {
         activeLimits: rateLimitKeys.length,
         activeBlocks: blockKeys.length,
@@ -350,7 +337,7 @@ export const REDIS_RATE_LIMIT_CONFIGS = {
     maxRequests: 100,
     algorithm: 'fixed' as const,
   },
-  
+
   API_STRICT: {
     windowMs: 15 * 60 * 1000, // 15 minutes
     maxRequests: 20,

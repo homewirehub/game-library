@@ -8,13 +8,9 @@ import { MetadataModule } from '../metadata/metadata.module';
 import { VirusScanService } from '../../common/virus-scan.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Game]),
-    MetadataModule,
-    ConfigModule
-  ],
+  imports: [TypeOrmModule.forFeature([Game]), MetadataModule, ConfigModule],
   controllers: [GamesController],
   providers: [GamesService, VirusScanService],
-  exports: [GamesService]
+  exports: [GamesService],
 })
 export class GamesModule {}

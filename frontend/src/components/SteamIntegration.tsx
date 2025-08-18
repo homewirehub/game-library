@@ -81,7 +81,7 @@ const SteamIntegration: React.FC = () => {
           gameId: gameId,
         },
       });
-      
+
       fetchSteamGames(); // Refresh the list
       alert('Game removed from Steam successfully!');
     } catch (error) {
@@ -104,15 +104,15 @@ const SteamIntegration: React.FC = () => {
 
   const addCustomGame = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     const formData = new FormData(event.currentTarget);
     const gameData = {
       userId: selectedUser,
       gameId: Date.now().toString(), // Simple ID generation
       gameName: formData.get('gameName') as string,
       executablePath: formData.get('executablePath') as string,
-      workingDir: formData.get('workingDir') as string || undefined,
-      iconPath: formData.get('iconPath') as string || undefined,
+      workingDir: (formData.get('workingDir') as string) || undefined,
+      iconPath: (formData.get('iconPath') as string) || undefined,
       tags: ['Custom Game', 'Game Library'],
     };
 
@@ -123,10 +123,10 @@ const SteamIntegration: React.FC = () => {
 
     try {
       await axios.post('/api/steam/games/add', gameData);
-      
+
       fetchSteamGames(); // Refresh the list
       alert('Game added to Steam successfully!');
-      
+
       // Reset form
       event.currentTarget.reset();
     } catch (error) {
@@ -137,7 +137,7 @@ const SteamIntegration: React.FC = () => {
 
   const formatLastPlayTime = (timestamp?: number): string => {
     if (!timestamp || timestamp === 0) return 'Never played';
-    
+
     const date = new Date(timestamp * 1000);
     return date.toLocaleDateString();
   };
@@ -168,10 +168,7 @@ const SteamIntegration: React.FC = () => {
     <div className="content-section">
       <div className="page-header">
         <h1 className="page-title">🎮 Steam Integration</h1>
-        <button 
-          onClick={restartSteam} 
-          className="btn btn-secondary"
-        >
+        <button onClick={restartSteam} className="btn btn-secondary">
           🔄 Restart Steam
         </button>
       </div>
@@ -185,8 +182,8 @@ const SteamIntegration: React.FC = () => {
       <div className="card">
         <h3 className="card-title">Steam Users</h3>
         <div className="form-group">
-          <select 
-            value={selectedUser} 
+          <select
+            value={selectedUser}
             onChange={(e) => setSelectedUser(e.target.value)}
             className="select"
           >
@@ -253,7 +250,7 @@ const SteamIntegration: React.FC = () => {
           {/* Current Non-Steam Games */}
           <div className="card">
             <h3 className="card-title">Non-Steam Games ({steamGames.length})</h3>
-            
+
             {steamGames.length === 0 ? (
               <div className="empty-state">
                 <p>No non-Steam games found for this user.</p>
@@ -267,11 +264,13 @@ const SteamIntegration: React.FC = () => {
                       <h4 className="game-card-title">{game.appName}</h4>
                       <div className="game-tags">
                         {game.tags?.map((tag, index) => (
-                          <span key={index} className="tag">{tag}</span>
+                          <span key={index} className="tag">
+                            {tag}
+                          </span>
                         ))}
                       </div>
                     </div>
-                    
+
                     <div className="game-details">
                       <div className="detail-row">
                         <span className="detail-label">Executable:</span>
@@ -283,12 +282,14 @@ const SteamIntegration: React.FC = () => {
                       </div>
                       <div className="detail-row">
                         <span className="detail-label">Last Played:</span>
-                        <span className="detail-value">{formatLastPlayTime(game.lastPlayTime)}</span>
+                        <span className="detail-value">
+                          {formatLastPlayTime(game.lastPlayTime)}
+                        </span>
                       </div>
                     </div>
-                    
+
                     <div className="game-card-actions">
-                      <button 
+                      <button
                         onClick={() => removeFromSteam(game.id)}
                         className="btn btn-danger btn-sm"
                       >
@@ -310,13 +311,23 @@ const SteamIntegration: React.FC = () => {
           <div className="help-section">
             <h4 className="help-subtitle">How to use Steam Integration:</h4>
             <ul className="help-list">
-              <li><strong>Select a Steam User:</strong> Choose which Steam account to manage</li>
-              <li><strong>Add Custom Games:</strong> Manually add any executable to Steam</li>
-              <li><strong>Itch.io Integration:</strong> Games downloaded through Itch.io can be automatically added to Steam</li>
-              <li><strong>Restart Steam:</strong> After adding games, restart Steam to see them in your library</li>
+              <li>
+                <strong>Select a Steam User:</strong> Choose which Steam account to manage
+              </li>
+              <li>
+                <strong>Add Custom Games:</strong> Manually add any executable to Steam
+              </li>
+              <li>
+                <strong>Itch.io Integration:</strong> Games downloaded through Itch.io can be
+                automatically added to Steam
+              </li>
+              <li>
+                <strong>Restart Steam:</strong> After adding games, restart Steam to see them in
+                your library
+              </li>
             </ul>
           </div>
-          
+
           <div className="help-section">
             <h4 className="help-subtitle">Supported Features:</h4>
             <ul className="help-list">
@@ -327,7 +338,7 @@ const SteamIntegration: React.FC = () => {
               <li>✅ Steam restart integration</li>
             </ul>
           </div>
-          
+
           <div className="help-section">
             <h4 className="help-subtitle">Tips:</h4>
             <ul className="help-list">

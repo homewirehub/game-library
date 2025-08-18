@@ -1,7 +1,4 @@
-import { applyDecorators, UseGuards } from '@nestjs/common';
-import { SetMetadata } from '@nestjs/common';
-// Remove this line: import { RateLimitGuard } from './rate-limit.guard';
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { applyDecorators, UseGuards, SetMetadata, CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
 export const RATE_LIMIT_KEY = 'rate-limit';
@@ -17,10 +14,7 @@ export interface RateLimitOptions {
 }
 
 export const RateLimit = (options: RateLimitOptions) =>
-  applyDecorators(
-    SetMetadata(RATE_LIMIT_KEY, options),
-    UseGuards(RateLimitGuard),
-  );
+  applyDecorators(SetMetadata(RATE_LIMIT_KEY, options), UseGuards(RateLimitGuard));
 
 // Predefined decorators for common use cases
 export const StrictRateLimit = () =>
@@ -45,14 +39,14 @@ export const LoginRateLimit = () =>
     maxRequests: 5,
     blockDurationMs: 30 * 60 * 1000, // 30 minutes
     algorithm: 'sliding',
-    keyGenerator: (req) => `login:${req.ip}:${req.body?.username || 'unknown'}`,
+  keyGenerator: (_req) => `login:${_req.ip}:${_req.body?.username || 'unknown'}`,
   });
 
 @Injectable()
 export class RateLimitGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  canActivate(_context: ExecutionContext): boolean {
     // Implement your rate limiting logic here
     // For now, always allow
     return true;

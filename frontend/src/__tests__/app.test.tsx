@@ -28,7 +28,10 @@ jest.mock('../config/api', () => ({
 }));
 
 // Mock heavy pages to keep test lightweight and avoid complex hooks
-jest.mock('../pages/GameLibraryRedesigned', () => ({ __esModule: true, default: () => <main>Library</main> }));
+jest.mock('../pages/GameLibraryRedesigned', () => ({
+  __esModule: true,
+  default: () => <main>Library</main>,
+}));
 
 describe('App header accessibility', () => {
   it('renders header with nav and toggle, sets aria attributes', async () => {
@@ -43,9 +46,9 @@ describe('App header accessibility', () => {
     expect(toggle).toBeInTheDocument();
 
     // Menu list exists and is hidden by default
-  const menu = document.getElementById('mobile-menu');
-  expect(menu).toBeTruthy();
-  expect(menu).toHaveAttribute('aria-hidden', 'true');
+    const menu = document.getElementById('mobile-menu');
+    expect(menu).toBeTruthy();
+    expect(menu).toHaveAttribute('aria-hidden', 'true');
   });
 
   it('toggles mobile menu open/close and manages focus/scroll lock', async () => {

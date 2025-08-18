@@ -1,4 +1,10 @@
-import { Injectable, CanActivate, ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { RedisRateLimitService } from './redis-rate-limit.service';
 import { RateLimitService } from './rate-limit.service';
@@ -9,14 +15,11 @@ export class RateLimitGuard implements CanActivate {
   constructor(
     private readonly redisRateLimitService: RedisRateLimitService,
     private readonly fallbackRateLimitService: RateLimitService,
-    private readonly reflector: Reflector,
+    private readonly reflector: Reflector
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const options = this.reflector.get<RateLimitOptions>(
-      RATE_LIMIT_KEY,
-      context.getHandler(),
-    );
+    const options = this.reflector.get<RateLimitOptions>(RATE_LIMIT_KEY, context.getHandler());
 
     if (!options) {
       return true; // No rate limiting applied
@@ -30,7 +33,7 @@ export class RateLimitGuard implements CanActivate {
     }
 
     // Generate key
-    const key = options.keyGenerator 
+    const key = options.keyGenerator
       ? options.keyGenerator(request)
       : `${request.ip}:${request.route?.path || request.url}`;
 
@@ -43,8 +46,8 @@ export class RateLimitGuard implements CanActivate {
         blockDurationMs: options.blockDurationMs,
         algorithm: options.algorithm || 'fixed',
       });
-    } catch (error) {
-      // Fallback to in-memory rate limiting
+  } catch (_error) {
+          // Fallback to in-memory rate limiting
       result = await this.fallbackRateLimitService.checkLimit(key, {
         windowMs: options.windowMs,
         maxRequests: options.maxRequests,
@@ -53,9 +56,10 @@ export class RateLimitGuard implements CanActivate {
     }
 
     if (!result.allowed) {
-      const message = options.message || 
+      const message =
+        options.message ||
         `Rate limit exceeded. ${result.blocked ? 'Temporarily blocked.' : 'Try again later.'}`;
-      
+
       throw new HttpException(
         {
           statusCode: HttpStatus.TOO_MANY_REQUESTS,
@@ -65,7 +69,7 @@ export class RateLimitGuard implements CanActivate {
           resetTime: result.resetTime,
           blocked: result.blocked,
         },
-        HttpStatus.TOO_MANY_REQUESTS,
+        HttpStatus.TOO_MANY_REQUESTS
       );
     }
 

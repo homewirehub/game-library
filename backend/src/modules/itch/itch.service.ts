@@ -49,8 +49,10 @@ export class ItchService {
     try {
       await execAsync('butler --version');
       return true;
-    } catch (error) {
-      this.logger.warn('Butler (itch.io CLI) not found. Install with: npm install -g @itchio/butler');
+  } catch (_error) {
+      this.logger.warn(
+        'Butler (itch.io CLI) not found. Install with: npm install -g @itchio/butler'
+      );
       return false;
     }
   }
@@ -58,14 +60,15 @@ export class ItchService {
   async searchGames(query: string, limit: number = 20): Promise<ItchGame[]> {
     try {
       this.logger.log(`Searching itch.io for: "${query}"`);
-      
+
       // Use itch.io web search page
       const searchUrl = `https://itch.io/search?q=${encodeURIComponent(query)}`;
       const response = await axios.get(searchUrl, {
         timeout: 10000,
         headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-        }
+          'User-Agent':
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        },
       });
 
       const $ = cheerio.load(response.data);
@@ -90,14 +93,18 @@ export class ItchService {
           // Extract game ID from URL (e.g., /game/my-awesome-game -> my-awesome-game)
           const urlParts = url.split('/');
           const slug = urlParts[urlParts.length - 1] || urlParts[urlParts.length - 2];
-          
+
           games.push({
             id: slug,
             slug: slug,
             title: title,
             author: author || 'Unknown',
             url: url.startsWith('http') ? url : `https://itch.io${url}`,
-            cover_url: coverUrl?.startsWith('http') ? coverUrl : (coverUrl ? `https:${coverUrl}` : undefined),
+            cover_url: coverUrl?.startsWith('http')
+              ? coverUrl
+              : coverUrl
+                ? `https:${coverUrl}`
+                : undefined,
             price: price,
             platforms: ['windows'], // Default assumption, could be improved
             tags: [],
@@ -107,17 +114,16 @@ export class ItchService {
 
       this.logger.log(`Found ${games.length} games for query: "${query}"`);
       return games;
-
     } catch (error) {
-      this.logger.error('Failed to search itch.io games:', error.message);
+      this.logger.error('Failed to search itch.io games:', (error as Error).message);
       // Return empty array instead of throwing to prevent UI errors
       return [];
     }
   }
 
-  async downloadGame(slug: string, gameTitle?: string): Promise<string> {
+  async downloadGame(slug: string, _gameTitle?: string): Promise<string> {
     const gameId = this.slugToId(slug);
-    
+
     if (this.downloads.has(gameId)) {
       throw new Error(`Download for ${slug} is already in progress`);
     }
@@ -166,12 +172,11 @@ export class ItchService {
 
       this.logger.log(`Download completed for: ${slug}`);
       return gameId;
-
     } catch (error) {
       progress.status = 'failed';
       progress.error = error.message;
       progress.message = `Download failed: ${error.message}`;
-      
+
       this.logger.error(`Download failed for ${slug}:`, error);
       throw error;
     }
@@ -187,7 +192,7 @@ export class ItchService {
 
   async cancelDownload(gameId: string): Promise<boolean> {
     const progress = this.downloads.get(gameId);
-    
+
     if (!progress || progress.status === 'completed' || progress.status === 'failed') {
       return false;
     }
@@ -202,7 +207,7 @@ export class ItchService {
 
   async retryDownload(gameId: string): Promise<boolean> {
     const progress = this.downloads.get(gameId);
-    
+
     if (!progress || progress.status !== 'failed') {
       return false;
     }
@@ -210,7 +215,7 @@ export class ItchService {
     this.downloads.delete(gameId);
     // Extract slug from gameId (this is a simplified approach)
     const slug = this.idToSlug(gameId);
-    
+
     try {
       await this.downloadGame(slug);
       return true;
@@ -223,24 +228,24 @@ export class ItchService {
   async getLocalGames(): Promise<ItchGame[]> {
     try {
       const downloadedGames: ItchGame[] = [];
-      
+
       if (!(await fs.pathExists(this.downloadDir))) {
         return downloadedGames;
       }
 
       const dirs = await fs.readdir(this.downloadDir);
-      
+
       for (const dir of dirs) {
         const dirPath = path.join(this.downloadDir, dir);
         const stat = await fs.stat(dirPath);
-        
+
         if (stat.isDirectory()) {
           // Look for metadata file or infer from directory structure
           const metadataPath = path.join(dirPath, 'metadata.json');
           let gameData: Partial<ItchGame> = {
             id: dir,
             slug: this.idToSlug(dir),
-            title: dir.replace(/-/g, ' ').replace(/^\w/, c => c.toUpperCase()),
+            title: dir.replace(/-/g, ' ').replace(/^\w/, (c) => c.toUpperCase()),
             author: 'Unknown',
             url: `https://itch.io/${this.idToSlug(dir)}`,
           };
@@ -293,7 +298,7 @@ export class ItchService {
   private async executeWithProgress(command: string, progress: DownloadProgress): Promise<void> {
     return new Promise((resolve, reject) => {
       const child = exec(command);
-      
+
       child.stdout?.on('data', (data: string) => {
         // Parse butler output for progress
         const progressMatch = data.match(/(\d+)%/);
@@ -324,7 +329,7 @@ export class ItchService {
   private async extractDownload(downloadPath: string, gameId: string): Promise<void> {
     try {
       const files = await fs.readdir(downloadPath);
-      const zipFiles = files.filter(f => f.endsWith('.zip'));
+      const zipFiles = files.filter((f) => f.endsWith('.zip'));
 
       if (zipFiles.length === 0) {
         this.logger.log(`No zip files found in ${downloadPath}, assuming already extracted`);
@@ -335,12 +340,12 @@ export class ItchService {
       await fs.ensureDir(extractPath);
 
       for (const zipFile of zipFiles) {
-        const zipPath = path.join(downloadPath, zipFile);
+  const _zipPath = path.join(downloadPath, zipFile);
         this.logger.log(`Extracting ${zipFile} to ${extractPath}`);
-        
+
         // Use a zip extraction library (you'll need to install one)
         // For now, this is a placeholder
-        // await extract(zipPath, { dir: extractPath });
+  // await extract(_zipPath, { dir: extractPath });
       }
     } catch (error) {
       this.logger.error(`Failed to extract download for ${gameId}:`, error);
@@ -350,12 +355,12 @@ export class ItchService {
 
   private extractPlatforms(game: any): string[] {
     const platforms: string[] = [];
-    
+
     if (game.traits?.includes('windows')) platforms.push('windows');
     if (game.traits?.includes('mac')) platforms.push('mac');
     if (game.traits?.includes('linux')) platforms.push('linux');
     if (game.traits?.includes('web')) platforms.push('web');
-    
+
     return platforms;
   }
 
@@ -374,12 +379,12 @@ export class ItchService {
 
     this.downloads.forEach((progress, gameId) => {
       // Remove completed downloads older than 24 hours
-      if (progress.status === 'completed' && (now - Date.now()) > 24 * 60 * 60 * 1000) {
+      if (progress.status === 'completed' && now - Date.now() > 24 * 60 * 60 * 1000) {
         completedToRemove.push(gameId);
       }
     });
 
-    completedToRemove.forEach(gameId => {
+    completedToRemove.forEach((gameId) => {
       this.downloads.delete(gameId);
     });
 

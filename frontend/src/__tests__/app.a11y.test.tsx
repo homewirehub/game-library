@@ -17,13 +17,25 @@ jest.mock('../config/api', () => ({
 }));
 
 // Mock heavy route components to keep test focused on header/nav
-jest.mock('../pages/GameLibraryRedesigned', () => ({ __esModule: true, default: () => <div>Library New</div> }));
+jest.mock('../pages/GameLibraryRedesigned', () => ({
+  __esModule: true,
+  default: () => <div>Library New</div>,
+}));
 jest.mock('../pages/GameUpload', () => ({ __esModule: true, default: () => <div>Upload</div> }));
 jest.mock('../pages/GameDetails', () => ({ __esModule: true, default: () => <div>Details</div> }));
-jest.mock('../pages/InstallationWizard', () => ({ __esModule: true, default: () => <div>Install</div> }));
+jest.mock('../pages/InstallationWizard', () => ({
+  __esModule: true,
+  default: () => <div>Install</div>,
+}));
 jest.mock('../components/ItchGames', () => ({ __esModule: true, default: () => <div>Itch</div> }));
-jest.mock('../components/DesignSystemDemo', () => ({ __esModule: true, default: () => <div>Design</div> }));
-jest.mock('../components/SteamIntegration', () => ({ __esModule: true, default: () => <div>Steam</div> }));
+jest.mock('../components/DesignSystemDemo', () => ({
+  __esModule: true,
+  default: () => <div>Design</div>,
+}));
+jest.mock('../components/SteamIntegration', () => ({
+  __esModule: true,
+  default: () => <div>Steam</div>,
+}));
 
 describe('App navigation a11y', () => {
   beforeEach(() => {
@@ -36,9 +48,9 @@ describe('App navigation a11y', () => {
 
     const toggle = await screen.findByRole('button', { name: /toggle navigation/i });
 
-  // Initially closed
-  expect(toggle).toHaveAttribute('aria-expanded', 'false');
-  const menu = screen.getByRole('menu', { hidden: true });
+    // Initially closed
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    const menu = screen.getByRole('menu', { hidden: true });
     expect(menu).toHaveAttribute('aria-hidden', 'true');
 
     // Open

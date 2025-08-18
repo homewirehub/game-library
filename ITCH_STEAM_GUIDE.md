@@ -26,10 +26,11 @@ The Game Library now includes powerful integrations with:
 ### Required Software
 
 1. **Butler (Itch.io CLI)**
+
    ```bash
    # Install globally via npm
    npm install -g @itchio/butler
-   
+
    # Or download from: https://itchio.itch.io/butler
    ```
 
@@ -84,6 +85,7 @@ RATE_LIMIT_MAX=100
 ### 3. Verify Installation
 
 1. **Check Butler Installation**:
+
    ```bash
    butler --version
    ```
@@ -114,7 +116,7 @@ RATE_LIMIT_MAX=100
 const searchGames = async (query: string) => {
   const response = await axios.post('/api/itch/search', {
     query: query,
-    limit: 20
+    limit: 20,
   });
   return response.data; // Array of ItchGame objects
 };
@@ -127,7 +129,7 @@ const searchGames = async (query: string) => {
 const downloadGame = async (slug: string) => {
   const response = await axios.post('/api/itch/download', {
     slug: slug,
-    gameTitle: 'Optional Game Title'
+    gameTitle: 'Optional Game Title',
   });
   return response.data.gameId; // Unique download ID
 };
@@ -153,17 +155,17 @@ const getProgress = async (gameId: string) => {
 
 ### API Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/itch/status` | Check Butler availability |
-| `POST` | `/api/itch/search` | Search itch.io games |
-| `POST` | `/api/itch/download` | Start game download |
-| `GET` | `/api/itch/downloads` | List all downloads |
-| `GET` | `/api/itch/downloads/:id` | Get download progress |
-| `POST` | `/api/itch/downloads/:id/cancel` | Cancel download |
-| `POST` | `/api/itch/downloads/:id/retry` | Retry failed download |
-| `GET` | `/api/itch/games/local` | List downloaded games |
-| `DELETE` | `/api/itch/games/:id` | Delete downloaded game |
+| Method   | Endpoint                         | Description               |
+| -------- | -------------------------------- | ------------------------- |
+| `GET`    | `/api/itch/status`               | Check Butler availability |
+| `POST`   | `/api/itch/search`               | Search itch.io games      |
+| `POST`   | `/api/itch/download`             | Start game download       |
+| `GET`    | `/api/itch/downloads`            | List all downloads        |
+| `GET`    | `/api/itch/downloads/:id`        | Get download progress     |
+| `POST`   | `/api/itch/downloads/:id/cancel` | Cancel download           |
+| `POST`   | `/api/itch/downloads/:id/retry`  | Retry failed download     |
+| `GET`    | `/api/itch/games/local`          | List downloaded games     |
+| `DELETE` | `/api/itch/games/:id`            | Delete downloaded game    |
 
 ## 🎯 Steam Integration
 
@@ -199,7 +201,7 @@ const addToSteam = async (gameData) => {
     executablePath: 'C:\\Path\\To\\Game.exe',
     workingDir: 'C:\\Path\\To\\Game\\', // optional
     iconPath: 'C:\\Path\\To\\Icon.png', // optional
-    tags: ['Indie', 'Custom'] // optional
+    tags: ['Indie', 'Custom'], // optional
   });
   return response.data;
 };
@@ -215,7 +217,7 @@ const addItchGameToSteam = async (gameData) => {
     gameId: 'itch_game_id',
     gameName: 'Game Name',
     gameSlug: 'author/game-name',
-    downloadAssets: true // Downloads artwork automatically
+    downloadAssets: true, // Downloads artwork automatically
   });
   return response.data;
 };
@@ -224,6 +226,7 @@ const addItchGameToSteam = async (gameData) => {
 ### Steam User Detection
 
 Steam users are automatically detected from:
+
 - **Windows**: `%USERPROFILE%\\AppData\\Roaming\\Steam\\userdata`
 - **Linux**: `~/.steam/userdata`
 - **macOS**: `~/Library/Application Support/Steam/userdata`
@@ -239,17 +242,17 @@ When `downloadAssets: true` is used:
 
 ### API Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/steam/status` | Check Steam installation |
-| `GET` | `/api/steam/users` | List Steam users |
-| `POST` | `/api/steam/games/add` | Add custom game |
-| `POST` | `/api/steam/games/add-itch` | Add itch.io game |
-| `POST` | `/api/steam/games/add-multiple` | Bulk add games |
-| `DELETE` | `/api/steam/games/remove` | Remove game |
-| `GET` | `/api/steam/games/:userId` | List user's non-Steam games |
-| `POST` | `/api/steam/assets/download` | Download artwork |
-| `POST` | `/api/steam/restart` | Restart Steam |
+| Method   | Endpoint                        | Description                 |
+| -------- | ------------------------------- | --------------------------- |
+| `GET`    | `/api/steam/status`             | Check Steam installation    |
+| `GET`    | `/api/steam/users`              | List Steam users            |
+| `POST`   | `/api/steam/games/add`          | Add custom game             |
+| `POST`   | `/api/steam/games/add-itch`     | Add itch.io game            |
+| `POST`   | `/api/steam/games/add-multiple` | Bulk add games              |
+| `DELETE` | `/api/steam/games/remove`       | Remove game                 |
+| `GET`    | `/api/steam/games/:userId`      | List user's non-Steam games |
+| `POST`   | `/api/steam/assets/download`    | Download artwork            |
+| `POST`   | `/api/steam/restart`            | Restart Steam               |
 
 ## ⚙️ Configuration
 
@@ -307,15 +310,15 @@ storage/
 ```typescript
 interface ItchGame {
   id: string;
-  slug: string;           // e.g., "author/game-name"
+  slug: string; // e.g., "author/game-name"
   title: string;
   author: string;
-  url: string;           // itch.io page URL
+  url: string; // itch.io page URL
   cover_url?: string;
   description?: string;
   tags?: string[];
-  platforms?: string[];  // ['windows', 'mac', 'linux', 'web']
-  price?: string;        // e.g., "$5.00" or "Free"
+  platforms?: string[]; // ['windows', 'mac', 'linux', 'web']
+  price?: string; // e.g., "$5.00" or "Free"
   downloads_count?: number;
   published_at?: string;
 }
@@ -327,9 +330,9 @@ interface ItchGame {
 interface DownloadProgress {
   gameId: string;
   status: 'queued' | 'downloading' | 'extracting' | 'completed' | 'failed';
-  progress: number;      // 0-100
+  progress: number; // 0-100
   message: string;
-  error?: string;        // Present if status is 'failed'
+  error?: string; // Present if status is 'failed'
   downloadPath?: string; // Present if status is 'completed'
 }
 ```
@@ -340,10 +343,10 @@ interface DownloadProgress {
 interface SteamShortcut {
   id: string;
   appName: string;
-  exe: string;          // Executable path
-  startDir: string;     // Working directory
-  icon?: string;        // Icon path
-  tags?: string[];      // Steam categories
+  exe: string; // Executable path
+  startDir: string; // Working directory
+  icon?: string; // Icon path
+  tags?: string[]; // Steam categories
   lastPlayTime?: number; // Unix timestamp
   isVR?: boolean;
   allowDesktopConfig?: boolean;
@@ -356,8 +359,8 @@ interface SteamShortcut {
 ```typescript
 interface SteamGridAsset {
   type: 'grid' | 'hero' | 'logo' | 'icon';
-  url: string;          // SteamGridDB URL
-  localPath?: string;   // Local file path after download
+  url: string; // SteamGridDB URL
+  localPath?: string; // Local file path after download
 }
 ```
 
@@ -370,6 +373,7 @@ interface SteamGridAsset {
 **Error**: `"Butler (itch.io CLI) not found"`
 
 **Solutions**:
+
 ```bash
 # Install Butler globally
 npm install -g @itchio/butler
@@ -387,6 +391,7 @@ butler --version
 **Error**: `"Steam not found on this system"`
 
 **Solutions**:
+
 - Ensure Steam is installed
 - Run Steam at least once to create user data
 - Check Steam installation paths:
@@ -399,6 +404,7 @@ butler --version
 **Error**: Downloads stuck in "downloading" or fail immediately
 
 **Solutions**:
+
 ```bash
 # Check Butler authentication
 butler login
@@ -420,6 +426,7 @@ rmdir /s storage\downloads # Windows
 **Error**: Games not appearing in Steam
 
 **Solutions**:
+
 1. **Restart Steam**: Use the restart endpoint or manually restart
 2. **Check File Paths**: Ensure executable paths are absolute and valid
 3. **Verify User Selection**: Confirm correct Steam user is selected
@@ -430,6 +437,7 @@ rmdir /s storage\downloads # Windows
 **Error**: No artwork downloaded or API errors
 
 **Solutions**:
+
 ```bash
 # Verify SteamGridDB API key
 curl -H "Authorization: Bearer YOUR_KEY" \
@@ -451,6 +459,7 @@ NODE_ENV=development
 ```
 
 This will provide detailed logs for:
+
 - Butler command execution
 - Steam file operations
 - API requests and responses
@@ -480,6 +489,7 @@ If you encounter issues not covered here:
 5. **Update Dependencies**: Make sure all packages are up to date
 
 For additional help, check the project's GitHub issues or create a new issue with:
+
 - Error messages
 - System information (OS, Node version, etc.)
 - Steps to reproduce

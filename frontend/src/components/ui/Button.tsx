@@ -36,8 +36,10 @@ export const Button: React.FC<ButtonProps> = ({
     fullWidthClass,
     loadingClass,
     disabledClass,
-    className
-  ].filter(Boolean).join(' ');
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   const renderIcon = () => {
     if (loading) {
@@ -50,11 +52,7 @@ export const Button: React.FC<ButtonProps> = ({
   };
 
   return (
-    <button
-      className={classes}
-      disabled={disabled || loading}
-      {...props}
-    >
+    <button className={classes} disabled={disabled || loading} {...props}>
       {iconPosition === 'left' && renderIcon()}
       {children && <span className="btn__text">{children}</span>}
       {iconPosition === 'right' && renderIcon()}

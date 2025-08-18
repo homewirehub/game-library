@@ -49,21 +49,21 @@
   width: 100%;
   height: var(--input-height);
   padding: var(--input-padding-y) var(--input-padding-x);
-  
+
   /* Typography */
   font-family: var(--font-family-primary);
   font-size: var(--font-size-base);
   line-height: var(--line-height-normal);
-  
+
   /* Styling */
   background-color: var(--color-neutral-800);
   border: var(--input-border-width) solid var(--color-neutral-600);
   border-radius: var(--radius-md);
   color: var(--color-neutral-100);
-  
+
   /* Transitions */
   transition: all var(--transition-default);
-  
+
   /* Remove default styles */
   outline: none;
   appearance: none;
@@ -583,29 +583,29 @@
   .form-row {
     grid-template-columns: 1fr;
   }
-  
+
   .input-group {
     flex-direction: column;
   }
-  
+
   .input-group .input {
     border-radius: var(--radius-md);
   }
-  
+
   .input-group .input:not(:last-child) {
     border-right: var(--input-border-width) solid var(--input-border-color);
     border-bottom: none;
   }
-  
+
   .input-addon {
     border-radius: var(--radius-md);
   }
-  
+
   .game-filter-form {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .platform-selector {
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   }
@@ -631,7 +631,7 @@
   .switch {
     border-width: 2px;
   }
-  
+
   .file-input-label {
     border-width: 3px;
   }

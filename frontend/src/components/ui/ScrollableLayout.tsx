@@ -10,16 +10,14 @@ interface ScrollableLayoutProps {
 export const ScrollableLayout: React.FC<ScrollableLayoutProps> = ({
   children,
   padding = 'md',
-  maxWidth = 'xl'
+  maxWidth = 'xl',
 }) => {
   const paddingClass = `scrollable-layout--padding-${padding}`;
   const maxWidthClass = `scrollable-layout--max-width-${maxWidth}`;
 
   return (
     <div className={`scrollable-layout ${paddingClass} ${maxWidthClass}`}>
-      <div className="scrollable-layout__content">
-        {children}
-      </div>
+      <div className="scrollable-layout__content">{children}</div>
     </div>
   );
 };

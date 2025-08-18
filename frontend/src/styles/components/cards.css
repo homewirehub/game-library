@@ -178,7 +178,7 @@
   left: 0;
   right: 0;
   padding: var(--space-4);
-  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
   color: white;
 }
 
@@ -191,7 +191,7 @@
 
 .game-card-description {
   font-size: var(--font-size-sm);
-  color: rgba(255,255,255,0.8);
+  color: rgba(255, 255, 255, 0.8);
   line-height: var(--line-height-snug);
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -212,7 +212,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-1);
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-sm);
   backdrop-filter: blur(8px);
@@ -244,7 +244,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -599,13 +599,15 @@
 .feature-card {
   text-align: center;
   border: 2px solid transparent;
-  background: linear-gradient(white, white) padding-box,
-              linear-gradient(135deg, var(--color-primary-200), var(--color-secondary-200)) border-box;
+  background:
+    linear-gradient(white, white) padding-box,
+    linear-gradient(135deg, var(--color-primary-200), var(--color-secondary-200)) border-box;
 }
 
 .feature-card:hover {
-  background: linear-gradient(var(--color-primary-50), var(--color-secondary-50)) padding-box,
-              linear-gradient(135deg, var(--color-primary-500), var(--color-secondary-500)) border-box;
+  background:
+    linear-gradient(var(--color-primary-50), var(--color-secondary-50)) padding-box,
+    linear-gradient(135deg, var(--color-primary-500), var(--color-secondary-500)) border-box;
 }
 
 .feature-card-icon {
@@ -756,23 +758,23 @@
     grid-template-columns: 1fr;
     gap: var(--space-4);
   }
-  
+
   .card-grid-sm {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
-  
+
   .card-masonry {
     columns: 1;
   }
-  
+
   .game-card {
     max-width: none;
   }
-  
+
   .pricing-card.featured {
     transform: none;
   }
-  
+
   .stat-card-value {
     font-size: var(--font-size-3xl);
   }
@@ -783,27 +785,27 @@
   .card-body {
     padding: var(--space-4);
   }
-  
+
   .card-footer {
     padding: var(--space-3) var(--space-4);
     flex-direction: column;
     align-items: stretch;
     gap: var(--space-3);
   }
-  
+
   .game-card-content {
     padding: var(--space-3);
   }
-  
+
   .game-card-title {
     font-size: var(--font-size-base);
   }
-  
+
   .download-progress {
     flex-direction: column;
     gap: var(--space-2);
   }
-  
+
   .download-progress-bar {
     margin: 0;
   }
@@ -817,7 +819,7 @@
   .game-card-overlay {
     transition: none;
   }
-  
+
   .card:hover,
   .game-card:hover {
     transform: none;
@@ -829,8 +831,8 @@
   .card {
     border-width: 2px;
   }
-  
+
   .game-card-overlay {
-    background: rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.8);
   }
 }

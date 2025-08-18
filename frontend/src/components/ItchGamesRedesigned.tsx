@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { 
-  Container, 
-  Card, 
-  CardHeader, 
-  CardContent, 
-  Button, 
-  Input, 
-  Select, 
-  TabBar, 
+  Container as _Container, 
+  Card,
+  CardHeader,
+  CardContent,
+  Button,
+  Input,
+  Select,
+  TabBar,
   TabPanel,
   Grid,
   Flex,
   Stack,
-  ScrollableLayout
+  ScrollableLayout,
 } from './ui';
 
 interface ItchGame {
@@ -54,7 +54,7 @@ const ItchGamesRedesigned: React.FC = () => {
     fetchSteamUsers();
     fetchDownloads();
     fetchLocalGames();
-    
+
     // Poll downloads every 2 seconds
     const interval = setInterval(fetchDownloads, 2000);
     return () => clearInterval(interval);
@@ -193,12 +193,18 @@ const ItchGamesRedesigned: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'queued': return '#6c757d';
-      case 'downloading': return '#0d6efd';
-      case 'extracting': return '#fd7e14';
-      case 'completed': return '#198754';
-      case 'failed': return '#dc3545';
-      default: return '#6c757d';
+      case 'queued':
+        return '#6c757d';
+      case 'downloading':
+        return '#0d6efd';
+      case 'extracting':
+        return '#fd7e14';
+      case 'completed':
+        return '#198754';
+      case 'failed':
+        return '#dc3545';
+      default:
+        return '#6c757d';
     }
   };
 
@@ -210,27 +216,33 @@ const ItchGamesRedesigned: React.FC = () => {
             <h1 style={{ margin: 0, fontSize: '2rem', fontWeight: 600 }}>
               🎮 Itch.io Game Library
             </h1>
-            
+
             <Grid cols="responsive" gap="md">
               <Input
                 placeholder="Search for indie games on itch.io..."
                 value={searchQuery}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-                onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && searchGames()}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setSearchQuery(e.target.value)
+                }
+                onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) =>
+                  e.key === 'Enter' && searchGames()
+                }
                 disabled={isSearching}
                 icon="🔍"
                 size="lg"
               />
               <Select
                 value={selectedSteamUser}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setSelectedSteamUser(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                  setSelectedSteamUser(e.target.value)
+                }
                 size="lg"
                 options={[
                   { value: '', label: 'Select Steam User' },
-                  ...steamUsers.map(user => ({
+                  ...steamUsers.map((user) => ({
                     value: user.id,
-                    label: user.name || `User ${user.id}`
-                  }))
+                    label: user.name || `User ${user.id}`,
+                  })),
                 ]}
               />
             </Grid>
@@ -265,63 +277,65 @@ const ItchGamesRedesigned: React.FC = () => {
               {searchResults.length > 0 && (
                 <Grid cols="responsive" gap="lg">
                   {searchResults.map((game) => (
-                      <Card key={game.id} variant="default" padding="md" hover interactive>
-                        {game.cover_url && (
-                          <img 
-                            src={game.cover_url} 
-                            alt={game.title}
+                    <Card key={game.id} variant="default" padding="md" hover interactive>
+                      {game.cover_url && (
+                        <img
+                          src={game.cover_url}
+                          alt={game.title}
+                          style={{
+                            width: '100%',
+                            height: '200px',
+                            objectFit: 'cover',
+                            borderRadius: '8px',
+                            marginBottom: '1rem',
+                          }}
+                        />
+                      )}
+                      <Stack spacing="sm">
+                        <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 600 }}>
+                          {game.title}
+                        </h3>
+                        <p style={{ margin: 0, color: '#6b7280', fontSize: '0.875rem' }}>
+                          by {game.author}
+                        </p>
+                        {game.description && (
+                          <p
                             style={{
-                              width: '100%',
-                              height: '200px',
-                              objectFit: 'cover',
-                              borderRadius: '8px',
-                              marginBottom: '1rem'
-                            }}
-                          />
-                        )}
-                        <Stack spacing="sm">
-                          <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 600 }}>
-                            {game.title}
-                          </h3>
-                          <p style={{ margin: 0, color: '#6b7280', fontSize: '0.875rem' }}>
-                            by {game.author}
-                          </p>
-                          {game.description && (
-                            <p style={{ 
-                              margin: 0, 
-                              color: '#4b5563', 
+                              margin: 0,
+                              color: '#4b5563',
                               fontSize: '0.875rem',
                               display: '-webkit-box',
                               WebkitLineClamp: 3,
                               lineClamp: 3,
                               WebkitBoxOrient: 'vertical',
-                              overflow: 'hidden'
-                            }}>
-                              {game.description}
-                            </p>
-                          )}
-                          
-                          <Flex gap="sm" justify="between">
-                            <Button
-                              variant="primary"
-                              size="sm"
-                              onClick={() => downloadGame(game)}
-                              icon="⬇️"
-                              fullWidth
-                            >
-                              Download
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => window.open(game.url, '_blank')}
-                              icon="🌐"
-                            >
-                              View
-                            </Button>
-                          </Flex>
-                        </Stack>
-                      </Card>
+                              overflow: 'hidden',
+                            }}
+                          >
+                            {game.description}
+                          </p>
+                        )}
+
+                        <Flex gap="sm" justify="between">
+                          <Button
+                            variant="primary"
+                            size="sm"
+                            onClick={() => downloadGame(game)}
+                            icon="⬇️"
+                            fullWidth
+                          >
+                            Download
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => window.open(game.url, '_blank')}
+                            icon="🌐"
+                          >
+                            View
+                          </Button>
+                        </Flex>
+                      </Stack>
+                    </Card>
                   ))}
                 </Grid>
               )}
@@ -350,7 +364,8 @@ const ItchGamesRedesigned: React.FC = () => {
                 </Card>
               )}
             </Stack>
-          </TabPanel>          <TabPanel tabId="downloads" activeTab={activeTab}>
+          </TabPanel>{' '}
+          <TabPanel tabId="downloads" activeTab={activeTab}>
             <Stack spacing="lg">
               {downloads.length === 0 ? (
                 <Card variant="flat" padding="xl">
@@ -371,49 +386,58 @@ const ItchGamesRedesigned: React.FC = () => {
                           <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>
                             {download.gameId}
                           </h3>
-                          <span style={{
-                            padding: '0.25rem 0.75rem',
-                            fontSize: '0.75rem',
-                            fontWeight: 600,
-                            borderRadius: '9999px',
-                            color: getStatusColor(download.status),
-                            backgroundColor: `${getStatusColor(download.status)}20`
-                          }}>
+                          <span
+                            style={{
+                              padding: '0.25rem 0.75rem',
+                              fontSize: '0.75rem',
+                              fontWeight: 600,
+                              borderRadius: '9999px',
+                              color: getStatusColor(download.status),
+                              backgroundColor: `${getStatusColor(download.status)}20`,
+                            }}
+                          >
                             {download.status.toUpperCase()}
                           </span>
                         </Flex>
-                        
+
                         <p style={{ margin: 0, color: '#6b7280', fontSize: '0.875rem' }}>
                           {download.message}
                         </p>
-                        
+
                         {download.status === 'downloading' && (
-                          <div style={{
-                            width: '100%',
-                            height: '8px',
-                            backgroundColor: '#e5e7eb',
-                            borderRadius: '4px',
-                            overflow: 'hidden'
-                          }}>
-                            <div style={{
-                              width: `${download.progress}%`,
-                              height: '100%',
-                              backgroundColor: getStatusColor(download.status),
+                          <div
+                            style={{
+                              width: '100%',
+                              height: '8px',
+                              backgroundColor: '#e5e7eb',
                               borderRadius: '4px',
-                              transition: 'width 0.3s ease'
-                            }} />
+                              overflow: 'hidden',
+                            }}
+                          >
+                            <div
+                              style={{
+                                width: `${download.progress}%`,
+                                height: '100%',
+                                backgroundColor: getStatusColor(download.status),
+                                borderRadius: '4px',
+                                transition: 'width 0.3s ease',
+                              }}
+                            />
                           </div>
                         )}
-                        
+
                         {download.error && (
-                          <Card variant="outlined" padding="sm" 
-                                style={{ borderColor: '#ef4444', backgroundColor: '#fef2f2' }}>
+                          <Card
+                            variant="outlined"
+                            padding="sm"
+                            style={{ borderColor: '#ef4444', backgroundColor: '#fef2f2' }}
+                          >
                             <p style={{ margin: 0, color: '#dc2626', fontSize: '0.875rem' }}>
                               <strong>Error:</strong> {download.error}
                             </p>
                           </Card>
                         )}
-                        
+
                         <Flex gap="sm">
                           {download.status === 'failed' && (
                             <Button
@@ -443,7 +467,6 @@ const ItchGamesRedesigned: React.FC = () => {
               )}
             </Stack>
           </TabPanel>
-
           <TabPanel tabId="library" activeTab={activeTab}>
             <Stack spacing="lg">
               {localGames.length === 0 ? (
@@ -467,7 +490,7 @@ const ItchGamesRedesigned: React.FC = () => {
                         <p style={{ margin: 0, color: '#6b7280', fontSize: '0.875rem' }}>
                           by {game.author}
                         </p>
-                        
+
                         <Stack spacing="sm">
                           <Button
                             variant="secondary"

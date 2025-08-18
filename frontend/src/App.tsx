@@ -56,7 +56,10 @@ function App() {
           menuRef.current.querySelectorAll<HTMLElement>(
             'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
           )
-        ).filter(el => !el.hasAttribute('disabled') && el.tabIndex !== -1 && !el.getAttribute('aria-hidden'));
+        ).filter(
+          (el) =>
+            !el.hasAttribute('disabled') && el.tabIndex !== -1 && !el.getAttribute('aria-hidden')
+        );
         if (focusables.length === 0) {
           e.preventDefault();
           toggleRef.current?.focus();
@@ -91,7 +94,7 @@ function App() {
     try {
       const response = await axios.get(API_ENDPOINTS.INSTALLATION_STATUS);
       setIsInstalled(response.data.installed);
-    } catch (error) {
+  } catch (_error) {
       // If installation endpoint doesn't exist, assume not installed
       setIsInstalled(false);
     } finally {
@@ -127,101 +130,130 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-  <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <ErrorBoundary>
-        <div className="game-library-layout">
-          <header className="app-header">
-            <nav className="app-nav game-navbar" aria-label="Main">
-              <Link to="/" className="app-logo">
-                <div className="app-logo-icon">GL</div>
-                <span>Game.Lib</span>
-              </Link>
-              <button
-                id="nav-toggle"
-                className="navbar-toggle"
-                aria-controls="mobile-menu"
-                aria-expanded={isMenuOpen}
-                ref={toggleRef}
-                onClick={() => (isMenuOpen ? closeMenu() : openMenu())}
-              >
-                <span className="sr-only">Toggle navigation</span>
-                ☰
-              </button>
-              <ul
-                id="mobile-menu"
-                ref={menuRef}
-                className={isMenuOpen ? 'app-nav-links navbar-menu mobile-open' : 'app-nav-links navbar-menu'}
-                aria-hidden={!isMenuOpen}
-                role="menu"
-                aria-labelledby="nav-toggle"
-              >
-                <li>
-                  <NavLink
-                    to="/"
-                    className={({ isActive }) => (isActive ? 'app-nav-link active' : 'app-nav-link')}
-                    onClick={() => { if (isMenuOpen) closeMenu(); }}
-                  >
-                    Library
-                  </NavLink>
-                </li>
-                
-                <li>
-                  <NavLink
-                    to="/upload"
-                    className={({ isActive }) => (isActive ? 'app-nav-link active' : 'app-nav-link')}
-                    onClick={() => { if (isMenuOpen) closeMenu(); }}
-                  >
-                    Upload
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/itch"
-                    className={({ isActive }) => (isActive ? 'app-nav-link active' : 'app-nav-link')}
-                    onClick={() => { if (isMenuOpen) closeMenu(); }}
-                  >
-                    Itch.io
-                  </NavLink>
-                </li>
-                
-                <li>
-                  <NavLink
-                    to="/design-system"
-                    className={({ isActive }) => (isActive ? 'app-nav-link active' : 'app-nav-link')}
-                    onClick={() => { if (isMenuOpen) closeMenu(); }}
-                  >
-                    🎨 Design
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/steam"
-                    className={({ isActive }) => (isActive ? 'app-nav-link active' : 'app-nav-link')}
-                    onClick={() => { if (isMenuOpen) closeMenu(); }}
-                  >
-                    Steam
-                  </NavLink>
-                </li>
-              </ul>
-            </nav>
-          </header>
+          <div className="game-library-layout">
+            <header className="app-header">
+              <nav className="app-nav game-navbar" aria-label="Main">
+                <Link to="/" className="app-logo">
+                  <div className="app-logo-icon">GL</div>
+                  <span>Game.Lib</span>
+                </Link>
+                <button
+                  id="nav-toggle"
+                  className="navbar-toggle"
+                  aria-controls="mobile-menu"
+                  aria-expanded={isMenuOpen}
+                  ref={toggleRef}
+                  onClick={() => (isMenuOpen ? closeMenu() : openMenu())}
+                >
+                  <span className="sr-only">Toggle navigation</span>☰
+                </button>
+                <ul
+                  id="mobile-menu"
+                  ref={menuRef}
+                  className={
+                    isMenuOpen
+                      ? 'app-nav-links navbar-menu mobile-open'
+                      : 'app-nav-links navbar-menu'
+                  }
+                  aria-hidden={!isMenuOpen}
+                  role="menu"
+                  aria-labelledby="nav-toggle"
+                >
+                  <li>
+                    <NavLink
+                      to="/"
+                      className={({ isActive }) =>
+                        isActive ? 'app-nav-link active' : 'app-nav-link'
+                      }
+                      onClick={() => {
+                        if (isMenuOpen) closeMenu();
+                      }}
+                    >
+                      Library
+                    </NavLink>
+                  </li>
 
-          <main className="app-main">
-            <Suspense fallback={<div className="loading-container"><div className="loading-spinner spinner-lg"></div></div>}>
-            <Routes>
-              <Route path="/" element={<GameLibraryRedesigned />} />
-              <Route path="/library" element={<Navigate to="/" replace />} />
-              <Route path="/upload" element={<GameUpload />} />
-              <Route path="/itch" element={<ItchGames />} />
-              <Route path="/itch-redesigned" element={<Navigate to="/itch" replace />} />
-              <Route path="/design-system" element={<DesignSystemDemo />} />
-              <Route path="/steam" element={<SteamIntegration />} />
-              <Route path="/games/:id" element={<GameDetails />} />
-              <Route path="/install" element={<Navigate to="/" replace />} />
-            </Routes>
-            </Suspense>
-          </main>
-        </div>
+                  <li>
+                    <NavLink
+                      to="/upload"
+                      className={({ isActive }) =>
+                        isActive ? 'app-nav-link active' : 'app-nav-link'
+                      }
+                      onClick={() => {
+                        if (isMenuOpen) closeMenu();
+                      }}
+                    >
+                      Upload
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/itch"
+                      className={({ isActive }) =>
+                        isActive ? 'app-nav-link active' : 'app-nav-link'
+                      }
+                      onClick={() => {
+                        if (isMenuOpen) closeMenu();
+                      }}
+                    >
+                      Itch.io
+                    </NavLink>
+                  </li>
+
+                  <li>
+                    <NavLink
+                      to="/design-system"
+                      className={({ isActive }) =>
+                        isActive ? 'app-nav-link active' : 'app-nav-link'
+                      }
+                      onClick={() => {
+                        if (isMenuOpen) closeMenu();
+                      }}
+                    >
+                      🎨 Design
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/steam"
+                      className={({ isActive }) =>
+                        isActive ? 'app-nav-link active' : 'app-nav-link'
+                      }
+                      onClick={() => {
+                        if (isMenuOpen) closeMenu();
+                      }}
+                    >
+                      Steam
+                    </NavLink>
+                  </li>
+                </ul>
+              </nav>
+            </header>
+
+            <main className="app-main">
+              <Suspense
+                fallback={
+                  <div className="loading-container">
+                    <div className="loading-spinner spinner-lg"></div>
+                  </div>
+                }
+              >
+                <Routes>
+                  <Route path="/" element={<GameLibraryRedesigned />} />
+                  <Route path="/library" element={<Navigate to="/" replace />} />
+                  <Route path="/upload" element={<GameUpload />} />
+                  <Route path="/itch" element={<ItchGames />} />
+                  <Route path="/itch-redesigned" element={<Navigate to="/itch" replace />} />
+                  <Route path="/design-system" element={<DesignSystemDemo />} />
+                  <Route path="/steam" element={<SteamIntegration />} />
+                  <Route path="/games/:id" element={<GameDetails />} />
+                  <Route path="/install" element={<Navigate to="/" replace />} />
+                </Routes>
+              </Suspense>
+            </main>
+          </div>
         </ErrorBoundary>
       </Router>
     </QueryClientProvider>

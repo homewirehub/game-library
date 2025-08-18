@@ -10,9 +10,7 @@ describe('TabBar', () => {
     ];
     const onTabChange = jest.fn();
 
-    render(
-      <TabBar tabs={tabs} activeTab="one" onTabChange={onTabChange} />
-    );
+    render(<TabBar tabs={tabs} activeTab="one" onTabChange={onTabChange} />);
 
     const tabOne = screen.getByRole('tab', { name: /one/i });
     const tabTwo = screen.getByRole('tab', { name: /two/i });

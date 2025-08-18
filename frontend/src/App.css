@@ -4,6 +4,8 @@
 
 /* Import our complete design system */
 @import './styles/main.css';
+/* Readability overrides should come after main styles */
+@import './styles/readability.css';
 
 /* ===== Application Root ===== */
 
@@ -283,34 +285,34 @@
   .app-nav {
     padding: var(--space-3) var(--space-4);
   }
-  
+
   .app-main {
     padding: var(--space-6) var(--space-4);
   }
-  
+
   .page-title {
     font-size: var(--font-size-3xl);
   }
-  
+
   .page-description {
     font-size: var(--font-size-base);
   }
-  
+
   .page-actions {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .section-header {
     flex-direction: column;
     align-items: stretch;
     gap: var(--space-4);
   }
-  
+
   .section-actions {
     justify-content: center;
   }
-  
+
   .app-nav-links {
     gap: var(--space-4);
     flex-wrap: wrap;
@@ -321,20 +323,20 @@
   .app-logo {
     font-size: var(--font-size-lg);
   }
-  
+
   .app-logo-icon {
     width: 28px;
     height: 28px;
   }
-  
+
   .app-nav-links {
     display: none; /* Will be replaced with mobile menu */
   }
-  
+
   .page-header {
     margin-bottom: var(--space-6);
   }
-  
+
   .content-section {
     margin-bottom: var(--space-8);
   }

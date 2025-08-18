@@ -1,16 +1,16 @@
-import { 
-  Controller, 
-  Get, 
-  Post, 
-  Put, 
-  Delete, 
-  Param, 
-  Body, 
-  UseInterceptors, 
-  UploadedFile, 
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+  UseInterceptors,
+  UploadedFile,
   Res,
   BadRequestException,
-  Logger 
+  Logger,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
@@ -42,9 +42,7 @@ export class GamesController {
 
   @Post('upload')
   @UploadRateLimit() // Apply rate limiting to uploads
-  @UseInterceptors(
-    FileInterceptor('file', FileUploadConfigService.createMulterOptions())
-  )
+  @UseInterceptors(FileInterceptor('file', FileUploadConfigService.createMulterOptions()))
   async uploadGame(@UploadedFile() file: Express.Multer.File): Promise<Game> {
     if (!file) {
       throw new BadRequestException('No file uploaded');
@@ -55,32 +53,29 @@ export class GamesController {
     try {
       // Perform virus scan if enabled
       const scanResult = await this.virusScanService.scanFile(file.path);
-      
+
       if (!scanResult.isClean) {
         // Delete infected file immediately
         await fs.remove(file.path);
-        
+
         this.logger.warn(`Infected file detected: ${file.originalname}`, {
           threats: scanResult.threats,
-          scanner: scanResult.scanner
+          scanner: scanResult.scanner,
         });
-        
-        throw new BadRequestException(
-          `File contains threats: ${scanResult.threats.join(', ')}`
-        );
+
+        throw new BadRequestException(`File contains threats: ${scanResult.threats.join(', ')}`);
       }
 
       this.logger.log(`File scan completed: ${scanResult.scanner} (${scanResult.scanTime}ms)`);
 
       // Process the clean file
       return await this.gamesService.uploadGame(file);
-
     } catch (error) {
       // Cleanup file on error
       if (await fs.pathExists(file.path)) {
         await fs.remove(file.path);
       }
-      
+
       this.logger.error(`Upload failed for ${file.originalname}:`, error);
       throw error;
     }

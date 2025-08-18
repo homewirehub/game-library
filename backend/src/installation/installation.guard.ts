@@ -1,4 +1,10 @@
-import { Injectable, CanActivate, ExecutionContext, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { InstallationService } from './installation.service';
 
@@ -9,7 +15,7 @@ export const SkipInstallationCheck = () => Reflector.createDecorator<boolean>();
 export class InstallationGuard implements CanActivate {
   constructor(
     private readonly installationService: InstallationService,
-    private readonly reflector: Reflector,
+    private readonly reflector: Reflector
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -23,16 +29,16 @@ export class InstallationGuard implements CanActivate {
     }
 
     const isInstalled = await this.installationService.isInstalled();
-    
+
     if (!isInstalled) {
       const request = context.switchToHttp().getRequest();
       const url = request.url;
-      
+
       // Allow installation endpoints
       if (url.startsWith('/api/installation') || url.startsWith('/api/health')) {
         return true;
       }
-      
+
       // Redirect to installation page for all other requests
       throw new HttpException(
         {
@@ -40,7 +46,7 @@ export class InstallationGuard implements CanActivate {
           message: 'System requires installation',
           redirectTo: '/install',
         },
-        HttpStatus.SERVICE_UNAVAILABLE,
+        HttpStatus.SERVICE_UNAVAILABLE
       );
     }
 

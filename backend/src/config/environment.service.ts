@@ -80,7 +80,8 @@ export class EnvironmentService {
       jwtSecret: this.configService.get<string>('JWT_SECRET', this.generateDefaultSecret()),
       jwtExpiresIn: this.configService.get<string>('JWT_EXPIRES_IN', '7d'),
       bcryptRounds: this.configService.get<number>('BCRYPT_ROUNDS', 12),
-      corsOrigin: this.configService.get<string>('CORS_ORIGIN', 'http://localhost:3000,http://localhost:5173')
+      corsOrigin: this.configService
+        .get<string>('CORS_ORIGIN', 'http://localhost:3000,http://localhost:5173')
         .split(','),
       rateLimitWindowMs: this.configService.get<number>('RATE_LIMIT_WINDOW_MS', 15 * 60 * 1000), // 15 minutes
       rateLimitMax: this.configService.get<number>('RATE_LIMIT_MAX', 100),
@@ -89,7 +90,7 @@ export class EnvironmentService {
 
   getRedisConfig(): RedisConfig {
     const redisUrl = this.configService.get<string>('REDIS_URL');
-    
+
     if (redisUrl) {
       return {
         url: redisUrl,
@@ -117,7 +118,8 @@ export class EnvironmentService {
     return {
       path: this.configService.get<string>('STORAGE_PATH', './storage'),
       maxFileSize: this.configService.get<number>('MAX_FILE_SIZE', 5 * 1024 * 1024 * 1024), // 5GB
-      allowedFileTypes: this.configService.get<string>('ALLOWED_FILE_TYPES', '.zip,.rar,.7z,.iso,.exe')
+      allowedFileTypes: this.configService
+        .get<string>('ALLOWED_FILE_TYPES', '.zip,.rar,.7z,.iso,.exe')
         .split(','),
       tempDir: this.configService.get<string>('TEMP_DIR', './storage/temp'),
       backupDir: this.configService.get<string>('BACKUP_DIR', './storage/backups'),
@@ -129,7 +131,10 @@ export class EnvironmentService {
       port: this.configService.get<number>('SERVER_PORT', 3000),
       host: this.configService.get<string>('SERVER_HOST', '0.0.0.0'),
       domain: this.configService.get<string>('SERVER_DOMAIN'),
-      environment: this.configService.get<'development' | 'production' | 'test'>('NODE_ENV', 'development'),
+      environment: this.configService.get<'development' | 'production' | 'test'>(
+        'NODE_ENV',
+        'development'
+      ),
     };
   }
 
@@ -166,7 +171,9 @@ export class EnvironmentService {
   }
 
   private generateDefaultSecret(): string {
-    console.warn('WARNING: Using default JWT secret. Please set JWT_SECRET in environment variables.');
+    console.warn(
+      'WARNING: Using default JWT secret. Please set JWT_SECRET in environment variables.'
+    );
     return 'default-development-secret-please-change-in-production';
   }
 }

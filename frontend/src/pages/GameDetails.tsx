@@ -28,18 +28,22 @@ const GameDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  
+
   const [isEditing, setIsEditing] = useState(false);
   const [showMetadataSearch, setShowMetadataSearch] = useState(false);
   const [editedGame, setEditedGame] = useState<Partial<Game>>({});
 
   // Fetch game details
-  const { data: game, isLoading, error } = useQuery({
+  const {
+    data: game,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['game', id],
     queryFn: async (): Promise<Game> => {
       const response = await axios.get(API_ENDPOINTS.GAME_BY_ID(id!));
       return response.data;
-    }
+    },
   });
 
   // Update game mutation
@@ -57,7 +61,7 @@ const GameDetails: React.FC = () => {
     onError: (error) => {
       console.error('Error updating game:', error);
       alert('Error updating game. Please try again.');
-    }
+    },
   });
 
   // Delete game mutation
@@ -73,7 +77,7 @@ const GameDetails: React.FC = () => {
     onError: (error) => {
       console.error('Error deleting game:', error);
       alert('Error deleting game. Please try again.');
-    }
+    },
   });
 
   useEffect(() => {
@@ -96,7 +100,9 @@ const GameDetails: React.FC = () => {
   };
 
   const handleDelete = () => {
-    if (window.confirm('Are you sure you want to delete this game? This action cannot be undone.')) {
+    if (
+      window.confirm('Are you sure you want to delete this game? This action cannot be undone.')
+    ) {
       deleteGameMutation.mutate();
     }
   };
@@ -104,9 +110,9 @@ const GameDetails: React.FC = () => {
   const handleDownload = async () => {
     try {
       const response = await axios.get(API_ENDPOINTS.GAME_DOWNLOAD(id!), {
-        responseType: 'blob'
+        responseType: 'blob',
       });
-      
+
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
@@ -121,9 +127,9 @@ const GameDetails: React.FC = () => {
   };
 
   const handleInputChange = (field: keyof Game, value: string | number) => {
-    setEditedGame(prev => ({
+    setEditedGame((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
@@ -131,7 +137,7 @@ const GameDetails: React.FC = () => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     if (bytes === 0) return '0 Bytes';
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
-    return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
+    return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + ' ' + sizes[i];
   };
 
   const formatDate = (dateString: string): string => {
@@ -140,7 +146,7 @@ const GameDetails: React.FC = () => {
       month: 'long',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   };
 
@@ -154,15 +160,15 @@ const GameDetails: React.FC = () => {
         <button onClick={() => navigate('/')} className="back-button">
           ← Back to Library
         </button>
-        
+
         <div className="game-actions">
           {!isEditing ? (
             <>
               <button onClick={handleEdit} className="edit-button">
                 Edit Metadata
               </button>
-              <button 
-                onClick={() => setShowMetadataSearch(!showMetadataSearch)} 
+              <button
+                onClick={() => setShowMetadataSearch(!showMetadataSearch)}
                 className="metadata-search-button"
               >
                 {showMetadataSearch ? 'Hide' : 'Search'} Metadata
@@ -176,7 +182,11 @@ const GameDetails: React.FC = () => {
             </>
           ) : (
             <>
-              <button onClick={handleSave} className="save-button" disabled={updateGameMutation.isPending}>
+              <button
+                onClick={handleSave}
+                className="save-button"
+                disabled={updateGameMutation.isPending}
+              >
                 {updateGameMutation.isPending ? 'Saving...' : 'Save Changes'}
               </button>
               <button onClick={handleCancel} className="cancel-button">
@@ -190,13 +200,13 @@ const GameDetails: React.FC = () => {
       <div className="game-details-content">
         <div className="game-cover-section">
           {(isEditing ? editedGame.coverUrl : game.coverUrl) && (
-            <img 
-              src={isEditing ? editedGame.coverUrl : game.coverUrl} 
+            <img
+              src={isEditing ? editedGame.coverUrl : game.coverUrl}
               alt={isEditing ? editedGame.title : game.title}
               className="game-cover-large"
             />
           )}
-          
+
           {isEditing && (
             <div className="cover-edit">
               <label>Cover Image URL:</label>

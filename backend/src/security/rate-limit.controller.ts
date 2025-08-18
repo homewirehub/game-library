@@ -6,14 +6,14 @@ import { RateLimitService } from './rate-limit.service';
 export class RateLimitController {
   constructor(
     private readonly redisRateLimitService: RedisRateLimitService,
-    private readonly fallbackRateLimitService: RateLimitService,
+    private readonly fallbackRateLimitService: RateLimitService
   ) {}
 
   @Get('stats')
   async getStats() {
     const redisStats = await this.redisRateLimitService.getStats();
     const fallbackStats = this.fallbackRateLimitService.getStats();
-    
+
     return {
       redis: redisStats,
       fallback: fallbackStats,
@@ -24,14 +24,14 @@ export class RateLimitController {
   @Get('health')
   async getHealth() {
     const redisHealth = await this.redisRateLimitService.healthCheck();
-    
+
     return {
       status: redisHealth.redis ? 'healthy' : 'degraded',
       services: {
         redis: redisHealth.redis ? 'up' : 'down',
         fallback: redisHealth.fallback ? 'up' : 'down',
       },
-      message: redisHealth.redis 
+      message: redisHealth.redis
         ? 'Rate limiting operating normally with Redis'
         : 'Rate limiting operating in fallback mode (in-memory)',
       timestamp: new Date().toISOString(),

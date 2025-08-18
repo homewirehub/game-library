@@ -57,15 +57,17 @@ const InstallationWizard: React.FC = () => {
       host: 'localhost',
     },
     storage: {
-      path: 'C:\\Users\\offic\\Desktop\\game.lib\\backend\\uploads\\games',
+      path: './storage',
       maxFileSize: 1073741824, // 1GB
     },
   });
 
-  const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [installing, setInstalling] = useState(false);
   const [isTestingDatabase, setIsTestingDatabase] = useState(false);
-  const [dbTestResult, setDbTestResult] = useState<{success: boolean; message: string} | null>(null);
+  const [dbTestResult, setDbTestResult] = useState<{ success: boolean; message: string } | null>(
+    null
+  );
 
   useEffect(() => {
     // Check installation status
@@ -80,7 +82,7 @@ const InstallationWizard: React.FC = () => {
       if (response.data.installed) {
         navigate('/');
       }
-    } catch (error) {
+  } catch (_error) {
       console.log('Installation not complete, continuing with wizard');
     }
   };
@@ -89,25 +91,25 @@ const InstallationWizard: React.FC = () => {
     try {
       const response = await axios.get(API_ENDPOINTS.INSTALLATION_REQUIREMENTS);
       setRequirements(response.data.requirements);
-    } catch (error) {
-      console.error('Failed to load system requirements:', error);
+    } catch (_error) {
+      console.error('Failed to load system requirements:', _error);
     }
   };
 
   const testDatabaseConnection = async () => {
     setIsTestingDatabase(true);
     setDbTestResult(null);
-    
+
     try {
       const response = await axios.post(API_ENDPOINTS.INSTALLATION_TEST_DB, config.database);
       setDbTestResult({
         success: response.data.success,
-        message: response.data.message
+        message: response.data.message,
       });
     } catch (error: any) {
       setDbTestResult({
         success: false,
-        message: error.response?.data?.message || 'Connection failed'
+        message: error.response?.data?.message || 'Connection failed',
       });
     } finally {
       setIsTestingDatabase(false);
@@ -120,15 +122,16 @@ const InstallationWizard: React.FC = () => {
 
     try {
       const response = await axios.post(API_ENDPOINTS.INSTALLATION_INSTALL, config);
-      
+
       if (response.data.success) {
         setCurrentStep(6);
       } else {
         setErrors({ general: response.data.message || 'Installation failed' });
       }
     } catch (error: any) {
-      setErrors({ 
-        general: error.response?.data?.message || 'Installation failed. Please check your configuration.' 
+      setErrors({
+        general:
+          error.response?.data?.message || 'Installation failed. Please check your configuration.',
       });
     } finally {
       setInstalling(false);
@@ -153,9 +156,10 @@ const InstallationWizard: React.FC = () => {
         return (
           <>
             <p className="step-intro">
-              Welcome! This wizard will help you install and manage games from itch.io, GOG, and local folders.
+              Welcome! This wizard will help you install and manage games from itch.io, GOG, and
+              local folders.
             </p>
-            
+
             <ul className="feature-list">
               <li>Steam-style library view</li>
               <li>Automatic metadata enrichment</li>
@@ -170,20 +174,32 @@ const InstallationWizard: React.FC = () => {
                 <h3>System Requirements</h3>
                 <div className="requirements-grid">
                   <div className="requirement-item">
-                    <span>Node.js {requirements.node.required}: {requirements.node.current}</span>
-                    <span className={`requirement-status ${requirements.node.satisfied ? 'satisfied' : 'not-satisfied'}`}>
+                    <span>
+                      Node.js {requirements.node.required}: {requirements.node.current}
+                    </span>
+                    <span
+                      className={`requirement-status ${requirements.node.satisfied ? 'satisfied' : 'not-satisfied'}`}
+                    >
                       {requirements.node.satisfied ? 'OK' : 'FAIL'}
                     </span>
                   </div>
                   <div className="requirement-item">
-                    <span>Disk Space {requirements.disk.required}: {requirements.disk.available}</span>
-                    <span className={`requirement-status ${requirements.disk.satisfied ? 'satisfied' : 'not-satisfied'}`}>
+                    <span>
+                      Disk Space {requirements.disk.required}: {requirements.disk.available}
+                    </span>
+                    <span
+                      className={`requirement-status ${requirements.disk.satisfied ? 'satisfied' : 'not-satisfied'}`}
+                    >
                       {requirements.disk.satisfied ? 'OK' : 'FAIL'}
                     </span>
                   </div>
                   <div className="requirement-item">
-                    <span>Memory {requirements.memory.required}: {requirements.memory.available}</span>
-                    <span className={`requirement-status ${requirements.memory.satisfied ? 'satisfied' : 'not-satisfied'}`}>
+                    <span>
+                      Memory {requirements.memory.required}: {requirements.memory.available}
+                    </span>
+                    <span
+                      className={`requirement-status ${requirements.memory.satisfied ? 'satisfied' : 'not-satisfied'}`}
+                    >
                       {requirements.memory.satisfied ? 'OK' : 'FAIL'}
                     </span>
                   </div>
@@ -198,15 +214,15 @@ const InstallationWizard: React.FC = () => {
           <>
             <h2>Configure Database</h2>
             <p>Choose your database configuration to store your game library</p>
-            
+
             <div className="form-group">
               <label>
                 <input
                   type="radio"
                   value="postgres"
                   checked={config.database.type === 'postgres'}
-                  onChange={(e) => {
-                    setConfig(prev => ({
+                  onChange={(_e) => {
+                    setConfig((prev) => ({
                       ...prev,
                       database: {
                         ...prev.database,
@@ -215,28 +231,28 @@ const InstallationWizard: React.FC = () => {
                         port: 5432,
                         username: '',
                         password: '',
-                        database: 'gamelib'
-                      }
+                        database: 'gamelib',
+                      },
                     }));
                   }}
                 />
                 PostgreSQL
               </label>
-              
+
               <label>
                 <input
                   type="radio"
                   value="sqlite"
                   checked={config.database.type === 'sqlite'}
-                  onChange={(e) => {
-                    setConfig(prev => ({
+                  onChange={(_e) => {
+                    setConfig((prev) => ({
                       ...prev,
                       database: {
                         ...prev.database,
                         type: 'sqlite',
                         database: 'gamelib.db',
-                        path: './data/gamelib.db'
-                      }
+                        path: './data/gamelib.db',
+                      },
                     }));
                   }}
                 />
@@ -246,92 +262,104 @@ const InstallationWizard: React.FC = () => {
 
             {config.database.type === 'postgres' ? (
               <>
-        <div className="input-field">
+                <div className="input-field">
                   <label>Host</label>
                   <input
                     type="text"
-          className="input"
+                    className="input"
                     value={config.database.host || ''}
-                    onChange={(e) => setConfig(prev => ({
-                      ...prev,
-                      database: { ...prev.database, host: e.target.value }
-                    }))}
+                    onChange={(e) =>
+                      setConfig((prev) => ({
+                        ...prev,
+                        database: { ...prev.database, host: e.target.value },
+                      }))
+                    }
                     placeholder="localhost"
                   />
                 </div>
 
-        <div className="input-field">
+                <div className="input-field">
                   <label>Port</label>
                   <input
                     type="number"
-          className="input"
+                    className="input"
                     value={config.database.port || 5432}
-                    onChange={(e) => setConfig(prev => ({
-                      ...prev,
-                      database: { ...prev.database, port: parseInt(e.target.value) || 5432 }
-                    }))}
+                    onChange={(e) =>
+                      setConfig((prev) => ({
+                        ...prev,
+                        database: { ...prev.database, port: parseInt(e.target.value) || 5432 },
+                      }))
+                    }
                     placeholder="5432"
                   />
                 </div>
 
-        <div className="input-field">
+                <div className="input-field">
                   <label>Username</label>
                   <input
                     type="text"
-          className="input"
+                    className="input"
                     value={config.database.username || ''}
-                    onChange={(e) => setConfig(prev => ({
-                      ...prev,
-                      database: { ...prev.database, username: e.target.value }
-                    }))}
+                    onChange={(e) =>
+                      setConfig((prev) => ({
+                        ...prev,
+                        database: { ...prev.database, username: e.target.value },
+                      }))
+                    }
                     placeholder="postgres"
                   />
                 </div>
 
-        <div className="input-field">
+                <div className="input-field">
                   <label>Password</label>
                   <input
                     type="password"
-          className="input"
+                    className="input"
                     value={config.database.password || ''}
-                    onChange={(e) => setConfig(prev => ({
-                      ...prev,
-                      database: { ...prev.database, password: e.target.value }
-                    }))}
+                    onChange={(e) =>
+                      setConfig((prev) => ({
+                        ...prev,
+                        database: { ...prev.database, password: e.target.value },
+                      }))
+                    }
                     placeholder="Enter database password"
                   />
                 </div>
 
-        <div className="input-field">
+                <div className="input-field">
                   <label>Database Name</label>
                   <input
                     type="text"
-          className="input"
+                    className="input"
                     value={config.database.database}
-                    onChange={(e) => setConfig(prev => ({
-                      ...prev,
-                      database: { ...prev.database, database: e.target.value }
-                    }))}
+                    onChange={(e) =>
+                      setConfig((prev) => ({
+                        ...prev,
+                        database: { ...prev.database, database: e.target.value },
+                      }))
+                    }
                     placeholder="gamelib"
                   />
                 </div>
               </>
             ) : (
               <>
-        <div className="input-field">
+                <div className="input-field">
                   <label>Database File Path</label>
                   <input
                     type="text"
-          className="input"
+                    className="input"
                     value={config.database.path || config.database.database}
-                    onChange={(e) => setConfig(prev => ({
-                      ...prev,
-                      database: { 
-                        ...prev.database, 
-                        path: e.target.value,
-                        database: e.target.value 
-                      }
-                    }))}
+                    onChange={(e) =>
+                      setConfig((prev) => ({
+                        ...prev,
+                        database: {
+                          ...prev.database,
+                          path: e.target.value,
+                          database: e.target.value,
+                        },
+                      }))
+                    }
                     placeholder="./data/gamelib.db"
                   />
                   <small>
@@ -340,7 +368,7 @@ const InstallationWizard: React.FC = () => {
                 </div>
               </>
             )}
-            
+
             <div className="stack">
               <button
                 type="button"
@@ -365,44 +393,50 @@ const InstallationWizard: React.FC = () => {
             <h2>Admin Account Setup</h2>
             <p>Create your administrator account</p>
 
-      <div className="input-field">
+            <div className="input-field">
               <label>Username</label>
               <input
                 type="text"
-        className="input"
+                className="input"
                 value={config.admin.username}
-                onChange={(e) => setConfig(prev => ({
-                  ...prev,
-                  admin: { ...prev.admin, username: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setConfig((prev) => ({
+                    ...prev,
+                    admin: { ...prev.admin, username: e.target.value },
+                  }))
+                }
                 placeholder="admin"
               />
             </div>
 
-      <div className="input-field">
+            <div className="input-field">
               <label>Email</label>
               <input
                 type="email"
-        className="input"
+                className="input"
                 value={config.admin.email || ''}
-                onChange={(e) => setConfig(prev => ({
-                  ...prev,
-                  admin: { ...prev.admin, email: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setConfig((prev) => ({
+                    ...prev,
+                    admin: { ...prev.admin, email: e.target.value },
+                  }))
+                }
                 placeholder="admin@gamelib.com"
               />
             </div>
 
-      <div className="input-field">
+            <div className="input-field">
               <label>Password (minimum 8 characters)</label>
               <input
                 type="password"
-        className="input"
+                className="input"
                 value={config.admin.password}
-                onChange={(e) => setConfig(prev => ({
-                  ...prev,
-                  admin: { ...prev.admin, password: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setConfig((prev) => ({
+                    ...prev,
+                    admin: { ...prev.admin, password: e.target.value },
+                  }))
+                }
                 placeholder="Enter a secure password"
                 minLength={8}
               />
@@ -420,44 +454,50 @@ const InstallationWizard: React.FC = () => {
             <h2>Server Configuration</h2>
             <p>Configure your server settings</p>
 
-      <div className="input-field">
+            <div className="input-field">
               <label>Server Port</label>
               <input
                 type="number"
-        className="input"
+                className="input"
                 value={config.server.port}
-                onChange={(e) => setConfig(prev => ({
-                  ...prev,
-                  server: { ...prev.server, port: parseInt(e.target.value) || 3001 }
-                }))}
+                onChange={(e) =>
+                  setConfig((prev) => ({
+                    ...prev,
+                    server: { ...prev.server, port: parseInt(e.target.value) || 3001 },
+                  }))
+                }
                 placeholder="3001"
               />
             </div>
 
-      <div className="input-field">
+            <div className="input-field">
               <label>Server Host</label>
               <input
                 type="text"
-        className="input"
+                className="input"
                 value={config.server.host}
-                onChange={(e) => setConfig(prev => ({
-                  ...prev,
-                  server: { ...prev.server, host: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setConfig((prev) => ({
+                    ...prev,
+                    server: { ...prev.server, host: e.target.value },
+                  }))
+                }
                 placeholder="localhost"
               />
             </div>
 
-      <div className="input-field">
+            <div className="input-field">
               <label>Storage Path</label>
               <input
                 type="text"
-        className="input"
+                className="input"
                 value={config.storage.path}
-                onChange={(e) => setConfig(prev => ({
-                  ...prev,
-                  storage: { ...prev.storage, path: e.target.value }
-                }))}
+                onChange={(e) =>
+                  setConfig((prev) => ({
+                    ...prev,
+                    storage: { ...prev.storage, path: e.target.value },
+                  }))
+                }
                 placeholder="Path where games will be stored"
               />
             </div>
@@ -485,13 +525,9 @@ const InstallationWizard: React.FC = () => {
               </div>
             </div>
 
-            {errors.general && (
-              <div className="alert alert--error">{errors.general}</div>
-            )}
+            {errors.general && <div className="alert alert--error">{errors.general}</div>}
 
-            {installing && (
-              <div className="alert">Installing Game Library...</div>
-            )}
+            {installing && <div className="alert">Installing Game Library...</div>}
           </>
         );
 
@@ -538,9 +574,7 @@ const InstallationWizard: React.FC = () => {
       <div className="card section stack" style={{ marginTop: 'var(--space-4)' }}>
         {renderProgressIndicator()}
 
-        <div className="card card--inset section">
-          {renderStep()}
-        </div>
+        <div className="card card--inset section">{renderStep()}</div>
 
         <WizardActions
           onBack={currentStep > 1 && currentStep < 6 ? prevStep : undefined}
@@ -558,7 +592,9 @@ const InstallationWizard: React.FC = () => {
 
         {currentStep === 6 && (
           <div className="row" style={{ justifyContent: 'flex-end' }}>
-            <button className="btn" onClick={() => navigate('/')}>Go to Game Library 🎮</button>
+            <button className="btn" onClick={() => navigate('/')}>
+              Go to Game Library 🎮
+            </button>
           </div>
         )}
       </div>

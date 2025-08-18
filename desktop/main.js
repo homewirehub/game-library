@@ -17,7 +17,7 @@ function createWindow() {
       contextIsolation: true,
     },
     icon: path.join(__dirname, 'assets/icon.png'), // Add your icon
-    title: 'game.lib Desktop Client'
+    title: 'game.lib Desktop Client',
   });
 
   // Load the React frontend build or development server
@@ -61,14 +61,14 @@ ipcMain.handle('download-game', async (event, gameId) => {
     // Get download directory from user
     const result = await dialog.showOpenDialog(mainWindow, {
       properties: ['openDirectory'],
-      title: 'Select Download Directory'
+      title: 'Select Download Directory',
     });
 
     if (result.canceled) return { success: false, message: 'Download canceled' };
 
     const downloadPath = result.filePaths[0];
     const response = await axios.get(`${BACKEND_URL}/games/${gameId}/download`, {
-      responseType: 'stream'
+      responseType: 'stream',
     });
 
     // Extract filename from headers or use default
@@ -80,23 +80,23 @@ ipcMain.handle('download-game', async (event, gameId) => {
 
     return new Promise((resolve) => {
       writer.on('finish', () => {
-        resolve({ 
-          success: true, 
-          message: 'Download completed', 
-          filePath: filePath 
+        resolve({
+          success: true,
+          message: 'Download completed',
+          filePath: filePath,
         });
       });
       writer.on('error', (error) => {
-        resolve({ 
-          success: false, 
-          message: `Download failed: ${error.message}` 
+        resolve({
+          success: false,
+          message: `Download failed: ${error.message}`,
         });
       });
     });
   } catch (error) {
-    return { 
-      success: false, 
-      message: `Download failed: ${error.message}` 
+    return {
+      success: false,
+      message: `Download failed: ${error.message}`,
     };
   }
 });
@@ -104,39 +104,39 @@ ipcMain.handle('download-game', async (event, gameId) => {
 ipcMain.handle('install-game', async (event, filePath, gameName) => {
   try {
     const ext = path.extname(filePath).toLowerCase();
-    
+
     if (ext === '.exe') {
       // Execute installer
       const { spawn } = require('child_process');
       const installer = spawn(filePath, { detached: true, stdio: 'ignore' });
       installer.unref();
-      
-      return { 
-        success: true, 
-        message: 'Installer started. Please follow the installation wizard.' 
+
+      return {
+        success: true,
+        message: 'Installer started. Please follow the installation wizard.',
       };
     } else if (['.zip', '.rar', '.7z'].includes(ext)) {
       // Extract archive (would need additional libraries like node-7z)
-      return { 
-        success: false, 
-        message: 'Archive extraction not yet implemented. Please extract manually.' 
+      return {
+        success: false,
+        message: 'Archive extraction not yet implemented. Please extract manually.',
       };
     } else if (ext === '.iso') {
       // Mount ISO (Windows specific)
-      return { 
-        success: false, 
-        message: 'ISO mounting not yet implemented. Please mount manually.' 
+      return {
+        success: false,
+        message: 'ISO mounting not yet implemented. Please mount manually.',
       };
     }
-    
-    return { 
-      success: false, 
-      message: 'Unsupported file format' 
+
+    return {
+      success: false,
+      message: 'Unsupported file format',
     };
   } catch (error) {
-    return { 
-      success: false, 
-      message: `Installation failed: ${error.message}` 
+    return {
+      success: false,
+      message: `Installation failed: ${error.message}`,
     };
   }
 });
@@ -145,14 +145,14 @@ ipcMain.handle('add-to-steam', async (event, gameData) => {
   try {
     // This would integrate with Steam's shortcuts.vdf
     // For now, return a placeholder
-    return { 
-      success: false, 
-      message: 'Steam integration not yet implemented' 
+    return {
+      success: false,
+      message: 'Steam integration not yet implemented',
     };
   } catch (error) {
-    return { 
-      success: false, 
-      message: `Steam integration failed: ${error.message}` 
+    return {
+      success: false,
+      message: `Steam integration failed: ${error.message}`,
     };
   }
 });
@@ -162,6 +162,6 @@ ipcMain.handle('get-system-info', async () => {
     platform: os.platform(),
     arch: os.arch(),
     homedir: os.homedir(),
-    tmpdir: os.tmpdir()
+    tmpdir: os.tmpdir(),
   };
 });

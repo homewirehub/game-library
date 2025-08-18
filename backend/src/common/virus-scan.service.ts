@@ -31,7 +31,7 @@ export class VirusScanService {
         isClean: true,
         threats: [],
         scanTime: Date.now() - startTime,
-        scanner: 'disabled'
+        scanner: 'disabled',
       };
     }
 
@@ -48,7 +48,7 @@ export class VirusScanService {
           isClean: clamAvResult.isClean || false,
           threats: clamAvResult.threats || [],
           scanner: clamAvResult.scanner || 'clamav',
-          scanTime: Date.now() - startTime
+          scanTime: Date.now() - startTime,
         };
       }
 
@@ -60,7 +60,7 @@ export class VirusScanService {
             isClean: defenderResult.isClean || false,
             threats: defenderResult.threats || [],
             scanner: defenderResult.scanner || 'windows-defender',
-            scanTime: Date.now() - startTime
+            scanTime: Date.now() - startTime,
           };
         }
       }
@@ -71,15 +71,14 @@ export class VirusScanService {
         isClean: true,
         threats: [],
         scanTime: Date.now() - startTime,
-        scanner: 'none'
+        scanner: 'none',
       };
-
     } catch (error) {
       this.logger.error('Virus scan failed:', error);
       // In case of scan failure, you might want to reject the file
       // or allow it based on your security policy
       const rejectOnScanFailure = this.configService.get<boolean>('REJECT_ON_SCAN_FAILURE', true);
-      
+
       if (rejectOnScanFailure) {
         throw new Error(`Virus scan failed: ${error.message}`);
       }
@@ -88,7 +87,7 @@ export class VirusScanService {
         isClean: true,
         threats: [],
         scanTime: Date.now() - startTime,
-        scanner: 'failed'
+        scanner: 'failed',
       };
     }
   }
@@ -97,28 +96,27 @@ export class VirusScanService {
     try {
       // Check if ClamAV is available
       await execAsync('clamscan --version');
-      
+
       this.logger.debug(`Scanning file with ClamAV: ${filePath}`);
-      const { stdout, stderr } = await execAsync(`clamscan --no-summary "${filePath}"`);
-      
+  const { stdout, stderr: _stderr } = await execAsync(`clamscan --no-summary "${filePath}"`);
+
       // ClamAV returns 0 for clean files, 1 for infected files
       const isClean = !stdout.includes('FOUND');
       const threats: string[] = [];
-      
+
       if (!isClean) {
         // Extract threat names from output
         const threatMatches = stdout.match(/: (.+) FOUND/g);
         if (threatMatches) {
-          threats.push(...threatMatches.map(match => match.replace(/: (.+) FOUND/, '$1')));
+          threats.push(...threatMatches.map((match) => match.replace(/: (.+) FOUND/, '$1')));
         }
       }
 
       return {
         isClean,
         threats,
-        scanner: 'clamav'
+        scanner: 'clamav',
       };
-
     } catch (error) {
       if (error.message.includes('clamscan')) {
         this.logger.debug('ClamAV not available');
@@ -131,8 +129,8 @@ export class VirusScanService {
   private async scanWithWindowsDefender(filePath: string): Promise<Partial<ScanResult> | null> {
     try {
       this.logger.debug(`Scanning file with Windows Defender: ${filePath}`);
-      
-      const { stdout, stderr } = await execAsync(
+
+  const { stdout: _stdout, stderr } = await execAsync(
         `powershell.exe -Command "Start-MpScan -ScanPath '${filePath}' -ScanType CustomScan"`
       );
 
@@ -141,9 +139,8 @@ export class VirusScanService {
       return {
         isClean: !stderr.includes('threat'),
         threats: stderr.includes('threat') ? ['Unknown threat detected'] : [],
-        scanner: 'windows-defender'
+        scanner: 'windows-defender',
       };
-
     } catch (error) {
       this.logger.debug('Windows Defender scan failed:', error.message);
       return null;
@@ -173,7 +170,7 @@ export class VirusScanService {
 
     return {
       available: scanners.length > 0,
-      scanners
+      scanners,
     };
   }
 }

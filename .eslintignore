@@ -1,4 +1,0 @@
-dist
-node_modules
-backend/test/**
-**/*.e2e-spec.ts

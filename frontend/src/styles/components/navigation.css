@@ -582,6 +582,15 @@
   }
 }
 
+/* Utility: prevent background scroll when mobile menu is open */
+body.no-scroll { overflow: hidden; }
+
+/* Fallback for browsers without backdrop-filter support */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .navbar { background: var(--surface-2); }
+  .navbar-menu.mobile-open { background: var(--surface-2); }
+}
+
 /* Focus styles */
 .navbar-link:focus,
 .sidebar-link:focus,

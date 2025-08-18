@@ -4,6 +4,7 @@
    ========================================================================== */
 
 /* ===== Import Design System Foundation ===== */
+@import './design-system.css';
 @import './base.css';
 
 /* ===== Import Component Library ===== */
@@ -23,9 +24,6 @@
 
 /* ===== Import Utility Classes ===== */
 @import './utilities.css';
-
-/* ===== Import design-system last to take precedence over legacy component CSS ===== */
-@import './design-system.css';
 
 /* ==========================================================================
    Custom Game Library Components

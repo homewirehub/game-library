@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, NavLink, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import GameLibrary from './pages/GameLibrary';
 import GameLibraryRedesigned from './pages/GameLibraryRedesigned';
@@ -20,6 +20,7 @@ const queryClient = new QueryClient();
 function App() {
   const [isInstalled, setIsInstalled] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     checkInstallationStatus();
@@ -68,19 +69,93 @@ function App() {
       <Router>
         <div className="game-library-layout">
           <header className="app-header">
-            <nav className="app-nav game-navbar">
+            <nav className="app-nav game-navbar" aria-label="Main">
               <Link to="/" className="app-logo">
                 <div className="app-logo-icon">GL</div>
                 <span>Game.Lib</span>
               </Link>
-              <ul className="app-nav-links">
-                <li><Link to="/" className="app-nav-link">Library</Link></li>
-                <li><Link to="/library-redesigned" className="app-nav-link">Library (New)</Link></li>
-                <li><Link to="/upload" className="app-nav-link">Upload</Link></li>
-                <li><Link to="/itch" className="app-nav-link">Itch.io</Link></li>
-                <li><Link to="/itch-redesigned" className="app-nav-link">Itch (New)</Link></li>
-                <li><Link to="/design-system" className="app-nav-link">🎨 Design</Link></li>
-                <li><Link to="/steam" className="app-nav-link">Steam</Link></li>
+              <button
+                id="nav-toggle"
+                className="navbar-toggle"
+                aria-controls="mobile-menu"
+                aria-expanded={isMenuOpen}
+                onClick={() => {
+                  const next = !isMenuOpen;
+                  setIsMenuOpen(next);
+                  document.body.classList.toggle('no-scroll', next);
+                }}
+              >
+                <span className="sr-only">Toggle navigation</span>
+                ☰
+              </button>
+              <ul
+                id="mobile-menu"
+                className={isMenuOpen ? 'app-nav-links navbar-menu mobile-open' : 'app-nav-links navbar-menu'}
+                aria-hidden={!isMenuOpen}
+              >
+                <li>
+                  <NavLink
+                    to="/"
+                    className={({ isActive }) => (isActive ? 'app-nav-link active' : 'app-nav-link')}
+                    onClick={() => { if (isMenuOpen) { setIsMenuOpen(false); document.body.classList.remove('no-scroll'); } }}
+                  >
+                    Library
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/library-redesigned"
+                    className={({ isActive }) => (isActive ? 'app-nav-link active' : 'app-nav-link')}
+                    onClick={() => { if (isMenuOpen) { setIsMenuOpen(false); document.body.classList.remove('no-scroll'); } }}
+                  >
+                    Library (New)
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/upload"
+                    className={({ isActive }) => (isActive ? 'app-nav-link active' : 'app-nav-link')}
+                    onClick={() => { if (isMenuOpen) { setIsMenuOpen(false); document.body.classList.remove('no-scroll'); } }}
+                  >
+                    Upload
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/itch"
+                    className={({ isActive }) => (isActive ? 'app-nav-link active' : 'app-nav-link')}
+                    onClick={() => { if (isMenuOpen) { setIsMenuOpen(false); document.body.classList.remove('no-scroll'); } }}
+                  >
+                    Itch.io
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/itch-redesigned"
+                    className={({ isActive }) => (isActive ? 'app-nav-link active' : 'app-nav-link')}
+                    onClick={() => { if (isMenuOpen) { setIsMenuOpen(false); document.body.classList.remove('no-scroll'); } }}
+                  >
+                    Itch (New)
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/design-system"
+                    className={({ isActive }) => (isActive ? 'app-nav-link active' : 'app-nav-link')}
+                    onClick={() => { if (isMenuOpen) { setIsMenuOpen(false); document.body.classList.remove('no-scroll'); } }}
+                  >
+                    🎨 Design
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/steam"
+                    className={({ isActive }) => (isActive ? 'app-nav-link active' : 'app-nav-link')}
+                    onClick={() => { if (isMenuOpen) { setIsMenuOpen(false); document.body.classList.remove('no-scroll'); } }}
+                  >
+                    Steam
+                  </NavLink>
+                </li>
               </ul>
             </nav>
           </header>

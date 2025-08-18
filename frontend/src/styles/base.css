@@ -18,6 +18,8 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
@@ -27,8 +29,10 @@ body {
   line-height: var(--line-height-normal);
   color: var(--color-neutral-900);
   background-color: var(--color-neutral-0);
-  min-height: 100vh;
-  overflow-x: hidden;
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 /* ===== Typography Scale ===== */
@@ -117,22 +121,22 @@ p {
 .lead {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-normal);
-  color: var(--color-neutral-600);
+  color: var(--color-neutral-400);
   line-height: var(--line-height-relaxed);
 }
 
 /* Small text */
 .text-muted {
   font-size: var(--font-size-sm);
-  color: var(--color-neutral-500);
+  color: var(--color-neutral-400);
 }
 
 /* Code */
 code {
   font-family: var(--font-family-mono);
   font-size: 0.875em;
-  background-color: var(--color-neutral-100);
-  color: var(--color-neutral-800);
+  background-color: var(--color-neutral-50);
+  color: var(--color-neutral-900);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-sm);
 }
@@ -156,13 +160,13 @@ pre code {
 
 /* Links */
 a {
-  color: var(--color-primary-600);
+  color: var(--color-primary-400);
   text-decoration: none;
   transition: var(--transition-default);
 }
 
 a:hover {
-  color: var(--color-primary-700);
+  color: var(--color-primary-300);
   text-decoration: underline;
 }
 

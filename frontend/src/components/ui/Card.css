@@ -1,0 +1,235 @@
+/* ==========================================================================
+   Card Component - Design System
+   ========================================================================== */
+
+.card {
+  /* Base card styles */
+  background-color: var(--color-neutral-0);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-neutral-200);
+  transition: var(--transition-default);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ===== Card Variants ===== */
+
+.card--default {
+  box-shadow: var(--shadow-sm);
+}
+
+.card--elevated {
+  box-shadow: var(--shadow-lg);
+  border: none;
+}
+
+.card--outlined {
+  box-shadow: none;
+  border: 2px solid var(--color-neutral-300);
+}
+
+.card--flat {
+  box-shadow: none;
+  border: none;
+  background-color: transparent;
+}
+
+/* ===== Card Padding ===== */
+
+.card--padding-none {
+  padding: 0;
+}
+
+.card--padding-sm {
+  padding: var(--space-3);
+}
+
+.card--padding-md {
+  padding: var(--space-6);
+}
+
+.card--padding-lg {
+  padding: var(--space-8);
+}
+
+.card--padding-xl {
+  padding: var(--space-12);
+}
+
+/* ===== Card States ===== */
+
+.card--hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
+
+.card--interactive {
+  cursor: pointer;
+  user-select: none;
+}
+
+.card--interactive:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card--interactive:active {
+  transform: translateY(0);
+}
+
+/* ===== Card Sub-components ===== */
+
+.card__header {
+  padding: var(--space-6) var(--space-6) var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.card__content {
+  padding: var(--space-6);
+}
+
+.card__footer {
+  padding: var(--space-4) var(--space-6) var(--space-6) var(--space-6);
+  border-top: 1px solid var(--color-neutral-200);
+  background-color: var(--color-neutral-50);
+}
+
+/* Handle padding when card has padding and sub-components */
+.card--padding-sm .card__header,
+.card--padding-sm .card__content,
+.card--padding-sm .card__footer {
+  padding: var(--space-3);
+}
+
+.card--padding-md .card__header {
+  padding: var(--space-6) var(--space-6) var(--space-4) var(--space-6);
+}
+
+.card--padding-md .card__content {
+  padding: var(--space-6);
+}
+
+.card--padding-md .card__footer {
+  padding: var(--space-4) var(--space-6) var(--space-6) var(--space-6);
+}
+
+.card--padding-lg .card__header,
+.card--padding-lg .card__content,
+.card--padding-lg .card__footer {
+  padding: var(--space-8);
+}
+
+.card--padding-xl .card__header,
+.card--padding-xl .card__content,
+.card--padding-xl .card__footer {
+  padding: var(--space-12);
+}
+
+/* Remove borders for flat cards */
+.card--flat .card__header,
+.card--flat .card__footer {
+  border: none;
+  background-color: transparent;
+}
+
+/* ===== Dark Theme ===== */
+
+@media (prefers-color-scheme: dark) {
+  .card {
+    background-color: var(--color-neutral-900);
+    border-color: var(--color-neutral-700);
+  }
+
+  .card--outlined {
+    border-color: var(--color-neutral-600);
+  }
+
+  .card__header {
+    border-bottom-color: var(--color-neutral-700);
+  }
+
+  .card__footer {
+    border-top-color: var(--color-neutral-700);
+    background-color: var(--color-neutral-800);
+  }
+
+  .card--flat .card__footer {
+    background-color: transparent;
+  }
+}
+
+/* ===== Game-specific Card Styles ===== */
+
+.card--game {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3/4;
+}
+
+.card--game .card__image {
+  width: 100%;
+  height: 60%;
+  object-fit: cover;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.card--game .card__content {
+  height: 40%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--space-4);
+}
+
+.card--game .card__title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-2);
+  color: var(--color-neutral-900);
+  line-height: var(--line-height-tight);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card--game .card__meta {
+  font-size: var(--font-size-sm);
+  color: var(--color-neutral-600);
+  margin-bottom: var(--space-3);
+}
+
+.card--game .card__actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: auto;
+}
+
+@media (prefers-color-scheme: dark) {
+  .card--game .card__title {
+    color: var(--color-neutral-100);
+  }
+
+  .card--game .card__meta {
+    color: var(--color-neutral-400);
+  }
+}
+
+/* ===== Responsive Design ===== */
+
+@media (max-width: 640px) {
+  .card--padding-lg {
+    padding: var(--space-6);
+  }
+
+  .card--padding-xl {
+    padding: var(--space-8);
+  }
+
+  .card__header,
+  .card__content,
+  .card__footer {
+    padding: var(--space-4);
+  }
+}

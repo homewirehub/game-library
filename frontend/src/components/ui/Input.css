@@ -1,0 +1,326 @@
+/* ==========================================================================
+   Input & Select Components - Design System
+   ========================================================================== */
+
+/* ===== Input Base Styles ===== */
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input__label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-700);
+  margin-bottom: var(--space-2);
+}
+
+.input__container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  width: 100%;
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-normal);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  background-color: var(--color-neutral-0);
+  color: var(--color-neutral-900);
+  transition: var(--transition-default);
+  outline: none;
+}
+
+.input:focus {
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.input::placeholder {
+  color: var(--color-neutral-400);
+}
+
+/* ===== Input Variants ===== */
+
+.input-wrapper--default .input {
+  background-color: var(--color-neutral-0);
+  border: 1px solid var(--color-neutral-300);
+}
+
+.input-wrapper--outlined .input {
+  background-color: transparent;
+  border: 2px solid var(--color-neutral-400);
+}
+
+.input-wrapper--filled .input {
+  background-color: var(--color-neutral-100);
+  border: 1px solid transparent;
+}
+
+.input-wrapper--filled .input:focus {
+  background-color: var(--color-neutral-0);
+  border-color: var(--color-primary-500);
+}
+
+/* ===== Input Sizes ===== */
+
+.input-wrapper--sm .input {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+}
+
+.input-wrapper--md .input {
+  padding: var(--space-2-5) var(--space-4);
+  font-size: var(--font-size-base);
+}
+
+.input-wrapper--lg .input {
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--font-size-lg);
+}
+
+/* ===== Input with Icons ===== */
+
+.input-wrapper--with-icon .input {
+  padding-left: var(--space-10);
+}
+
+.input-wrapper--icon-right.input-wrapper--with-icon .input {
+  padding-left: var(--space-4);
+  padding-right: var(--space-10);
+}
+
+.input__icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-neutral-500);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.input__icon--left {
+  left: var(--space-3);
+}
+
+.input__icon--right {
+  right: var(--space-3);
+}
+
+/* ===== Input States ===== */
+
+.input-wrapper--error .input {
+  border-color: var(--color-error-500);
+}
+
+.input-wrapper--error .input:focus {
+  border-color: var(--color-error-500);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.input-wrapper--error .input__label {
+  color: var(--color-error-600);
+}
+
+.input:disabled {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-500);
+  cursor: not-allowed;
+}
+
+/* ===== Helper Text ===== */
+
+.input__helper-text {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-600);
+}
+
+.input__helper-text--error {
+  color: var(--color-error-600);
+}
+
+/* ===== Select Styles ===== */
+
+.select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.select__label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-700);
+  margin-bottom: var(--space-2);
+}
+
+.select__container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.select {
+  width: 100%;
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-normal);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  background-color: var(--color-neutral-0);
+  color: var(--color-neutral-900);
+  transition: var(--transition-default);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: none;
+}
+
+.select:focus {
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.select__chevron {
+  position: absolute;
+  right: var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-neutral-500);
+  pointer-events: none;
+  transition: var(--transition-default);
+}
+
+.select:focus + .select__chevron {
+  color: var(--color-primary-500);
+}
+
+/* ===== Select Variants ===== */
+
+.select-wrapper--default .select {
+  background-color: var(--color-neutral-0);
+  border: 1px solid var(--color-neutral-300);
+}
+
+.select-wrapper--outlined .select {
+  background-color: transparent;
+  border: 2px solid var(--color-neutral-400);
+}
+
+.select-wrapper--filled .select {
+  background-color: var(--color-neutral-100);
+  border: 1px solid transparent;
+}
+
+.select-wrapper--filled .select:focus {
+  background-color: var(--color-neutral-0);
+  border-color: var(--color-primary-500);
+}
+
+/* ===== Select Sizes ===== */
+
+.select-wrapper--sm .select {
+  padding: var(--space-2) var(--space-8) var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+}
+
+.select-wrapper--md .select {
+  padding: var(--space-2-5) var(--space-10) var(--space-2-5) var(--space-4);
+  font-size: var(--font-size-base);
+}
+
+.select-wrapper--lg .select {
+  padding: var(--space-3) var(--space-12) var(--space-3) var(--space-6);
+  font-size: var(--font-size-lg);
+}
+
+/* ===== Select States ===== */
+
+.select-wrapper--error .select {
+  border-color: var(--color-error-500);
+}
+
+.select-wrapper--error .select:focus {
+  border-color: var(--color-error-500);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.select-wrapper--error .select__label {
+  color: var(--color-error-600);
+}
+
+.select:disabled {
+  background-color: var(--color-neutral-100);
+  color: var(--color-neutral-500);
+  cursor: not-allowed;
+}
+
+.select__helper-text {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: var(--font-size-xs);
+  color: var(--color-neutral-600);
+}
+
+.select__helper-text--error {
+  color: var(--color-error-600);
+}
+
+/* ===== Dark Theme ===== */
+
+@media (prefers-color-scheme: dark) {
+  .input__label,
+  .select__label {
+    color: var(--color-neutral-300);
+  }
+
+  .input,
+  .select {
+    background-color: var(--color-neutral-800);
+    border-color: var(--color-neutral-600);
+    color: var(--color-neutral-100);
+  }
+
+  .input::placeholder {
+    color: var(--color-neutral-500);
+  }
+
+  .input:focus,
+  .select:focus {
+    border-color: var(--color-primary-400);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+
+  .input-wrapper--filled .input,
+  .select-wrapper--filled .select {
+    background-color: var(--color-neutral-700);
+  }
+
+  .input:disabled,
+  .select:disabled {
+    background-color: var(--color-neutral-700);
+    color: var(--color-neutral-500);
+  }
+
+  .input__helper-text,
+  .select__helper-text {
+    color: var(--color-neutral-400);
+  }
+}
+
+/* ===== Responsive Design ===== */
+
+@media (max-width: 640px) {
+  .input-wrapper--lg .input,
+  .select-wrapper--lg .select {
+    padding: var(--space-2-5) var(--space-10) var(--space-2-5) var(--space-4);
+    font-size: var(--font-size-base);
+  }
+}

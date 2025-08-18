@@ -4,7 +4,6 @@
    ========================================================================== */
 
 /* ===== Import Design System Foundation ===== */
-@import './design-system.css';
 @import './base.css';
 
 /* ===== Import Component Library ===== */
@@ -13,9 +12,20 @@
 @import './components/cards.css';
 @import './components/navigation.css';
 @import './components/installation-wizard.css';
+@import './components/itch-games.css';
+
+/* ===== Import UI Component Library ===== */
+@import '../components/ui/Button.css';
+@import '../components/ui/Card.css';
+@import '../components/ui/Input.css';
+@import '../components/ui/TabBar.css';
+@import '../components/ui/Layout.css';
 
 /* ===== Import Utility Classes ===== */
 @import './utilities.css';
+
+/* ===== Import design-system last to take precedence over legacy component CSS ===== */
+@import './design-system.css';
 
 /* ==========================================================================
    Custom Game Library Components
@@ -25,9 +35,12 @@
 
 .game-library-layout {
   min-height: 100vh;
-  background: linear-gradient(135deg, var(--color-neutral-900), var(--color-neutral-800));
+  /* Use dark tokens: neutral-0 (dark) to neutral-50 (slightly lighter) */
+  background: linear-gradient(135deg, var(--color-neutral-0), var(--color-neutral-50));
   position: relative;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .game-library-layout::before {
@@ -231,7 +244,8 @@
 /* Enhanced Game Cards */
 .modern-game-card {
   position: relative;
-  background: var(--color-neutral-0);
+  /* Slightly lifted surface on dark bg */
+  background: var(--color-neutral-50);
   border-radius: var(--radius-xl);
   overflow: hidden;
   box-shadow: var(--shadow-lg);

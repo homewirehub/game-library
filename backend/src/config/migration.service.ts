@@ -22,17 +22,17 @@ export class MigrationService implements OnModuleInit {
       
       if (pendingMigrations) {
         this.logger.warn('⚠️  Pending migrations detected!');
-        this.logger.warn('📋 Run the following command to update your database:');
-        this.logger.warn('   pnpm migration:run');
-        this.logger.warn('🔍 Or check migration status with:');
-        this.logger.warn('   pnpm migration:show');
+  this.logger.warn('📋 Run the following command to update your database:');
+  this.logger.warn('   pnpm --filter backend migration:run');
+  this.logger.warn('🔍 Or check migration status with:');
+  this.logger.warn('   pnpm --filter backend migration:show');
       } else {
         this.logger.log('✅ Database schema is up to date');
       }
     } catch (error) {
       this.logger.error('❌ Failed to check migration status:', error);
-      this.logger.warn('💡 This might be the first run. Consider running migrations:');
-      this.logger.warn('   pnpm migration:run');
+  this.logger.warn('💡 This might be the first run. Consider running migrations:');
+  this.logger.warn('   pnpm --filter backend migration:run');
     }
   }
 

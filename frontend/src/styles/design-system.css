@@ -314,3 +314,156 @@
     --input-border-width: 2px;
   }
 }
+
+/* ========================================================================
+   Unified Dark Theme Tokens and Primitives (Single Source of Truth)
+   Appends a cohesive, minimal design system while preserving existing tokens
+   ======================================================================== */
+
+/* Additional semantic status shades (used by Itch Games component) */
+:root {
+  /* Success */
+  --color-success-100: #163e2c;
+  /* Info */
+  --color-info-100: #112844;
+  /* Warning */
+  --color-warning-100: #4a3913;
+  /* Error */
+  --color-error-100: #521a1a;
+}
+
+/* 1) Minimal dark tokens used by primitives */
+:root {
+  /* Brand */
+  --brand: #1dd1a1;
+  --brand-2: #3aa2ff;
+
+  /* Dark surfaces */
+  --bg: #0b0f17;
+  --surface: #131a24;
+  --surface-2: #161f2b;
+  --surface-3: #0f1520;
+
+  /* Text */
+  --text-high: #e8eef7;
+  --text-med: #b7c2d0;
+  --text-low: #8d9aab;
+
+  /* Lines & focus */
+  --line: #243144;
+  --focus: #7ec4ff;
+  --shadow: 0 10px 30px rgba(0,0,0,.45);
+
+  /* Radius & spacing */
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --space-1: 6px;
+  --space-2: 10px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+
+  /* Typography */
+  --font: ui-sans-serif, Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  --fs-xs: 12px;
+  --fs-sm: 14px;
+  --fs-md: 16px;
+  --fs-lg: 20px;
+  --fs-xl: 28px;
+  --fs-xxl: 36px;
+  --lh: 1.5;
+}
+
+/* 2) Global */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text-high);
+  font-family: var(--font);
+  line-height: var(--lh);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: var(--brand-2); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container { width: min(1200px, 100% - 48px); margin-inline: auto; }
+
+h1 { font-size: var(--fs-xxl); letter-spacing: .2px; margin: var(--space-5) 0 var(--space-2); }
+h2 { font-size: var(--fs-xl); margin: var(--space-4) 0 var(--space-2); }
+.subtle { color: var(--text-med); }
+
+/* 3) Layout Primitives */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+}
+.card--inset { background: var(--surface-2); }
+
+.section { padding: var(--space-5); }
+.stack > * + * { margin-top: var(--space-3); }
+.row { display: flex; gap: var(--space-3); align-items: center; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+@media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
+
+/* 4) Controls */
+.btn {
+  --bg-btn: var(--brand-2);
+  --text-btn: #fff;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 16px; font-weight: 600; font-size: var(--fs-md);
+  background: var(--bg-btn); color: var(--text-btn);
+  border: none; border-radius: var(--r-md); cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,.25);
+  transition: transform .06s ease, box-shadow .2s ease, background .2s ease;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(0); }
+.btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.btn--secondary { --bg-btn: var(--surface-2); --text-btn: var(--text-high); border:1px solid var(--line); }
+.btn--danger { --bg-btn: #e25555; }
+
+.input, .select {
+  width: 100%; background: var(--surface-2); color: var(--text-high);
+  border: 1px solid var(--line); border-radius: var(--r-md);
+  padding: 10px 12px; font-size: var(--fs-md);
+}
+.input::placeholder { color: var(--text-low); }
+.input:focus, .select:focus { outline: 2px solid var(--focus); border-color: transparent; }
+
+.switch {
+  --h: 28px; --w: 50px;
+  width: var(--w); height: var(--h); background: var(--surface-2); border: 1px solid var(--line);
+  border-radius: var(--h); position: relative; cursor: pointer;
+}
+.switch::after {
+  content: ""; position: absolute; top: 2px; left: 2px; width: calc(var(--h) - 4px); height: calc(var(--h) - 4px);
+  background: #fff; border-radius: 50%; transition: left .2s ease;
+}
+.switch[aria-checked="true"] { background: var(--brand-2); }
+.switch[aria-checked="true"]::after { left: calc(var(--w) - var(--h) + 2px); }
+
+/* Tabs */
+.tabs { display: flex; gap: 6px; border-bottom: 1px solid var(--line); }
+.tab { padding: 10px 14px; border: 1px solid transparent; border-radius: var(--r-sm) var(--r-sm) 0 0; background: transparent; color: var(--text-med); cursor: pointer; font-weight: 600; }
+.tab[aria-selected="true"] { background: var(--surface-2); color: var(--text-high); border-color: var(--line); }
+
+/* Badges */
+.badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; font-size: var(--fs-sm); background: var(--surface-2); color: var(--text-med); border: 1px solid var(--line); border-radius: 999px; }
+
+/* Progress (Wizard) */
+.progress { height: 6px; background: var(--surface-2); border-radius: 999px; overflow: hidden; border: 1px solid var(--line); }
+.progress__bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--brand), var(--brand-2)); }
+
+/* Empty State */
+.empty { text-align: center; color: var(--text-med); padding: 60px 20px; }
+.empty__icon { font-size: 56px; opacity: .45; }
+
+/* Alerts */
+.alert { border: 1px solid var(--line); border-left: 4px solid var(--brand-2); background: var(--surface-2); color: var(--text-high); border-radius: var(--r-md); padding: 12px 14px; }
+.alert--error { border-left-color: #e25555; }

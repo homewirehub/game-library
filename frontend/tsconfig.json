@@ -16,7 +16,12 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
+  "src",
+  "jest.config.js",
+  "setupTests.ts"
+  ],
+  "exclude": [
+    "src/components/ItchGames-backup.tsx"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

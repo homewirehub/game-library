@@ -77,10 +77,12 @@ export class HealthService {
       let dataSource: DataSource;
 
       if (dbConfig.type === 'sqlite') {
+        // Use simple sqlite driver during tests if DB_SQLITE_DRIVER=sqlite
+        const useSimpleSqlite = process.env.DB_SQLITE_DRIVER === 'sqlite';
         dataSource = new DataSource({
-          type: 'sqlite',
+          type: (useSimpleSqlite ? 'sqlite' : 'better-sqlite3') as any,
           database: dbConfig.path || dbConfig.database,
-        });
+        } as any);
       } else {
         dataSource = new DataSource({
           type: 'postgres',

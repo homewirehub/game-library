@@ -6,7 +6,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001
 // Configure axios defaults
 axios.defaults.baseURL = API_BASE_URL;
 
-export const API_ENDPOINTS = {
+const API_ENDPOINTS = {
   // Installation endpoints
   INSTALLATION_STATUS: `${API_BASE_URL}/api/installation/status`,
   INSTALLATION_REQUIREMENTS: `${API_BASE_URL}/api/installation/requirements`,
@@ -14,15 +14,15 @@ export const API_ENDPOINTS = {
   INSTALLATION_INSTALL: `${API_BASE_URL}/api/installation/install`,
   
   // Game endpoints
-  GAMES: `${API_BASE_URL}/games`,
-  GAMES_UPLOAD: `${API_BASE_URL}/games/upload`,
-  GAME_BY_ID: (id: string) => `${API_BASE_URL}/games/${id}`,
-  GAME_DOWNLOAD: (id: string) => `${API_BASE_URL}/games/${id}/download`,
+  GAMES: `${API_BASE_URL}/api/games`,
+  GAMES_UPLOAD: `${API_BASE_URL}/api/games/upload`,
+  GAME_BY_ID: (id: string) => `${API_BASE_URL}/api/games/${id}`,
+  GAME_DOWNLOAD: (id: string) => `${API_BASE_URL}/api/games/${id}/download`,
   
   // Metadata endpoints
-  METADATA_SOURCES: `${API_BASE_URL}/metadata/sources`,
-  METADATA_SEARCH: `${API_BASE_URL}/metadata/search`,
-  METADATA_ENRICH: (gameId: string) => `${API_BASE_URL}/metadata/enrich/${gameId}`,
+  METADATA_SOURCES: `${API_BASE_URL}/api/metadata/sources`,
+  METADATA_SEARCH: `${API_BASE_URL}/api/metadata/search`,
+  METADATA_ENRICH: (gameId: string) => `${API_BASE_URL}/api/metadata/enrich/${gameId}`,
   
   // Steam endpoints
   STEAM_STATUS: `${API_BASE_URL}/api/steam/status`,
@@ -43,4 +43,5 @@ export const API_ENDPOINTS = {
   ITCH_DELETE_GAME: (gameId: string) => `${API_BASE_URL}/api/itch/games/${gameId}`,
 };
 
+export { API_ENDPOINTS };
 export default API_ENDPOINTS;

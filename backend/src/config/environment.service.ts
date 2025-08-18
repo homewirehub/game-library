@@ -55,15 +55,10 @@ export class EnvironmentService {
 
   getDatabaseConfig(): DatabaseConfig {
     const type = this.configService.get<'postgres' | 'sqlite'>('DB_TYPE', 'sqlite');
-    
-    const baseConfig = {
-      type,
-      database: this.configService.get<string>('DB_DATABASE', 'gamelib.db'),
-    };
-
     if (type === 'postgres') {
       return {
-        ...baseConfig,
+        type,
+        database: this.configService.get<string>('DB_NAME', 'gamelib'),
         host: this.configService.get<string>('DB_HOST', 'localhost'),
         port: this.configService.get<number>('DB_PORT', 5432),
         username: this.configService.get<string>('DB_USERNAME'),
@@ -71,12 +66,13 @@ export class EnvironmentService {
         ssl: this.configService.get<boolean>('DB_SSL', false),
         maxConnections: this.configService.get<number>('DB_MAX_CONNECTIONS', 10),
       };
-    } else {
-      return {
-        ...baseConfig,
-        path: this.configService.get<string>('DB_PATH', './data/gamelib.db'),
-      };
     }
+
+    return {
+      type,
+      database: this.configService.get<string>('DB_NAME', 'gamelib'),
+      path: this.configService.get<string>('DB_PATH', './data/gamelib.db'),
+    };
   }
 
   getSecurityConfig(): SecurityConfig {

@@ -5,6 +5,7 @@ import { promisify } from 'util';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import axios from 'axios';
+import * as cheerio from 'cheerio';
 
 const execAsync = promisify(exec);
 
@@ -56,32 +57,60 @@ export class ItchService {
 
   async searchGames(query: string, limit: number = 20): Promise<ItchGame[]> {
     try {
-      // Use itch.io API to search for games
-      const response = await axios.get('https://itch.io/api/1/search/games', {
-        params: {
-          query,
-          format: 'json',
-          limit,
-        },
+      this.logger.log(`Searching itch.io for: "${query}"`);
+      
+      // Use itch.io web search page
+      const searchUrl = `https://itch.io/search?q=${encodeURIComponent(query)}`;
+      const response = await axios.get(searchUrl, {
         timeout: 10000,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
       });
 
-      return response.data.games.map((game: any) => ({
-        id: game.id.toString(),
-        slug: game.url.replace('https://itch.io/', ''),
-        title: game.title,
-        author: game.user?.username || 'Unknown',
-        url: game.url,
-        cover_url: game.cover_url,
-        description: game.short_text,
-        tags: game.tags || [],
-        platforms: this.extractPlatforms(game),
-        price: game.min_price ? `$${game.min_price}` : 'Free',
-        downloads_count: game.downloads_count,
-        published_at: game.published_at,
-      }));
+      const $ = cheerio.load(response.data);
+      const games: ItchGame[] = [];
+
+      $('.game_cell').each((index, element) => {
+        if (index >= limit) return false; // Stop after reaching limit
+
+        const $game = $(element);
+        const $titleLink = $game.find('.game_title a');
+        const $author = $game.find('.game_author a');
+        const $cover = $game.find('.game_thumb img');
+        const $price = $game.find('.price_value');
+
+        const title = $titleLink.text().trim();
+        const url = $titleLink.attr('href');
+        const author = $author.text().trim();
+        const coverUrl = $cover.attr('data-lazy_src') || $cover.attr('src');
+        const price = $price.length ? $price.text().trim() : 'Free';
+
+        if (title && url) {
+          // Extract game ID from URL (e.g., /game/my-awesome-game -> my-awesome-game)
+          const urlParts = url.split('/');
+          const slug = urlParts[urlParts.length - 1] || urlParts[urlParts.length - 2];
+          
+          games.push({
+            id: slug,
+            slug: slug,
+            title: title,
+            author: author || 'Unknown',
+            url: url.startsWith('http') ? url : `https://itch.io${url}`,
+            cover_url: coverUrl?.startsWith('http') ? coverUrl : (coverUrl ? `https:${coverUrl}` : undefined),
+            price: price,
+            platforms: ['windows'], // Default assumption, could be improved
+            tags: [],
+          });
+        }
+      });
+
+      this.logger.log(`Found ${games.length} games for query: "${query}"`);
+      return games;
+
     } catch (error) {
-      this.logger.error('Failed to search itch.io games:', error);
+      this.logger.error('Failed to search itch.io games:', error.message);
+      // Return empty array instead of throwing to prevent UI errors
       return [];
     }
   }

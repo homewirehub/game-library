@@ -1,17 +1,27 @@
 {
   "name": "desktop",
   "version": "0.1.0",
+  "description": "Game Library desktop wrapper for the backend/frontend",
+  "author": "homewirehub",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder"
   },
+  "build": {
+    "appId": "com.homewirehub.game-library",
+    "productName": "Game Library",
+    "win": {
+      "target": "zip",
+      "signAndEditExecutable": false
+    }
+  },
   "dependencies": {
-    "electron": "^28.0.0",
     "axios": "^1.5.0",
     "node-steam-shortcuts": "^1.1.0"
   },
   "devDependencies": {
+    "electron": "^28.0.0",
     "electron-builder": "^24.0.0"
   }
 }

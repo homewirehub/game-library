@@ -49,11 +49,19 @@ export class InstallationService {
   async testDatabaseConnection(config: InstallationConfig['database']): Promise<boolean> {
     try {
       let dataSource: DataSource;
+  const sqliteDriver = process.env.DB_SQLITE_DRIVER === 'sqlite' ? 'sqlite' : 'better-sqlite3';
 
       if (config.type === 'sqlite') {
+        const dbFile = config.path || config.database;
+        const resolved = path.resolve(dbFile);
+        // Create parent directory if needed (except in-memory)
+        if (resolved !== ':memory:') {
+          const dir = path.dirname(resolved);
+          await fs.ensureDir(dir);
+        }
         dataSource = new DataSource({
-          type: 'better-sqlite3',
-          database: config.path || config.database,
+          type: sqliteDriver === 'sqlite' ? 'sqlite' : 'better-sqlite3',
+          database: resolved,
           synchronize: true,
         });
       } else {
@@ -77,38 +85,70 @@ export class InstallationService {
   }
 
   async testDatabaseConnectionWithErrors(config: InstallationConfig['database']): Promise<void> {
-    try {
-      let dataSource: DataSource;
-
+    let lastError: any;
+    const attempt = async (driver: 'better-sqlite3' | 'sqlite') => {
+      let ds: DataSource;
       if (config.type === 'sqlite') {
-        dataSource = new DataSource({
-          type: 'better-sqlite3',
-          database: config.path || config.database,
+        const dbFile = config.path || config.database;
+        const resolved = path.resolve(dbFile);
+        if (resolved !== ':memory:') {
+          const dir = path.dirname(resolved);
+          await fs.ensureDir(dir);
+        }
+        ds = new DataSource({
+          type: driver,
+          database: resolved,
           synchronize: true,
-        });
+        } as any);
       } else {
-        dataSource = new DataSource({
+        ds = new DataSource({
           type: 'postgres',
           host: config.host,
           port: config.port,
           username: config.username,
           password: config.password,
-          database: 'postgres', // Connect to default database first
+          database: 'postgres',
         });
       }
+      await ds.initialize();
+      await ds.destroy();
+    };
 
-      await dataSource.initialize();
-      await dataSource.destroy();
-    } catch (error) {
+    try {
+      const envDriver = process.env.DB_SQLITE_DRIVER === 'sqlite' ? 'sqlite' : 'better-sqlite3';
+      if (config.type === 'sqlite') {
+        try {
+          await attempt(envDriver);
+          return;
+        } catch (e1) {
+          lastError = e1;
+          // Fallback only if we initially tried better-sqlite3
+          if (envDriver === 'better-sqlite3') {
+            try {
+              await attempt('sqlite');
+              return;
+            } catch (e2) {
+              lastError = e2;
+            }
+          }
+          throw lastError;
+        }
+      } else {
+        await attempt('better-sqlite3'); // Driver value ignored for postgres branch
+      }
+    } catch (error: any) {
       this.logger.error('Database connection test failed:', error);
+      const dbFile = config.path || config.database;
+      const resolved = config.type === 'sqlite' ? path.resolve(dbFile) : undefined;
       throw new DatabaseConnectionError(
         `Failed to connect to ${config.type} database`,
-        { 
+        {
           type: config.type,
           host: config.host,
           port: config.port,
           database: config.database,
-          error: error.message 
+          path: resolved,
+          error: error?.message || String(error),
         }
       );
     }
@@ -166,9 +206,15 @@ export class InstallationService {
     let dataSource: DataSource;
 
     if (config.database.type === 'sqlite') {
+      const dbFile = config.database.path || config.database.database;
+      const resolved = path.resolve(dbFile);
+      if (resolved !== ':memory:') {
+        await fs.ensureDir(path.dirname(resolved));
+      }
+      const sqliteDriver = process.env.DB_SQLITE_DRIVER === 'sqlite' ? 'sqlite' : 'better-sqlite3';
       dataSource = new DataSource({
-        type: 'better-sqlite3',
-        database: config.database.path || config.database.database,
+        type: sqliteDriver === 'sqlite' ? 'sqlite' : 'better-sqlite3',
+        database: resolved,
         entities: [User, Game],
         synchronize: true,
         logging: false,
@@ -491,9 +537,13 @@ INSTALLATION_DATE=${new Date().toISOString()}
     const nodeVersion = process.version;
     const requiredNodeVersion = '18.0.0';
     
-    // Basic checks
-    const stats = await fs.stat(process.cwd());
-    const memoryUsage = process.memoryUsage();
+    // Get system memory info
+    const os = require('os');
+    const totalMemory = os.totalmem();
+    const freeMemory = os.freemem();
+    const totalMemoryMB = Math.round(totalMemory / 1024 / 1024);
+    const freeMemoryMB = Math.round(freeMemory / 1024 / 1024);
+    const requiredMemoryMB = 512;
 
     return {
       node: {
@@ -502,14 +552,14 @@ INSTALLATION_DATE=${new Date().toISOString()}
         satisfied: this.compareVersions(nodeVersion.slice(1), requiredNodeVersion) >= 0
       },
       disk: {
-        available: '10 GB', // Simplified for demo
+        available: '10+ GB', // Simplified - in production you'd check actual disk space
         required: '1 GB',
         satisfied: true
       },
       memory: {
-        available: `${Math.round(memoryUsage.heapTotal / 1024 / 1024)} MB`,
-        required: '512 MB',
-        satisfied: memoryUsage.heapTotal > 512 * 1024 * 1024
+        available: `${totalMemoryMB} MB (${freeMemoryMB} MB free)`,
+        required: `${requiredMemoryMB} MB`,
+        satisfied: totalMemoryMB >= requiredMemoryMB
       }
     };
   }

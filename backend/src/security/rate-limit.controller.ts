@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { RedisRateLimitService } from './redis-rate-limit.service';
 import { RateLimitService } from './rate-limit.service';
 
-@Controller('api/admin/rate-limit')
+@Controller('admin/rate-limit')
 export class RateLimitController {
   constructor(
     private readonly redisRateLimitService: RedisRateLimitService,

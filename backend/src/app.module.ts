@@ -4,7 +4,6 @@ import { ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from './config/config.module';
 import { GamesModule } from './modules/games/games.module';
-import { MetadataModule } from './modules/metadata/metadata.module';
 import { InstallationModule } from './installation/installation.module';
 import { InstallationGuard } from './installation/installation.guard';
 import { ItchModule } from './modules/itch/itch.module';
@@ -13,14 +12,16 @@ import { SecurityModule } from './security/security.module';
 import { Game } from './entities/game.entity';
 import { User } from './entities/user.entity';
 import { EnvConfig } from './config/env.schema';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
     ConfigModule,
+    HealthModule,
     TypeOrmModule.forRootAsync({
       useFactory: (configService: ConfigService) => {
         const dbType = configService.get('DB_TYPE', 'sqlite');
-        
+        const sqliteDriver = configService.get('DB_SQLITE_DRIVER', 'better-sqlite3'); // 'better-sqlite3' | 'sqlite'
         if (dbType === 'postgres') {
           return {
             type: 'postgres',
@@ -35,24 +36,32 @@ import { EnvConfig } from './config/env.schema';
             ssl: configService.get('NODE_ENV') === 'production' ? { rejectUnauthorized: false } : false,
           };
         } else {
-          // SQLite configuration using better-sqlite3
+          // SQLite configuration: allow choosing driver for tests vs prod
+          if (sqliteDriver === 'sqlite') {
+            return {
+              type: 'sqlite',
+              database: configService.get('DB_PATH', 'gamelib.db'),
+              entities: [Game, User],
+              synchronize: configService.get('DB_SYNCHRONIZE', false), // Use migrations instead
+              logging: configService.get('NODE_ENV') === 'development',
+            } as any;
+          }
           return {
             type: 'better-sqlite3',
             database: configService.get('DB_PATH', 'gamelib.db'),
             entities: [Game, User],
             synchronize: configService.get('DB_SYNCHRONIZE', false), // Use migrations instead
             logging: configService.get('NODE_ENV') === 'development',
-          };
+          } as any;
         }
       },
       inject: [ConfigService],
     }),
     InstallationModule,
-    SecurityModule,
-    GamesModule,
-    MetadataModule,
-    ItchModule,
-    SteamModule,
+  SecurityModule,
+  GamesModule,
+  ...(process.env.ITCH_ENABLED === 'true' ? [ItchModule] : []),
+  ...(process.env.STEAM_ENABLED === 'true' ? [SteamModule] : []),
   ],
   providers: [
     {

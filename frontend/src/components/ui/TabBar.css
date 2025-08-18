@@ -1,0 +1,298 @@
+/* ==========================================================================
+   TabBar Component - Design System
+   ========================================================================== */
+
+.tab-bar {
+  display: flex;
+  position: relative;
+  background-color: var(--color-neutral-0);
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.tab-bar--full-width {
+  width: 100%;
+}
+
+.tab-bar--full-width .tab-item {
+  flex: 1;
+}
+
+/* ===== Tab Item Base ===== */
+
+.tab-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-neutral-600);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-default);
+  position: relative;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.tab-item:hover:not(.tab-item--disabled) {
+  color: var(--color-neutral-800);
+  background-color: var(--color-neutral-50);
+}
+
+.tab-item--active {
+  color: var(--color-primary-600);
+}
+
+.tab-item--disabled {
+  color: var(--color-neutral-400);
+  cursor: not-allowed;
+}
+
+/* ===== Tab Variants ===== */
+
+/* Default variant - with bottom border indicator */
+.tab-bar--default .tab-item {
+  padding: var(--space-3) var(--space-6);
+  border-bottom: 2px solid transparent;
+}
+
+.tab-bar--default .tab-item--active {
+  border-bottom-color: var(--color-primary-600);
+  background-color: transparent;
+}
+
+.tab-bar--default .tab-item--active:hover {
+  background-color: var(--color-primary-50);
+}
+
+/* Pills variant - with rounded background */
+.tab-bar--pills {
+  background-color: var(--color-neutral-100);
+  border-radius: var(--radius-lg);
+  padding: var(--space-1);
+  border: none;
+  gap: var(--space-1);
+}
+
+.tab-bar--pills .tab-item {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+}
+
+.tab-bar--pills .tab-item--active {
+  background-color: var(--color-neutral-0);
+  color: var(--color-neutral-900);
+  box-shadow: var(--shadow-sm);
+}
+
+.tab-bar--pills .tab-item:hover:not(.tab-item--disabled):not(.tab-item--active) {
+  background-color: var(--color-neutral-200);
+}
+
+/* Underline variant - minimal with underline indicator */
+.tab-bar--underline {
+  background-color: transparent;
+  border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.tab-bar--underline .tab-item {
+  padding: var(--space-3) var(--space-4);
+  position: relative;
+}
+
+.tab-bar--underline .tab-item::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--color-primary-600);
+  transform: scaleX(0);
+  transition: transform 0.2s ease;
+}
+
+.tab-bar--underline .tab-item--active::after {
+  transform: scaleX(1);
+}
+
+.tab-bar--underline .tab-item:hover:not(.tab-item--disabled) {
+  background-color: transparent;
+  color: var(--color-primary-600);
+}
+
+/* ===== Tab Sizes ===== */
+
+.tab-bar--sm .tab-item {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--font-size-sm);
+}
+
+.tab-bar--md .tab-item {
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--font-size-base);
+}
+
+.tab-bar--lg .tab-item {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--font-size-lg);
+}
+
+/* Pills size adjustments */
+.tab-bar--pills.tab-bar--sm .tab-item {
+  padding: var(--space-1-5) var(--space-3);
+}
+
+.tab-bar--pills.tab-bar--md .tab-item {
+  padding: var(--space-2) var(--space-4);
+}
+
+.tab-bar--pills.tab-bar--lg .tab-item {
+  padding: var(--space-3) var(--space-6);
+}
+
+/* ===== Tab Item Elements ===== */
+
+.tab-item__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tab-item__label {
+  flex: 1;
+}
+
+.tab-item__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--space-5);
+  height: var(--space-5);
+  padding: 0 var(--space-1-5);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-neutral-0);
+  background-color: var(--color-primary-600);
+  border-radius: var(--radius-full);
+  line-height: 1;
+}
+
+.tab-item--active .tab-item__badge {
+  background-color: var(--color-primary-700);
+}
+
+.tab-item--disabled .tab-item__badge {
+  background-color: var(--color-neutral-400);
+}
+
+/* ===== Tab Panels ===== */
+
+.tab-panel {
+  padding: var(--space-6);
+}
+
+.tab-panel:not(.tab-panel--active) {
+  display: none;
+}
+
+.tab-panel--active {
+  display: block;
+}
+
+/* ===== Dark Theme ===== */
+
+@media (prefers-color-scheme: dark) {
+  .tab-bar {
+    background-color: var(--color-neutral-900);
+    border-bottom-color: var(--color-neutral-700);
+  }
+
+  .tab-item {
+    color: var(--color-neutral-400);
+  }
+
+  .tab-item:hover:not(.tab-item--disabled) {
+    color: var(--color-neutral-200);
+    background-color: var(--color-neutral-800);
+  }
+
+  .tab-item--active {
+    color: var(--color-primary-400);
+  }
+
+  .tab-bar--default .tab-item--active {
+    border-bottom-color: var(--color-primary-400);
+  }
+
+  .tab-bar--default .tab-item--active:hover {
+    background-color: var(--color-primary-900);
+  }
+
+  .tab-bar--pills {
+    background-color: var(--color-neutral-800);
+  }
+
+  .tab-bar--pills .tab-item--active {
+    background-color: var(--color-neutral-700);
+    color: var(--color-neutral-100);
+  }
+
+  .tab-bar--pills .tab-item:hover:not(.tab-item--disabled):not(.tab-item--active) {
+    background-color: var(--color-neutral-700);
+  }
+
+  .tab-bar--underline {
+    border-bottom-color: var(--color-neutral-700);
+  }
+
+  .tab-bar--underline .tab-item::after {
+    background-color: var(--color-primary-400);
+  }
+
+  .tab-bar--underline .tab-item:hover:not(.tab-item--disabled) {
+    color: var(--color-primary-400);
+  }
+
+  .tab-item__badge {
+    background-color: var(--color-primary-500);
+  }
+
+  .tab-item--active .tab-item__badge {
+    background-color: var(--color-primary-600);
+  }
+}
+
+/* ===== Responsive Design ===== */
+
+@media (max-width: 640px) {
+  .tab-bar {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .tab-bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab-item {
+    flex-shrink: 0;
+  }
+
+  .tab-bar--lg .tab-item {
+    padding: var(--space-3) var(--space-6);
+    font-size: var(--font-size-base);
+  }
+
+  .tab-item__label {
+    display: none;
+  }
+
+  .tab-item__icon + .tab-item__label {
+    display: inline;
+  }
+}

@@ -75,7 +75,7 @@ export class InstallationConfigDto {
   storage: StorageConfigDto;
 }
 
-@Controller('api/installation')
+@Controller('installation')
 export class InstallationController {
   constructor(private readonly installationService: InstallationService) {}
 
@@ -107,10 +107,11 @@ export class InstallationController {
   @Post('test-database')
   async testDatabaseConnection(@Body() config: DatabaseConfigDto) {
     try {
-      const canConnect = await this.installationService.testDatabaseConnection(config);
+      // Use detailed version to surface actionable error messages
+      await this.installationService.testDatabaseConnectionWithErrors(config as any);
       return {
-        success: canConnect,
-        message: canConnect ? 'Database connection successful' : 'Database connection failed',
+        success: true,
+        message: 'Database connection successful',
       };
     } catch (error) {
       return {

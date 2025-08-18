@@ -139,7 +139,8 @@ const GameLibrary: React.FC = () => {
       
       {/* Games Grid/List */}
       {filteredAndSortedGames.length > 0 ? (
-        <div className={viewMode === 'grid' ? 'card-grid' : 'card-list'}>
+        <div className="scrollable-container">
+          <div className={viewMode === 'grid' ? 'card-grid' : 'card-list'}>
           {filteredAndSortedGames.map((game, index) => (
             <div 
               key={game.id} 
@@ -232,6 +233,7 @@ const GameLibrary: React.FC = () => {
               </div>
             </div>
           ))}
+          </div>
         </div>
       ) : (
         <div className="empty-state">

@@ -29,7 +29,7 @@ export class InstallationGuard implements CanActivate {
       const url = request.url;
       
       // Allow installation endpoints
-      if (url.startsWith('/api/installation')) {
+      if (url.startsWith('/api/installation') || url.startsWith('/api/health')) {
         return true;
       }
       

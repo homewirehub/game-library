@@ -88,6 +88,8 @@ html, body {
   border-radius: 8px;
   display: flex; align-items: center;
   font-size: 0.9rem;
+  color: #eef2ff; /* brighter text for contrast */
+  font-weight: 600;
 }
 .feature-list li::before {
   content: '✓'; color: #00d077; margin-right: 8px;

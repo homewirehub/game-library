@@ -9,6 +9,7 @@ export const envSchema = z.object({
   // Database
   DB_TYPE: z.enum(['sqlite', 'postgres']).default('sqlite'),
   DB_PATH: z.string().optional(), // For SQLite
+  DB_SQLITE_DRIVER: z.enum(['sqlite', 'better-sqlite3']).default('better-sqlite3').optional(),
   DB_HOST: z.string().optional(), // For PostgreSQL
   DB_PORT: z.coerce.number().min(1).max(65535).optional(),
   DB_USERNAME: z.string().optional(),

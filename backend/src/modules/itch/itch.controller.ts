@@ -22,7 +22,7 @@ interface DownloadGameRequest {
   gameTitle?: string;
 }
 
-@Controller('api/itch')
+@Controller('itch')
 export class ItchController {
   private readonly logger = new Logger(ItchController.name);
 

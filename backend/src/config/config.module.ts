@@ -1,9 +1,7 @@
 import { Module, Global } from '@nestjs/common';
 import { ConfigModule as NestConfigModule } from '@nestjs/config';
 import { validateEnv } from './env.schema';
-
-// Validate environment on module initialization
-const validatedEnv = validateEnv();
+import { EnvironmentService } from './environment.service';
 
 @Global()
 @Module({
@@ -16,12 +14,7 @@ const validatedEnv = validateEnv();
       expandVariables: true,
     }),
   ],
-  providers: [
-    {
-      provide: 'ENV_CONFIG',
-      useValue: validatedEnv,
-    },
-  ],
-  exports: ['ENV_CONFIG'],
+  providers: [EnvironmentService],
+  exports: [EnvironmentService],
 })
 export class ConfigModule {}

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_ENDPOINTS } from '../config/api';
-import '../styles/components/installation-wizard.css';
+import '../styles/main.css';
+import WizardActions from '../components/WizardActions';
 
 interface SystemRequirements {
   node: { current: string; required: string; satisfied: boolean };
@@ -245,10 +246,11 @@ const InstallationWizard: React.FC = () => {
 
             {config.database.type === 'postgres' ? (
               <>
-                <div className="input-field">
+        <div className="input-field">
                   <label>Host</label>
                   <input
                     type="text"
+          className="input"
                     value={config.database.host || ''}
                     onChange={(e) => setConfig(prev => ({
                       ...prev,
@@ -258,10 +260,11 @@ const InstallationWizard: React.FC = () => {
                   />
                 </div>
 
-                <div className="input-field">
+        <div className="input-field">
                   <label>Port</label>
                   <input
                     type="number"
+          className="input"
                     value={config.database.port || 5432}
                     onChange={(e) => setConfig(prev => ({
                       ...prev,
@@ -271,10 +274,11 @@ const InstallationWizard: React.FC = () => {
                   />
                 </div>
 
-                <div className="input-field">
+        <div className="input-field">
                   <label>Username</label>
                   <input
                     type="text"
+          className="input"
                     value={config.database.username || ''}
                     onChange={(e) => setConfig(prev => ({
                       ...prev,
@@ -284,10 +288,11 @@ const InstallationWizard: React.FC = () => {
                   />
                 </div>
 
-                <div className="input-field">
+        <div className="input-field">
                   <label>Password</label>
                   <input
                     type="password"
+          className="input"
                     value={config.database.password || ''}
                     onChange={(e) => setConfig(prev => ({
                       ...prev,
@@ -297,10 +302,11 @@ const InstallationWizard: React.FC = () => {
                   />
                 </div>
 
-                <div className="input-field">
+        <div className="input-field">
                   <label>Database Name</label>
                   <input
                     type="text"
+          className="input"
                     value={config.database.database}
                     onChange={(e) => setConfig(prev => ({
                       ...prev,
@@ -312,10 +318,11 @@ const InstallationWizard: React.FC = () => {
               </>
             ) : (
               <>
-                <div className="input-field">
+        <div className="input-field">
                   <label>Database File Path</label>
                   <input
                     type="text"
+          className="input"
                     value={config.database.path || config.database.database}
                     onChange={(e) => setConfig(prev => ({
                       ...prev,
@@ -334,16 +341,17 @@ const InstallationWizard: React.FC = () => {
               </>
             )}
             
-            <div>
-              <button 
-                type="button" 
+            <div className="stack">
+              <button
+                type="button"
+                className="btn"
                 onClick={testDatabaseConnection}
                 disabled={isTestingDatabase}
               >
                 {isTestingDatabase ? 'Testing Connection...' : 'Test Database Connection'}
               </button>
               {dbTestResult && (
-                <div className={`message ${dbTestResult.success ? 'success' : 'error'}`}>
+                <div className={`alert ${dbTestResult.success ? '' : 'alert--error'}`}>
                   {dbTestResult.success ? '✓' : '✗'} {dbTestResult.message}
                 </div>
               )}
@@ -357,10 +365,11 @@ const InstallationWizard: React.FC = () => {
             <h2>Admin Account Setup</h2>
             <p>Create your administrator account</p>
 
-            <div className="input-field">
+      <div className="input-field">
               <label>Username</label>
               <input
                 type="text"
+        className="input"
                 value={config.admin.username}
                 onChange={(e) => setConfig(prev => ({
                   ...prev,
@@ -370,10 +379,11 @@ const InstallationWizard: React.FC = () => {
               />
             </div>
 
-            <div className="input-field">
+      <div className="input-field">
               <label>Email</label>
               <input
                 type="email"
+        className="input"
                 value={config.admin.email || ''}
                 onChange={(e) => setConfig(prev => ({
                   ...prev,
@@ -383,10 +393,11 @@ const InstallationWizard: React.FC = () => {
               />
             </div>
 
-            <div className="input-field">
+      <div className="input-field">
               <label>Password (minimum 8 characters)</label>
               <input
                 type="password"
+        className="input"
                 value={config.admin.password}
                 onChange={(e) => setConfig(prev => ({
                   ...prev,
@@ -409,10 +420,11 @@ const InstallationWizard: React.FC = () => {
             <h2>Server Configuration</h2>
             <p>Configure your server settings</p>
 
-            <div className="input-field">
+      <div className="input-field">
               <label>Server Port</label>
               <input
                 type="number"
+        className="input"
                 value={config.server.port}
                 onChange={(e) => setConfig(prev => ({
                   ...prev,
@@ -422,10 +434,11 @@ const InstallationWizard: React.FC = () => {
               />
             </div>
 
-            <div className="input-field">
+      <div className="input-field">
               <label>Server Host</label>
               <input
                 type="text"
+        className="input"
                 value={config.server.host}
                 onChange={(e) => setConfig(prev => ({
                   ...prev,
@@ -435,10 +448,11 @@ const InstallationWizard: React.FC = () => {
               />
             </div>
 
-            <div className="input-field">
+      <div className="input-field">
               <label>Storage Path</label>
               <input
                 type="text"
+        className="input"
                 value={config.storage.path}
                 onChange={(e) => setConfig(prev => ({
                   ...prev,
@@ -472,16 +486,11 @@ const InstallationWizard: React.FC = () => {
             </div>
 
             {errors.general && (
-              <div className="message error">
-                {errors.general}
-              </div>
+              <div className="alert alert--error">{errors.general}</div>
             )}
 
             {installing && (
-              <div className="installation-progress">
-                <div className="spinner"></div>
-                <p>Installing Game Library...</p>
-              </div>
+              <div className="alert">Installing Game Library...</div>
             )}
           </>
         );
@@ -503,9 +512,7 @@ const InstallationWizard: React.FC = () => {
               <li>Ready to manage your games!</li>
             </ul>
 
-            <div className="message success">
-              🚀 Your Game Library is now ready to use!
-            </div>
+            <div className="alert">🚀 Your Game Library is now ready to use!</div>
           </>
         );
 
@@ -515,69 +522,47 @@ const InstallationWizard: React.FC = () => {
   };
 
   const renderProgressIndicator = () => {
-    const steps = ['Welcome', 'Database', 'Admin', 'Server', 'Review', 'Complete'];
-    
+    const pct = Math.min((currentStep - 1) / (6 - 1), 1) * 100;
     return (
-      <div className="progress">
-        {steps.map((_, index) => (
-          <div 
-            key={index}
-            className={`step ${index < currentStep ? 'filled' : ''}`}
-          />
-        ))}
+      <div className="progress" aria-label="Installation progress">
+        <div className="progress__bar" style={{ width: `${pct}%` }} />
       </div>
     );
   };
 
   return (
-    <div className="wizard-container">
-      <div className="wizard-card">
-        <div className="wizard-header">
-          <h1>Game Library Installation</h1>
-          <small>Step {currentStep} of 6</small>
-        </div>
-        
+    <main className="container">
+      <h1>Game Library Installation</h1>
+      <p className="subtle">Step {currentStep} of 6</p>
+
+      <div className="card section stack" style={{ marginTop: 'var(--space-4)' }}>
         {renderProgressIndicator()}
-        
-        <div className="wizard-content">
+
+        <div className="card card--inset section">
           {renderStep()}
         </div>
-        
-        <div className="wizard-footer">
-          {currentStep > 1 && currentStep < 6 && (
-            <button 
-              onClick={prevStep}
-              className="back-button"
-            >
-              ← Back
-            </button>
-          )}
-          
-          {currentStep === 1 && <div />}
-          
-          {currentStep < 5 && (
-            <button onClick={nextStep}>
-              Next →
-            </button>
-          )}
-          
-          {currentStep === 5 && (
-            <button 
-              onClick={performInstallation}
-              disabled={installing}
-            >
+
+        <WizardActions
+          onBack={currentStep > 1 && currentStep < 6 ? prevStep : undefined}
+          onNext={currentStep < 5 ? nextStep : undefined}
+          nextLabel={currentStep < 5 ? 'Next →' : undefined}
+        />
+
+        {currentStep === 5 && (
+          <div className="row" style={{ justifyContent: 'flex-end' }}>
+            <button className="btn" onClick={performInstallation} disabled={installing}>
               {installing ? 'Installing...' : 'Install & Start 🚀'}
             </button>
-          )}
-          
-          {currentStep === 6 && (
-            <button onClick={() => navigate('/')}>
-              Go to Game Library 🎮
-            </button>
-          )}
-        </div>
+          </div>
+        )}
+
+        {currentStep === 6 && (
+          <div className="row" style={{ justifyContent: 'flex-end' }}>
+            <button className="btn" onClick={() => navigate('/')}>Go to Game Library 🎮</button>
+          </div>
+        )}
       </div>
-    </div>
+    </main>
   );
 };
 

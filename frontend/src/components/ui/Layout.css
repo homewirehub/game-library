@@ -1,0 +1,362 @@
+/* ==========================================================================
+   Layout Components - Design System
+   ========================================================================== */
+
+/* ===== Container ===== */
+
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container--centered {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Container Sizes */
+.container--sm {
+  max-width: 640px;
+}
+
+.container--md {
+  max-width: 768px;
+}
+
+.container--lg {
+  max-width: 1024px;
+}
+
+.container--xl {
+  max-width: 1280px;
+}
+
+.container--full {
+  max-width: none;
+}
+
+/* Container Padding */
+.container--padding-none {
+  padding: 0;
+}
+
+.container--padding-sm {
+  padding: var(--space-4);
+}
+
+.container--padding-md {
+  padding: var(--space-6);
+}
+
+.container--padding-lg {
+  padding: var(--space-8);
+}
+
+.container--padding-xl {
+  padding: var(--space-12);
+}
+
+/* Container Scrolling - NEW */
+.container--scrollable {
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.container--scrollable-auto {
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.container--scrollable-content {
+  height: calc(100vh - 4rem); /* Account for header/nav */
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* ===== Flex ===== */
+
+.flex {
+  display: flex;
+}
+
+/* Flex Direction */
+.flex--row {
+  flex-direction: row;
+}
+
+.flex--row-reverse {
+  flex-direction: row-reverse;
+}
+
+.flex--column {
+  flex-direction: column;
+}
+
+.flex--column-reverse {
+  flex-direction: column-reverse;
+}
+
+/* Flex Wrap */
+.flex--nowrap {
+  flex-wrap: nowrap;
+}
+
+.flex--wrap {
+  flex-wrap: wrap;
+}
+
+.flex--wrap-reverse {
+  flex-wrap: wrap-reverse;
+}
+
+/* Justify Content */
+.flex--justify-start {
+  justify-content: flex-start;
+}
+
+.flex--justify-end {
+  justify-content: flex-end;
+}
+
+.flex--justify-center {
+  justify-content: center;
+}
+
+.flex--justify-between {
+  justify-content: space-between;
+}
+
+.flex--justify-around {
+  justify-content: space-around;
+}
+
+.flex--justify-evenly {
+  justify-content: space-evenly;
+}
+
+/* Align Items */
+.flex--align-start {
+  align-items: flex-start;
+}
+
+.flex--align-end {
+  align-items: flex-end;
+}
+
+.flex--align-center {
+  align-items: center;
+}
+
+.flex--align-baseline {
+  align-items: baseline;
+}
+
+.flex--align-stretch {
+  align-items: stretch;
+}
+
+/* Flex Gap */
+.flex--gap-xs {
+  gap: var(--space-1);
+}
+
+.flex--gap-sm {
+  gap: var(--space-2);
+}
+
+.flex--gap-md {
+  gap: var(--space-4);
+}
+
+.flex--gap-lg {
+  gap: var(--space-6);
+}
+
+.flex--gap-xl {
+  gap: var(--space-8);
+}
+
+/* Flex Scrolling - NEW */
+.flex--scrollable {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.flex--scrollable-x {
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.flex--scrollable-both {
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+/* ===== Grid ===== */
+
+.grid {
+  display: grid;
+}
+
+/* Grid Columns */
+.grid--cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.grid--cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid--cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid--cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.grid--cols-5 {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.grid--cols-6 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.grid--cols-12 {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.grid--cols-auto {
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+}
+
+.grid--cols-responsive {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+/* Grid Gap */
+.grid--gap-xs {
+  gap: var(--space-1);
+}
+
+.grid--gap-sm {
+  gap: var(--space-2);
+}
+
+.grid--gap-md {
+  gap: var(--space-4);
+}
+
+.grid--gap-lg {
+  gap: var(--space-6);
+}
+
+.grid--gap-xl {
+  gap: var(--space-8);
+}
+
+/* Grid Rows */
+.grid--rows-auto {
+  grid-template-rows: auto;
+}
+
+/* ===== Stack ===== */
+
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Stack Spacing */
+.stack--spacing-xs > * + * {
+  margin-top: var(--space-1);
+}
+
+.stack--spacing-sm > * + * {
+  margin-top: var(--space-2);
+}
+
+.stack--spacing-md > * + * {
+  margin-top: var(--space-4);
+}
+
+.stack--spacing-lg > * + * {
+  margin-top: var(--space-6);
+}
+
+.stack--spacing-xl > * + * {
+  margin-top: var(--space-8);
+}
+
+/* Stack Alignment */
+.stack--align-start {
+  align-items: flex-start;
+}
+
+.stack--align-center {
+  align-items: center;
+}
+
+.stack--align-end {
+  align-items: flex-end;
+}
+
+.stack--align-stretch {
+  align-items: stretch;
+}
+
+/* ===== Responsive Grid Adjustments ===== */
+
+@media (max-width: 640px) {
+  .grid--cols-responsive {
+    grid-template-columns: 1fr;
+  }
+
+  .grid--cols-3,
+  .grid--cols-4,
+  .grid--cols-5,
+  .grid--cols-6 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .container--padding-lg {
+    padding: var(--space-6);
+  }
+
+  .container--padding-xl {
+    padding: var(--space-8);
+  }
+}
+
+@media (max-width: 480px) {
+  .grid--cols-2,
+  .grid--cols-3,
+  .grid--cols-4,
+  .grid--cols-5,
+  .grid--cols-6 {
+    grid-template-columns: 1fr;
+  }
+
+  .container--padding-md {
+    padding: var(--space-4);
+  }
+
+  .container--padding-lg {
+    padding: var(--space-4);
+  }
+
+  .container--padding-xl {
+    padding: var(--space-6);
+  }
+}

@@ -33,7 +33,7 @@ interface DownloadAssetsRequest {
   searchQuery?: string;
 }
 
-@Controller('api/steam')
+@Controller('steam')
 export class SteamController {
   private readonly logger = new Logger(SteamController.name);
 

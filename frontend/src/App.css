@@ -8,7 +8,8 @@
 /* ===== Application Root ===== */
 
 #root {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -16,18 +17,39 @@
 /* ===== Application Layout ===== */
 
 .app {
-  min-height: 100vh;
-  background: var(--color-neutral-900);
-  color: var(--color-neutral-100);
+  height: 100vh;
+  background: var(--color-neutral-0);
+  color: var(--color-neutral-900);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.game-library-layout {
+  height: 100vh;
+  background: var(--color-neutral-0);
+  color: var(--color-neutral-900);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .app-header {
-  background: var(--color-neutral-800);
-  border-bottom: 1px solid var(--color-neutral-700);
+  background: var(--color-neutral-50);
+  border-bottom: 1px solid var(--color-neutral-200);
   box-shadow: var(--shadow-sm);
   position: sticky;
   top: 0;
   z-index: var(--z-sticky);
+  flex-shrink: 0;
+}
+
+.app-main {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0;
+  margin: 0;
 }
 
 .app-nav {
@@ -108,6 +130,8 @@
   max-width: var(--content-max-width);
   margin: 0 auto;
   width: 100%;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 /* ===== Page Layouts ===== */
